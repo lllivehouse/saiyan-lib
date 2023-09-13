@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.mgentertainment.common.uidgen.dal.mapper.WorkerNodeMapper">
+	<insert id="addWorkerNode" parameterType="co.mgentertainment.common.uidgen.dal.entity.WorkerNodeEntity">
+		INSERT INTO worker_node
+		(
+		host_name,
+		port,
+		type,
+		launch_date,
+		modified,
+		created)
+		VALUES (
+		#{hostName},
+		#{port},
+		#{type},
+		#{launchDate},
+		now(),
+		now())
+		ON DUPLICATE KEY UPDATE
+	 	id = LAST_INSERT_ID(id),
+	 	modified = now(),
+	 	port = values(port),
+		type = values(type),
+		launch_date = now()
+		<selectKey resultType="java.lang.Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	<delete id="deleteByPrimaryKey">
+		DELETE FROM worker_node WHERE id = #{id}
+	</delete>
+	<delete id="deleteByHostname">
+		DELETE FROM worker_node WHERE host_name = #{hostName}
+	</delete>
+	<select id="selectWorkerNodeHost" resultType="java.lang.String">
+		SELECT DISTINCT host_name FROM WORKERworker_node_NODE ORDER BY host_name
+	</select>
+</mapper>
