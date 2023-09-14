@@ -16,8 +16,10 @@
     <properties>
         <common.lib.version>1.0.0-SNAPSHOT</common.lib.version>
         <dubbo.version>3.2.5</dubbo.version>
-        <openfeign.okhttp.version>11.10</openfeign.okhttp.version>
+        <!--aws-->
+        <aws.sdk.version>1.12.429</aws.sdk.version>
         <!--others-->
+        <openfeign.okhttp.version>11.10</openfeign.okhttp.version>
         <netty.version>4.1.97.Final</netty.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <shedlock.version>4.44.0</shedlock.version>
@@ -84,6 +86,14 @@
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
                 <version>${netty.version}</version>
+            </dependency>
+            <!--aws-->
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>${aws.sdk.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <!-- REST support dependencies -->
             <dependency>

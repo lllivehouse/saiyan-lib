@@ -63,7 +63,8 @@ public class GlobalSecurityConfiguration {
                 .and().authorizeRequests()
                 // 后端接口放行
                 .antMatchers("/checkPreload",
-                        "/auth/login"
+                        "/auth/login",
+                        "/auth/refreshToken"
                 ).permitAll()
                 // 其他请求需验证
                 .anyRequest().authenticated()
