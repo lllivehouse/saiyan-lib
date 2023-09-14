@@ -32,6 +32,7 @@
         <validation.version>2.0.1.Final</validation.version>
         <hibernate.version>8.0.1.Final</hibernate.version>
         <servlet.version>4.0.1</servlet.version>
+        <file.storage.version>1.0.3</file.storage.version>
     </properties>
 
     <dependencyManagement>
@@ -192,6 +193,12 @@
                 <artifactId>feign-okhttp</artifactId>
                 <version>${openfeign.okhttp.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.xuyanwu</groupId>
+                <artifactId>spring-file-storage</artifactId>
+                <version>${file.storage.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
