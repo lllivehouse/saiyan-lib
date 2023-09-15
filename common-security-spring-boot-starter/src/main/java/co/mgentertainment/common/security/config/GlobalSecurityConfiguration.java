@@ -4,7 +4,6 @@ import co.mgentertainment.common.security.exception.DefaultAccessDeniedHandler;
 import co.mgentertainment.common.security.exception.DefaultAuthenticationEntryPoint;
 import co.mgentertainment.common.security.filter.JwtTokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.filters.CorsFilter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
@@ -55,8 +53,6 @@ public class GlobalSecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                // 跨域配置
-                .cors().and().addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
                 // 禁用CSRF
                 .csrf().disable()
                 .headers().frameOptions().disable()
