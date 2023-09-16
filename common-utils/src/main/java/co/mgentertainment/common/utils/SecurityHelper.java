@@ -46,15 +46,18 @@ public class SecurityHelper {
      */
     public static String rsaDecrypt(String encryptText, String privateKey, int nonce) {
         RSA rsa = new RSA(privateKey, null);
-        byte[] decodeHex = HexUtil.decodeHex(encryptText);
-        byte[] decrypt = rsa.decrypt(decodeHex, KeyType.PrivateKey);
-        String decode = StrUtil.str(decrypt, CharsetUtil.CHARSET_UTF_8);
-        String[] arr = StringUtils.split(decode, ";");
-        if (arr == null || arr.length != 2 || !StringUtils.isNumeric(arr[1])) {
-            return null;
-        }
-        if (new Date(Long.parseLong(arr[1])).before(DateUtils.addSeconds(new Date(), nonce))) {
-            return arr[0];
+        try {
+            byte[] decodeHex = HexUtil.decodeHex(encryptText);
+            byte[] decrypt = rsa.decrypt(decodeHex, KeyType.PrivateKey);
+            String decode = StrUtil.str(decrypt, CharsetUtil.CHARSET_UTF_8);
+            String[] arr = StringUtils.split(decode, ";");
+            if (arr == null || arr.length != 2 || !StringUtils.isNumeric(arr[1])) {
+                return null;
+            }
+            if (new Date(Long.parseLong(arr[1])).before(DateUtils.addSeconds(new Date(), nonce))) {
+                return arr[0];
+            }
+        } catch (Exception ignored) {
         }
         return null;
     }
