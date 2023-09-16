@@ -50,6 +50,7 @@
         <module>uid-generator-spring-boot-starter</module>
         <module>distributed-event-spring-boot-starter</module>
         <module>common-redis-spring-boot-starter</module>
+        <module>common-eventbus-spring-boot-starter</module>
         <module>mybatis-generator-plugin</module>
     </modules>
 

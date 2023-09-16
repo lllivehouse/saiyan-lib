@@ -35,6 +35,7 @@
         <hibernate.version>8.0.1.Final</hibernate.version>
         <servlet.version>4.0.1</servlet.version>
         <file.storage.version>1.0.3</file.storage.version>
+        <ffmpeg.version>0.7.0</ffmpeg.version>
     </properties>
 
     <dependencyManagement>
@@ -72,6 +73,11 @@
             <dependency>
                 <groupId>co.mgentertainment</groupId>
                 <artifactId>common-redis-spring-boot-starter</artifactId>
+                <version>${common.lib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>co.mgentertainment</groupId>
+                <artifactId>common-eventbus-spring-boot-starter</artifactId>
                 <version>${common.lib.version}</version>
             </dependency>
             <!-- Dubbo -->
@@ -208,7 +214,11 @@
                 <artifactId>spring-file-storage</artifactId>
                 <version>${file.storage.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>net.bramp.ffmpeg</groupId>
+                <artifactId>ffmpeg</artifactId>
+                <version>${ffmpeg.version}</version>
+            </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
