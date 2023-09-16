@@ -5,6 +5,6 @@ package co.mgentertainment.common.eventbus;
  * @createTime 14/08/2023
  * @description AbstractEventSubscriber
  */
-public abstract class AbstractEventSubscriber<E extends BaseEvent> {
+public abstract class AbstractEventSubscriber<E extends AbstractEvent> {
     public abstract void subscribe(E event);
 }

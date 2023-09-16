@@ -5,7 +5,7 @@ import java.util.function.Function;
 /**
  * @author larry
  */
-public interface EventValidation<E extends BaseEvent> {
+public interface EventValidation<E extends AbstractEvent> {
 
     Function<EventFailure, E> acceptOrReject(E event);
 }
