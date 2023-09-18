@@ -43,6 +43,7 @@
         <module>bom</module>
         <module>model</module>
         <module>common-utils</module>
+        <module>api-client</module>
         <module>common-security-spring-boot-starter</module>
         <module>common-mybatisplus-spring-boot-starter</module>
         <module>common-doc-spring-boot-starter</module>
