@@ -1,6 +1,7 @@
 package co.mgentertainment.common.apiclient.auth;
 
 import co.mgentertainment.common.apiclient.exception.ClientException;
+import co.mgentertainment.common.model.HttpClientConstants;
 import co.mgentertainment.common.utils.SecurityHelper;
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,7 +33,7 @@ public class RsaSigner extends Signer {
 
     @Override
     public String getTokenName() {
-        return "c-token";
+        return HttpClientConstants.SSE_HEADER_NAME;
     }
 
     @Override
