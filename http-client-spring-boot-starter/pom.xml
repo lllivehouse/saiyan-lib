@@ -9,7 +9,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>api-client</artifactId>
+    <artifactId>http-client-spring-boot-starter</artifactId>
 
     <dependencies>
         <dependency>

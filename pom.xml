@@ -43,7 +43,6 @@
         <module>bom</module>
         <module>model</module>
         <module>common-utils</module>
-        <module>api-client</module>
         <module>common-security-spring-boot-starter</module>
         <module>common-mybatisplus-spring-boot-starter</module>
         <module>common-doc-spring-boot-starter</module>
@@ -52,6 +51,7 @@
         <module>distributed-event-spring-boot-starter</module>
         <module>common-redis-spring-boot-starter</module>
         <module>common-eventbus-spring-boot-starter</module>
+        <module>http-client-spring-boot-starter</module>
         <module>mybatis-generator-plugin</module>
     </modules>
 
