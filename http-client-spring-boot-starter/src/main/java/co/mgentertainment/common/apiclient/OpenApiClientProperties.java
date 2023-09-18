@@ -16,8 +16,6 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "open-api-client")
 public class OpenApiClientProperties {
 
-    private String clientId;
-
     private Map<String, ApiMetadata> requestApi = new HashMap<>(0);
 
     @Data
@@ -55,8 +53,8 @@ public class OpenApiClientProperties {
 
     @Data
     public static class SignAlgorithm {
+        // value:rsa
         private String name;
         private String encryptKey;
-        private String decryptKey;
     }
 }

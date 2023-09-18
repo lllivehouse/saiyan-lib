@@ -1,6 +1,10 @@
 package co.mgentertainment.common.apiclient.sse;
 
+import co.mgentertainment.common.apiclient.OpenApiClientProperties;
+import co.mgentertainment.common.apiclient.auth.Credential;
 import co.mgentertainment.common.apiclient.core.ApiClient;
+import co.mgentertainment.common.apiclient.core.DefaultApiClient;
+import co.mgentertainment.common.apiclient.core.DefaultClientProfile;
 import co.mgentertainment.common.apiclient.exception.ClientException;
 import co.mgentertainment.common.utils.GsonFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +26,10 @@ public class SseConnectionManager {
 
     private static final Map<String, ServerSentEvent> SSE_CACHE = new ConcurrentHashMap<>();
 
-    private ApiClient sseClient;
-    private String module;
-    private String action;
-    private String clientId;
+    private OpenApiClientProperties.ApiMetadata apiMetadata;
 
-    public SseConnectionManager(ApiClient sseClient, String module, String action, String clientId) {
-        this.sseClient = sseClient;
-        this.module = module;
-        this.action = action;
-        this.clientId = clientId;
+    public SseConnectionManager(OpenApiClientProperties.ApiMetadata metadata) {
+        this.apiMetadata = metadata;
     }
 
     /**
@@ -42,7 +40,7 @@ public class SseConnectionManager {
      */
     public void connect(String clientId, int retryTimes, Consumer<ServerSentMessage> callback) {
         try {
-            ServerSentEvent sse = this.sseClient.requestSse(new SseConnectRequest(this.module, this.action, "clientId", clientId),
+            ServerSentEvent sse = newSSEClient(clientId).requestSse(new SseConnectRequest(apiMetadata.getModule(), apiMetadata.getAction(), "clientId", clientId),
                     new ServerSentEvent.Listener() {
                         @Override
                         public void onOpen(ServerSentEvent sse, Response response) {
@@ -103,5 +101,25 @@ public class SseConnectionManager {
         if (sse != null) {
             sse.close();
         }
+    }
+
+    private ApiClient newSSEClient(String clientId) {
+        DefaultClientProfile profile = DefaultClientProfile.getProfile(apiMetadata.getHost(), apiMetadata.getVersion());
+        // 读永不超时
+        profile.getHttpClientConfig().setReadTimeoutMillis(0L);
+        // 自动重连
+        profile.getHttpClientConfig().setRetryOnConnectionFailure(true);
+        Credential credential = new Credential() {
+            @Override
+            public String getEncryptKey() {
+                return apiMetadata.getSignAlgorithm().getEncryptKey();
+            }
+
+            @Override
+            public String getIdentity() {
+                return clientId;
+            }
+        };
+        return new DefaultApiClient(profile, credential);
     }
 }
