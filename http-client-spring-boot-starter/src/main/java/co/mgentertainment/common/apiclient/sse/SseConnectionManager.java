@@ -13,6 +13,7 @@ import okhttp3.Response;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -117,7 +118,7 @@ public class SseConnectionManager {
 
             @Override
             public String getIdentity() {
-                return clientId;
+                return clientId + ";" + (System.currentTimeMillis() + ThreadLocalRandom.current().nextInt(1, 9000));
             }
         };
         return new DefaultApiClient(profile, credential);
