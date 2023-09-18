@@ -7,7 +7,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
-import cn.hutool.crypto.digest.MD5;
 import cn.hutool.crypto.symmetric.AES;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -63,7 +62,7 @@ public class SecurityHelper {
     }
 
     /**
-     * 混合加密，先base64编码，再aes加密，密钥用md5加密
+     * 混合加密，先对明文用base64编码，再对编码用aes加密
      *
      * @param plainText
      * @param secret
@@ -77,7 +76,7 @@ public class SecurityHelper {
     }
 
     /**
-     * 混合解密，先aes解密，密钥用md5加密，再base64解码
+     * 混合解密，先对加密问用aes解密，再将解密文用base64解码
      *
      * @param encryptText
      * @param secret
@@ -91,8 +90,7 @@ public class SecurityHelper {
     }
 
     private static AES getAes(String secret) {
-        String encodingSecret = MD5.create().digestHex(secret);
-        return SecureUtil.aes(encodingSecret.getBytes(StandardCharsets.UTF_8));
+        return SecureUtil.aes(secret.getBytes(StandardCharsets.UTF_8));
     }
 
 }
