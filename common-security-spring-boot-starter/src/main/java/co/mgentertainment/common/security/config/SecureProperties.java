@@ -44,6 +44,11 @@ public class SecureProperties {
     /**
      * ignored web routes to be auth
      */
-    private List<String> ignoredUrls= new ArrayList<>();
+    private List<String> ignoredUrls = new ArrayList<>();
+
+    /**
+     * ignored api path to be auth
+     */
+    private List<String> ignoredPaths = new ArrayList<>();
 
 }

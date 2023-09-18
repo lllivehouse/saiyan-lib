@@ -51,16 +51,14 @@ public class GlobalSecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, SecureProperties secureProperties) throws Exception {
         return http
                 // 禁用CSRF
                 .csrf().disable()
                 .headers().frameOptions().disable()
                 .and().authorizeRequests()
                 // 后端接口放行
-                .antMatchers("/checkPreload",
-                        "/auth/login",
-                        "/auth/refreshToken"
+                .antMatchers(secureProperties.getIgnoredPaths().toArray(new String[]{})
                 ).permitAll()
                 // 其他请求需验证
                 .anyRequest().authenticated()
