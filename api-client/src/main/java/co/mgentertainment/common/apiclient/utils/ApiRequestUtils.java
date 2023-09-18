@@ -5,6 +5,7 @@ import co.mgentertainment.common.apiclient.auth.RsaTokenCredential;
 import co.mgentertainment.common.apiclient.auth.Signer;
 import co.mgentertainment.common.apiclient.http.ProtocolType;
 import co.mgentertainment.common.apiclient.exception.ClientException;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class ApiRequestUtils {
             urlBuilder.append(protocol.toString()).append(findStr);
         }
         urlBuilder.append(hostname)
-                .append('/').append(version)
+                .append(StringUtils.isNotBlank(version) ? '/' + version : StringUtils.EMPTY)
                 .append('/').append(module)
                 .append('/').append(action);
         if (queryParameters.isEmpty()) {
