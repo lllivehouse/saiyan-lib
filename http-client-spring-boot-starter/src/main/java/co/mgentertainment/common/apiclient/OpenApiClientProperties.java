@@ -16,7 +16,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "open-api-client")
 public class OpenApiClientProperties {
 
-    private Map<String, ApiMetadata> requestApi = new HashMap<>(0);
+    private Map<String, ApiMetadata> api = new HashMap<>(0);
 
     @Data
     public static class ApiMetadata {

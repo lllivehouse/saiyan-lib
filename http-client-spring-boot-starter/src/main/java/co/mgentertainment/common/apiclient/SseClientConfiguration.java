@@ -1,7 +1,7 @@
 package co.mgentertainment.common.apiclient;
 
 import co.mgentertainment.common.apiclient.sse.SseConnectionManager;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,12 +13,12 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(OpenApiClientProperties.class)
-@ConditionalOnProperty(prefix = "open-api-client.requestApi", name = "sse", havingValue = "true")
+@ConditionalOnExpression("!'${open-api-client.api.sse}'.isEmpty()")
 public class SseClientConfiguration {
 
     @Bean(name = "sseConnectionManager")
     public SseConnectionManager getSseConnectionManager(OpenApiClientProperties properties) {
-        OpenApiClientProperties.ApiMetadata metadata = properties.getRequestApi().get("sse");
+        OpenApiClientProperties.ApiMetadata metadata = properties.getApi().get("sse");
         return new SseConnectionManager(metadata);
     }
 }
