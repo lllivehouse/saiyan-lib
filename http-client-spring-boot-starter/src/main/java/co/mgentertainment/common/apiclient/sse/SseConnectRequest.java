@@ -26,7 +26,7 @@ public class SseConnectRequest extends SseRequest {
 
     private void setQueryParam(String parameterName, String parameterValue) {
         if (Objects.nonNull(parameterValue)) {
-            this.putQueryParameter(parameterName, parameterName);
+            this.putQueryParameter(parameterName, parameterValue);
         }
     }
 }
