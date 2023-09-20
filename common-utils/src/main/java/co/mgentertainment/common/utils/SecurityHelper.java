@@ -89,6 +89,16 @@ public class SecurityHelper {
         return Base64.decodeStr(encodingStr);
     }
 
+    public static String aesEncrypt(@NotNull String plainText, @NotNull String secret) {
+        AES aes = getAes(secret);
+        return aes.encryptHex(plainText);
+    }
+
+    public static String aesDecrypt(@NotNull String encryptText, @NotNull String secret) {
+        AES aes = getAes(secret);
+        return aes.decryptStr(encryptText, StandardCharsets.UTF_8);
+    }
+
     private static AES getAes(String secret) {
         return SecureUtil.aes(secret.getBytes(StandardCharsets.UTF_8));
     }
