@@ -92,5 +92,4 @@ public class SecurityHelper {
     private static AES getAes(String secret) {
         return SecureUtil.aes(secret.getBytes(StandardCharsets.UTF_8));
     }
-
 }
