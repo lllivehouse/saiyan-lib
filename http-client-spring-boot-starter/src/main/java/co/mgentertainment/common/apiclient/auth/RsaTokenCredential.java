@@ -12,7 +12,7 @@ public class RsaTokenCredential implements Credential {
     private final String publicKey;
     private final String clientId;
 
-    RsaTokenCredential(String publicKey, String clientId) {
+    public RsaTokenCredential(String publicKey, String clientId) {
         if (Objects.isNull(publicKey)) {
             throw new IllegalArgumentException("publicKey cannot be null.");
         }

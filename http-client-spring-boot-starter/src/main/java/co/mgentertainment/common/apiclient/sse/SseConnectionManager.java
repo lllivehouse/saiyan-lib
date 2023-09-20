@@ -2,6 +2,7 @@ package co.mgentertainment.common.apiclient.sse;
 
 import co.mgentertainment.common.apiclient.OpenApiClientProperties;
 import co.mgentertainment.common.apiclient.auth.Credential;
+import co.mgentertainment.common.apiclient.auth.RsaTokenCredential;
 import co.mgentertainment.common.apiclient.core.ApiClient;
 import co.mgentertainment.common.apiclient.core.DefaultApiClient;
 import co.mgentertainment.common.apiclient.core.DefaultClientProfile;
@@ -13,7 +14,6 @@ import okhttp3.Response;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -110,17 +110,7 @@ public class SseConnectionManager {
         profile.getHttpClientConfig().setReadTimeoutMillis(0L);
         // 自动重连
         profile.getHttpClientConfig().setRetryOnConnectionFailure(true);
-        Credential credential = new Credential() {
-            @Override
-            public String getEncryptKey() {
-                return apiMetadata.getSignAlgorithm().getEncryptKey();
-            }
-
-            @Override
-            public String getIdentity() {
-                return clientId + ";" + (System.currentTimeMillis() + ThreadLocalRandom.current().nextInt(1, 9000));
-            }
-        };
+        Credential credential = new RsaTokenCredential(apiMetadata.getSignAlgorithm().getEncryptKey(), clientId);
         return new DefaultApiClient(profile, credential);
     }
 }
