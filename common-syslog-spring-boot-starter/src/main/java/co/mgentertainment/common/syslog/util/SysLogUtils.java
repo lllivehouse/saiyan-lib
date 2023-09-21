@@ -40,7 +40,6 @@ public class SysLogUtils {
 		sysLog.setParams(HttpUtil.toParams(request.getParameterMap()));
 		sysLog.setCreateBy(getUsername());
 		sysLog.setUpdateBy(getUsername());
-		sysLog.setServiceId(System.getProperty("app.name",""));
 		return sysLog;
 	}
 

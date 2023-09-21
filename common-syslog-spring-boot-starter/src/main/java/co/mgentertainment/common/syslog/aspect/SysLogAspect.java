@@ -73,6 +73,7 @@ public class SysLogAspect {
 		finally {
 			Long endTime = System.currentTimeMillis();
 			logVo.setTime(endTime - startTime);
+			logVo.setServiceId(System.getProperty("app.name",""));
 			SpringContextHolder.publishEvent(new SysLogEvent(logVo));
 		}
 
