@@ -49,11 +49,11 @@ public class SysLogAspect {
 		if (split.length==3){
 			String oprationModule = split[0];
 			String oprationText = split[1];
-			String oprationtPYE = split[2];
+			String oprationtType = split[2];
 
 			logVo.setOprationModule(oprationModule);
 			logVo.setOprationText(oprationText);
-			logVo.setOprationType(oprationtPYE);
+			logVo.setOprationType(oprationtType);
 		}
 		logVo.setTitle(value);
 
