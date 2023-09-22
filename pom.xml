@@ -37,6 +37,7 @@
         <alibaba.druid.version>1.2.18</alibaba.druid.version>
         <!--others-->
         <hutool.version>5.8.21</hutool.version>
+        <disruptor.version>3.4.4</disruptor.version>
     </properties>
 
     <modules>
@@ -163,6 +164,11 @@
                         <artifactId>spring-boot-dependencies</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.lmax</groupId>
+                <artifactId>disruptor</artifactId>
+                <version>${disruptor.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

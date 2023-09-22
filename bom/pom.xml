@@ -37,6 +37,7 @@
         <file.storage.version>1.0.3</file.storage.version>
         <ffmpeg.version>0.7.0</ffmpeg.version>
         <log4j2.version>2.20.0</log4j2.version>
+        <reflections.version>0.9.10</reflections.version>
     </properties>
 
     <dependencyManagement>
@@ -240,6 +241,11 @@
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-slf4j-impl</artifactId>
                 <version>${log4j2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>${reflections.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
