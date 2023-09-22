@@ -68,6 +68,8 @@ public class GlobalSecurityConfiguration {
                 .and().authenticationProvider(authenticationProvider)
                 // 添加jwt登录认证过滤器
                 .addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                // 将登录框关闭
+                .formLogin().disable()
 //                // 配置登录
 //                .formLogin().loginPage("/login.html").loginProcessingUrl("/auth/login").successForwardUrl("/index").failureUrl("/auth/login").and()
                 // 配置登出
