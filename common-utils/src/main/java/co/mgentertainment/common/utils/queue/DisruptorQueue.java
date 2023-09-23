@@ -1,5 +1,6 @@
 package co.mgentertainment.common.utils.queue;
 
+import com.google.common.base.Preconditions;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.SequenceBarrier;
 import com.lmax.disruptor.WorkerPool;
@@ -11,7 +12,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.*;
 
 /**
  * @author larry
@@ -22,6 +23,7 @@ public class DisruptorQueue<T> {
 
     private Disruptor<DisruptorEvent<T>> disruptor;
     private RingBuffer<DisruptorEvent<T>> ringBuffer;
+    private ExecutorService executor;
     private WorkerPool<DisruptorEvent<T>> workerPool;
 
     /**
@@ -46,18 +48,30 @@ public class DisruptorQueue<T> {
 
     /**
      * 创建"发布合作订阅模式"队列，即同一事件会被多个消费者合作并行消费
+     *
      * @param bufferSize
      * @param multiProducer
-     * @param executor
      * @param consumers
      */
-    public DisruptorQueue(int bufferSize, boolean multiProducer, ExecutorService executor, AbstractDisruptorWorkConsumer<T>... consumers) {
+    public DisruptorQueue(int bufferSize, boolean multiProducer, AbstractDisruptorWorkConsumer<T>... consumers) {
+        Preconditions.checkArgument(consumers != null && consumers.length > 0, "consumers can not be empty");
         this.ringBuffer = RingBuffer.create(multiProducer ? ProducerType.MULTI : ProducerType.SINGLE, new DisruptorEventFactory<>(), bufferSize,
                 new YieldingWaitStrategy());
         SequenceBarrier barriers = this.ringBuffer.newBarrier();
         this.workerPool = new WorkerPool<>(this.ringBuffer, barriers, new DisruptorEventExceptionHandler(), consumers);
         this.ringBuffer.addGatingSequences(workerPool.getWorkerSequences());
-        this.workerPool.start(executor);
+        // Fixed Thread Pool
+        int workerSize = consumers.length;
+        this.executor = new ThreadPoolExecutor(workerSize, workerSize, 0L, TimeUnit.MILLISECONDS,
+                new ArrayBlockingQueue<>(10), new ThreadFactory() {
+            private int counter = 0;
+
+            @Override
+            public Thread newThread(Runnable r) {
+                return new Thread(r, "DisruptorWorker-" + counter++);
+            }
+        });
+        this.workerPool.start(this.executor);
     }
 
     public void add(T t) {
@@ -82,6 +96,9 @@ public class DisruptorQueue<T> {
     }
 
     public void shutdown() {
+        if (this.executor != null && !this.executor.isShutdown()) {
+            this.executor.shutdown();
+        }
         this.disruptor.shutdown();
     }
 
