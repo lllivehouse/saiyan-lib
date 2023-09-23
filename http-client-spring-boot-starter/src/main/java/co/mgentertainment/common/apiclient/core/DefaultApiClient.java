@@ -1,5 +1,7 @@
 package co.mgentertainment.common.apiclient.core;
 
+import cn.hutool.core.map.MapUtil;
+import co.mgentertainment.common.apiclient.auth.ApiToken;
 import co.mgentertainment.common.apiclient.auth.Credential;
 import co.mgentertainment.common.apiclient.auth.DefaultCredentialProvider;
 import co.mgentertainment.common.apiclient.deserializer.Deserializable;
@@ -12,6 +14,7 @@ import co.mgentertainment.common.apiclient.sse.ServerSentEvent;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -25,6 +28,7 @@ public class DefaultApiClient implements ApiClient {
     private boolean autoRetry;
     private ClientProfile clientProfile;
     private Credential credential;
+    private ApiToken apiToken;
     private AbstractHttpClient httpClient;
 
     public DefaultApiClient(ClientProfile profile) {
@@ -44,13 +48,37 @@ public class DefaultApiClient implements ApiClient {
         }
     }
 
+    public DefaultApiClient(ClientProfile profile, ApiToken apiToken) {
+        this.maxRetryNumber = 3;
+        this.autoRetry = true;
+        this.clientProfile = profile;
+        this.apiToken = apiToken;
+        this.httpClient = HttpClientFactory.buildClient(this.clientProfile);
+        HttpClientConfig httpClientConfig = profile.getHttpClientConfig();
+        if (Objects.nonNull(httpClientConfig)) {
+            httpClientConfig.setAutoRetry(this.autoRetry);
+            httpClientConfig.setMaxRetryTimes(this.maxRetryNumber);
+        }
+    }
+
     public <T extends ApiResponse> T call(ApiRequest<T> request) throws ClientException {
-        HttpResponse httpResponse = this.doAction(request, this.credential);
+        HttpResponse httpResponse;
+        if (this.apiToken != null) {
+            httpResponse = this.doAction(request, MapUtil.builder(this.apiToken.getHeaderName(), this.apiToken.getToken()).build());
+        } else {
+            httpResponse = this.doAction(request, this.credential);
+        }
         return this.parseApiResponse(request, httpResponse);
     }
 
     public <T extends ApiResponse> CompletableFuture<T> asyncCall(ApiRequest<T> request, CallBack callBack) throws ClientException {
-        return this.asyncDoAction(request, this.credential, callBack).thenApplyAsync((httpResponse) -> {
+        return this.apiToken != null ? this.asyncDoAction(request, MapUtil.builder(this.apiToken.getHeaderName(), this.apiToken.getToken()).build(), callBack).thenApplyAsync((httpResponse) -> {
+            try {
+                return this.parseApiResponse(request, httpResponse);
+            } catch (ClientException var4) {
+                return null;
+            }
+        }) : this.asyncDoAction(request, this.credential, callBack).thenApplyAsync((httpResponse) -> {
             try {
                 return this.parseApiResponse(request, httpResponse);
             } catch (ClientException var4) {
@@ -61,39 +89,48 @@ public class DefaultApiClient implements ApiClient {
 
     @Override
     public ServerSentEvent requestSse(SseRequest request, ServerSentEvent.Listener listener) throws ClientException {
-        HttpRequest httpRequest = configHttpRequest(request, this.credential);
+        HttpRequest httpRequest = configSseHttpRequest(request, this.credential);
         return this.httpClient.requestSse(httpRequest, listener);
     }
 
     private <T extends ApiResponse> HttpResponse doAction(ApiRequest<T> request, Credential credential) throws ClientException {
-        return this.doRealAction(request, credential, request.getAcceptFormat());
+        HttpRequest httpRequest = this.configHttpRequest(request, credential, request.getAcceptFormat());
+        return this.doRealAction(httpRequest);
     }
 
-    private <T extends ApiResponse> HttpResponse doRealAction(ApiRequest<T> request, Credential credential, FormatType format) throws ClientException {
+    private <T extends ApiResponse> HttpResponse doAction(ApiRequest<T> request, Map<String, String> signedHeader) throws ClientException {
+        HttpRequest httpRequest = this.configHttpRequest(request, signedHeader, request.getAcceptFormat());
+        return this.doRealAction(httpRequest);
+    }
+
+    private <T extends ApiResponse> HttpResponse doRealAction(HttpRequest httpRequest) throws ClientException {
         try {
-            HttpRequest httpRequest = this.configHttpRequest(request, credential, format);
             HttpResponse httpResponse = this.httpClient.syncInvoke(httpRequest);
             return httpResponse;
         } catch (SocketTimeoutException var6) {
-            throw new ClientException("ReadTimeout", "SocketTimeoutException has occurred on a socket read or accept.The url is " + request.getUrl(), var6);
+            throw new ClientException("ReadTimeout", "SocketTimeoutException has occurred on a socket read or accept.The url is " + httpRequest.getUrl(), var6);
         } catch (IOException var7) {
-            throw new ClientException("ServerUnreachable", "Server unreachable: connection " + request.getUrl() + " failed", var7);
+            throw new ClientException("ServerUnreachable", "Server unreachable: connection " + httpRequest.getUrl() + " failed", var7);
         } catch (Exception var8) {
-            throw new ClientException("ClientException", "Fail to call " + request.getUrl(), var8);
+            throw new ClientException("ClientException", "Fail to call " + httpRequest.getUrl(), var8);
         }
     }
 
     private <T extends ApiResponse> CompletableFuture<HttpResponse> asyncDoAction(ApiRequest<T> request, Credential credential, CallBack callBack) throws ClientException {
-        return this.asyncDoRealAction(request, credential, request.getAcceptFormat(), callBack);
+        HttpRequest httpRequest = this.configHttpRequest(request, credential, request.getAcceptFormat());
+        return this.asyncDoRealAction(httpRequest, callBack);
     }
 
-    private <T extends ApiResponse> CompletableFuture<HttpResponse> asyncDoRealAction(ApiRequest<T> request, Credential credential, FormatType format, CallBack callBack) throws ClientException {
-        HttpRequest httpRequest = this.configHttpRequest(request, credential, format);
+    private <T extends ApiResponse> CompletableFuture<HttpResponse> asyncDoRealAction(HttpRequest httpRequest, CallBack callBack) throws ClientException {
         return this.httpClient.asyncInvoke(httpRequest, callBack);
     }
 
-    private <T extends ApiResponse> HttpRequest configHttpRequest(ApiRequest<T> request, Credential credential,
-                                                                  FormatType format) throws ClientException {
+    private <T extends ApiResponse> CompletableFuture<HttpResponse> asyncDoAction(ApiRequest<T> request, Map<String, String> signedHeader, CallBack callBack) throws ClientException {
+        HttpRequest httpRequest = this.configHttpRequest(request, signedHeader, request.getAcceptFormat());
+        return this.asyncDoRealAction(httpRequest, callBack);
+    }
+
+    private <T extends ApiResponse> HttpRequest configHttpRequest(ApiRequest<T> request, Credential credential, FormatType format) throws ClientException {
         this.doActionWithProxy(request.getProtocol(), System.getenv("HTTPS_PROXY"), System.getenv("HTTP_PROXY"));
         this.doActionWithIgnoreSSL(request, true);
         FormatType requestFormatType = request.getAcceptFormat();
@@ -112,7 +149,26 @@ public class DefaultApiClient implements ApiClient {
         }
     }
 
-    private HttpRequest configHttpRequest(SseRequest request, Credential credential) throws ClientException {
+    private <T extends ApiResponse> HttpRequest configHttpRequest(ApiRequest<T> request, Map<String, String> signedHeader, FormatType format) throws ClientException {
+        this.doActionWithProxy(request.getProtocol(), System.getenv("HTTPS_PROXY"), System.getenv("HTTP_PROXY"));
+        this.doActionWithIgnoreSSL(request, true);
+        FormatType requestFormatType = request.getAcceptFormat();
+        if (null != requestFormatType) {
+            format = requestFormatType;
+        }
+        if (request.getProtocol() == null) {
+            request.setProtocol(this.clientProfile.getHttpClientConfig().getProtocolType());
+        }
+        try {
+            return request.buildRequest(this.clientProfile, signedHeader, format);
+        } catch (ClientException e) {
+            throw e;
+        } catch (UnsupportedEncodingException e) {
+            throw new ClientException("UnsupportedEncoding");
+        }
+    }
+
+    private HttpRequest configSseHttpRequest(SseRequest request, Credential credential) throws ClientException {
         this.doActionWithProxy(request.getProtocol(), System.getenv("HTTPS_PROXY"), System.getenv("HTTP_PROXY"));
         request.setIgnoreSSLCerts(true);
         if (request.getProtocol() == null) {

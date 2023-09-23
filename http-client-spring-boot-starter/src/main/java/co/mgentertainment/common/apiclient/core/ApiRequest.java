@@ -45,24 +45,31 @@ public abstract class ApiRequest<T extends ApiResponse> extends HttpRequest {
             UnsupportedEncodingException {
         if (Objects.nonNull(credential)) {
             Map<String, String> signedHeader = ApiRequestUtils.getSignedHeader(credential);
-            this.headers.putAll(signedHeader);
-            if (Objects.nonNull(bodyParameters) && !bodyParameters.isEmpty()) {
-                byte[] data;
-                if (FormatType.JSON == this.getHttpContentType()) {
-                    data = ParameterHelper.getJsonData(bodyParameters);
-                } else if (FormatType.XML == this.getHttpContentType()) {
-                    data = ParameterHelper.getXmlData(bodyParameters);
-                } else if (FormatType.FORM == this.getHttpContentType()) {
-                    data = ParameterHelper.getFormData(bodyParameters);
-                } else if (FormatType.RAW == this.getHttpContentType()) {
-                    Map<String, File> formFiles = ParameterHelper.getFormFiles(bodyParameters);
-                    this.setMultipartFiles(formFiles);
-                    data = ParameterHelper.getFormData(bodyParameters);
-                } else {
-                    data = null;
-                }
-                this.setHttpContent(data, StandardCharsets.UTF_8.name(), formatType);
+            return this.buildRequest(profile, signedHeader, formatType);
+        }
+        this.setUrl(ApiRequestUtils.composeUrl(this.protocol, profile.getHostname(), profile.getVersion(), module, action, queryParameters));
+        return this;
+    }
+
+    public HttpRequest buildRequest(ClientProfile profile, Map<String, String> signedHeader, FormatType formatType) throws ClientException,
+            UnsupportedEncodingException {
+        this.headers.putAll(signedHeader);
+        if (Objects.nonNull(bodyParameters) && !bodyParameters.isEmpty()) {
+            byte[] data;
+            if (FormatType.JSON == this.getHttpContentType()) {
+                data = ParameterHelper.getJsonData(bodyParameters);
+            } else if (FormatType.XML == this.getHttpContentType()) {
+                data = ParameterHelper.getXmlData(bodyParameters);
+            } else if (FormatType.FORM == this.getHttpContentType()) {
+                data = ParameterHelper.getFormData(bodyParameters);
+            } else if (FormatType.RAW == this.getHttpContentType()) {
+                Map<String, File> formFiles = ParameterHelper.getFormFiles(bodyParameters);
+                this.setMultipartFiles(formFiles);
+                data = ParameterHelper.getFormData(bodyParameters);
+            } else {
+                data = null;
             }
+            this.setHttpContent(data, StandardCharsets.UTF_8.name(), formatType);
         }
         this.setUrl(ApiRequestUtils.composeUrl(this.protocol, profile.getHostname(), profile.getVersion(), module, action, queryParameters));
         return this;
