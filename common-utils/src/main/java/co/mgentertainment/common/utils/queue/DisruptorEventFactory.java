@@ -7,7 +7,7 @@ import com.lmax.disruptor.EventFactory;
  * @createTime 2023/2/11
  * @description DisruptorEventFactory
  */
-public class DisruptorEventFactory implements EventFactory<DisruptorEvent> {
+public class DisruptorEventFactory<T> implements EventFactory<DisruptorEvent<T>> {
 
     @Override
     public DisruptorEvent newInstance() {
