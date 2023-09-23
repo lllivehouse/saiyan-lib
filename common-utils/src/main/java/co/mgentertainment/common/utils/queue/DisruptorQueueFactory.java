@@ -6,6 +6,7 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
 import java.util.Objects;
+import java.util.concurrent.*;
 
 /**
  * @author larry
@@ -15,22 +16,49 @@ import java.util.Objects;
 public class DisruptorQueueFactory {
 
     /**
-     * 创建"发布订阅模式"队列，即同一事件会被多个消费者并行消费
+     * 创建"广播订阅模式"队列，即同一事件会被多个消费者重复并行消费
      *
-     * @param queueSize
+     * @param bufferSize
      * @param multiProducer
      * @param consumers
      * @param <T>
      * @return
      */
-    public static <T> DisruptorQueue<T> createPubSubQueue(int queueSize, boolean multiProducer,
+    public static <T> DisruptorQueue<T> createPubSubQueue(int bufferSize, boolean multiProducer,
                                                           AbstractDisruptorConsumer<T>... consumers) {
         Disruptor<DisruptorEvent<T>> disruptor = new Disruptor(new DisruptorEventFactory(),
-                queueSize, DaemonThreadFactory.INSTANCE,
+                bufferSize, DaemonThreadFactory.INSTANCE,
                 multiProducer ? ProducerType.MULTI : ProducerType.SINGLE,
                 new YieldingWaitStrategy());
         if (Objects.nonNull(consumers) && consumers.length > 0) {
             disruptor.handleEventsWith(consumers).then((disruptorEvent, l, b) -> disruptorEvent.clear());
+        }
+        return new DisruptorQueue(disruptor);
+    }
+
+    /**
+     * 创建"发布合作订阅模式"队列，即同一事件会被多个消费者合作并行消费
+     *
+     * @param bufferSize
+     * @param workerSize
+     * @param multiProducer
+     * @param consumers
+     * @param <T>
+     * @return
+     */
+    public static <T> DisruptorQueue<T> createWorkPoolQueue(int bufferSize, int workerSize, boolean multiProducer,
+                                                            AbstractDisruptorWorkConsumer<T>... consumers) {
+        Disruptor<DisruptorEvent<T>> disruptor = new Disruptor(new DisruptorEventFactory(), bufferSize,
+                new ThreadPoolExecutor(workerSize, workerSize, 0L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(10), new ThreadFactory() {
+                    private int counter = 0;
+
+                    @Override
+                    public Thread newThread(Runnable r) {
+                        return new Thread(r, "DisruptorWorker-" + counter++);
+                    }
+                }), multiProducer ? ProducerType.MULTI : ProducerType.SINGLE, new YieldingWaitStrategy());
+        if (Objects.nonNull(consumers) && consumers.length > 0) {
+            disruptor.handleEventsWithWorkerPool(consumers).then((disruptorEvent, l, b) -> disruptorEvent.clear());
         }
         return new DisruptorQueue(disruptor);
     }
