@@ -61,6 +61,7 @@ public class DefaultApiClient implements ApiClient {
         }
     }
 
+    @Override
     public <T extends ApiResponse> T call(ApiRequest<T> request) throws ClientException {
         HttpResponse httpResponse;
         if (this.apiToken != null) {
@@ -71,6 +72,7 @@ public class DefaultApiClient implements ApiClient {
         return this.parseApiResponse(request, httpResponse);
     }
 
+    @Override
     public <T extends ApiResponse> CompletableFuture<T> asyncCall(ApiRequest<T> request, CallBack callBack) throws ClientException {
         return this.apiToken != null ? this.asyncDoAction(request, MapUtil.builder(this.apiToken.getHeaderName(), this.apiToken.getToken()).build(), callBack).thenApplyAsync((httpResponse) -> {
             try {
