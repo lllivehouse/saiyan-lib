@@ -62,4 +62,8 @@ public class SysUserDetailsService implements UserDetailsService {
     public void refreshUserCache(String username) {
         sysUserRepository.cleanUserCache(username);
     }
+
+    public void cleanAllUserCache() {
+        sysUserRepository.cleanAllCache();
+    }
 }

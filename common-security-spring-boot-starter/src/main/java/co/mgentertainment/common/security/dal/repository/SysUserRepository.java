@@ -58,6 +58,10 @@ public class SysUserRepository implements InitializingBean {
         localCache.remove(username);
     }
 
+    public void cleanAllCache() {
+        localCache.removeAll();
+    }
+
     private SysUserInfo getUserInfoFromDb(String username) throws RuntimeException {
         SysUserDO user = jdbcTemplate.queryForObject(SQL_QUERY_USER, new BeanPropertyRowMapper<>(SysUserDO.class), username);
         if (user == null) {
