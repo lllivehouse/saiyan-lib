@@ -216,16 +216,24 @@
                 <artifactId>feign-okhttp</artifactId>
                 <version>${openfeign.okhttp.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>net.bramp.ffmpeg</groupId>
+                <artifactId>ffmpeg</artifactId>
+                <version>${ffmpeg.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>cn.xuyanwu</groupId>
                 <artifactId>spring-file-storage</artifactId>
                 <version>${file.storage.version}</version>
             </dependency>
             <dependency>
-                <groupId>net.bramp.ffmpeg</groupId>
-                <artifactId>ffmpeg</artifactId>
-                <version>${ffmpeg.version}</version>
+                <groupId>cn.xuyanwu</groupId>
+                <artifactId>file-storage-core</artifactId>
+                <version>${file.storage.version}</version>
             </dependency>
+
             <!--log4j2-->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
