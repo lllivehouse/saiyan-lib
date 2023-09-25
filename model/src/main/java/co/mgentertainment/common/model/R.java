@@ -55,6 +55,10 @@ public class R<T> implements Serializable {
 		return restResult(null, FAIL, msg);
 	}
 
+	public static <T> R<T> failed(int code, String msg) {
+		return restResult(null, code, msg);
+	}
+
 	public static <T> R<T> failed(ErrorCodeEnum errorCode) {
 		return restResult(null, errorCode.getCode(), errorCode.getMessage());
 	}
