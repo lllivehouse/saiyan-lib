@@ -38,6 +38,7 @@
         <ffmpeg.version>0.7.0</ffmpeg.version>
         <log4j2.version>2.20.0</log4j2.version>
         <reflections.version>0.9.10</reflections.version>
+        <guava.retry.version>2.0.0</guava.retry.version>
     </properties>
 
     <dependencyManagement>
@@ -250,11 +251,19 @@
                 <artifactId>log4j-slf4j-impl</artifactId>
                 <version>${log4j2.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.reflections</groupId>
                 <artifactId>reflections</artifactId>
                 <version>${reflections.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.github.rholder</groupId>
+                <artifactId>guava-retrying</artifactId>
+                <version>${guava.retry.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
