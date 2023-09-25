@@ -38,7 +38,7 @@
         <ffmpeg.version>0.7.0</ffmpeg.version>
         <log4j2.version>2.20.0</log4j2.version>
         <reflections.version>0.9.10</reflections.version>
-        <guava.retry.version>2.0.0</guava.retry.version>
+        <spring.retry.version>2.0.3</spring.retry.version>
     </properties>
 
     <dependencyManagement>
@@ -153,6 +153,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.springframework.retry</groupId>
+                <artifactId>spring-retry</artifactId>
+                <version>${spring.retry.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${jjwt.version}</version>
@@ -256,12 +262,6 @@
                 <groupId>org.reflections</groupId>
                 <artifactId>reflections</artifactId>
                 <version>${reflections.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.github.rholder</groupId>
-                <artifactId>guava-retrying</artifactId>
-                <version>${guava.retry.version}</version>
             </dependency>
 
             <dependency>
