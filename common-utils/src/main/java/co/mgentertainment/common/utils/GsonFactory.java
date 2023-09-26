@@ -135,9 +135,9 @@ public class GsonFactory {
                 case NUMBER:
                     double dbNum = in.nextDouble();
 
-                    // 数字超过long的最大值，返回字符串类型
+                    // 数字超过long的最大值，返回浮点类型
                     if (dbNum > Long.MAX_VALUE) {
-                        return in.nextString();
+                        return dbNum;
                     }
                     // 判断数字是否为整数值
                     long lngNum = (long) dbNum;
