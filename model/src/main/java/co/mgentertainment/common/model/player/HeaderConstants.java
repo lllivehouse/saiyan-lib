@@ -6,9 +6,12 @@ package co.mgentertainment.common.model.player;
  * @description HeaderConstants
  */
 public interface HeaderConstants {
-    String HEADER_CLIENT_ID = "clientId";
-    String HEADER_UID = "uid";
-    String HEADER_USERNAME = "username";
-    String HEADER_NICKNAME = "nickname";
-    String HEADER_AVATAR = "avatar";
+    String HEADER_CLIENT_ID = "_clientId";
+    String HEADER_UID = "_uid";
+    String HEADER_USERNAME = "_username";
+    String HEADER_NICKNAME = "_nickname";
+    String HEADER_AVATAR = "_avatar";
+    String HEADER_REQ_ID = "_requestId";
+    String HEADER_REQ_TS = "_requestTimestamp";
+    String HEADER_CLIENT_IP = "_clientIp";
 }
