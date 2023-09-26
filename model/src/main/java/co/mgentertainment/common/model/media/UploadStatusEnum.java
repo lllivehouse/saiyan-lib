@@ -16,6 +16,7 @@ public enum UploadStatusEnum {
     UPLOAD_FAILURE(4, "正片上传失败"),
     TRAILER_CUT_FAILURE(5, "预告片剪切失败"),
     TRAILER_UPLOAD_FAILURE(6, "预告片上传失败"),
+    VIDEO_DAMAGED_OR_LOST(7, "视频已损坏或丢失"),
     COMPLETED(10, "已完成"),
     ;
 
