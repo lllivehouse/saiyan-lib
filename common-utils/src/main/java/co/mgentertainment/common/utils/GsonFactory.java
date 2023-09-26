@@ -28,6 +28,8 @@ public class GsonFactory {
     public static Gson getGson() {
         String dateFormat = DateUtils.DEFAULT_FORMAT;
         return new GsonBuilder()
+                .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+                .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                 .setDateFormat(dateFormat)
                 .setLongSerializationPolicy(LongSerializationPolicy.STRING)
                 .registerTypeAdapter(new TypeToken<Map<String, Object>>() {
