@@ -31,7 +31,7 @@ public class GsonFactory {
                 .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                 .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                 .setDateFormat(dateFormat)
-                .setLongSerializationPolicy(LongSerializationPolicy.STRING)
+                .registerTypeAdapter(Long.class, new LongSerializer())
                 .registerTypeAdapter(new TypeToken<Map<String, Object>>() {
                 }.getType(), new MapTypeAdapter())
                 .registerTypeAdapter(Date.class, new DateDeserializer(dateFormat))
@@ -64,6 +64,14 @@ public class GsonFactory {
                 }
             }
             return new Date(Long.parseLong(jsonStr));
+        }
+    }
+
+    public static class LongSerializer implements JsonSerializer<Long> {
+
+        @Override
+        public JsonElement serialize(Long value, Type type, JsonSerializationContext jsonSerializationContext) {
+            return (value == null ? JsonNull.INSTANCE : value > Integer.MAX_VALUE ? new JsonPrimitive(value.toString()) : new JsonPrimitive(value));
         }
     }
 
@@ -135,9 +143,9 @@ public class GsonFactory {
                 case NUMBER:
                     double dbNum = in.nextDouble();
 
-                    // 数字超过long的最大值，返回浮点类型
-                    if (dbNum > Long.MAX_VALUE) {
-                        return dbNum;
+                    // 数字超过int的最大值，返回字符串类型
+                    if (dbNum > Integer.MAX_VALUE) {
+                        return in.nextString();
                     }
                     // 判断数字是否为整数值
                     long lngNum = (long) dbNum;
