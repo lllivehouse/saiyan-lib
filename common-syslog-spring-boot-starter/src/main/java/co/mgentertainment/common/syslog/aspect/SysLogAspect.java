@@ -44,7 +44,7 @@ public class SysLogAspect {
             }
         }
         String[] split = value.split("_");
-        SysLogDO logVo = SysLogUtils.getSysLog(point.getArgs());
+        SysLogDO logVo = SysLogUtils.getSysLog(point.getArgs(), sysLog.ignoredArgs());
         if (split.length == 3) {
             String oprationModule = split[0];
             String oprationText = split[1];

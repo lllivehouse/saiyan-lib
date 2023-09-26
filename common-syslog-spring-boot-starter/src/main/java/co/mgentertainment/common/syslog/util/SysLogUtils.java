@@ -18,9 +18,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -30,7 +33,7 @@ import java.util.Objects;
 @UtilityClass
 public class SysLogUtils {
 
-    public SysLogDO getSysLog(Object[] args) {
+    public SysLogDO getSysLog(Object[] args, boolean isIgnoredArgs) {
         HttpServletRequest request = ((ServletRequestAttributes) Objects
                 .requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         SysLogDO sysLog = new SysLogDO();
@@ -39,10 +42,13 @@ public class SysLogUtils {
         sysLog.setRequestUri(URLUtil.getPath(request.getRequestURI()));
         sysLog.setMethod(request.getMethod());
         sysLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
-        sysLog.setParams(StringUtils.equalsIgnoreCase(request.getMethod(), "post") ? GsonFactory.getGson().toJson(args) :
-                HttpUtil.toParams(request.getParameterMap()));
         sysLog.setCreateBy(getUsername());
         sysLog.setUpdateBy(getUsername());
+        if (!isIgnoredArgs) {
+            sysLog.setParams(StringUtils.equalsIgnoreCase(request.getMethod(), "post") ?
+                    GsonFactory.getGson().toJson(Arrays.stream(args).filter(arg -> !(arg instanceof HttpServletRequest) && !(arg instanceof HttpServletResponse) && !(arg instanceof MultipartFile)).toArray()) :
+                    HttpUtil.toParams(request.getParameterMap()));
+        }
         return sysLog;
     }
 

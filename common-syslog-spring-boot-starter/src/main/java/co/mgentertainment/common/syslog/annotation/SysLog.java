@@ -11,16 +11,24 @@ import java.lang.annotation.*;
 @Documented
 public @interface SysLog {
 
-	/**
-	 * 描述
-	 * @return {String}
-	 */
-	String value() default "";
+    /**
+     * 描述
+     *
+     * @return {String}
+     */
+    String value() default "";
 
-	/**
-	 * spel 表达式
-	 * @return 日志描述
-	 */
-	String expression() default "";
+    /**
+     * spel 表达式
+     *
+     * @return 日志描述
+     */
+    String expression() default "";
 
+    /**
+     * 是否忽略请求参数（针对file上传）
+     *
+     * @return
+     */
+    boolean ignoredArgs() default false;
 }
