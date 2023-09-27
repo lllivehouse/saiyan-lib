@@ -13,8 +13,6 @@ public class DeserializableFactory {
         switch(format) {
             case JSON:
                 return new JsonDeserializer();
-            case XML:
-                return new XmlDeserializer();
             default:
                 throw new IllegalStateException("Unsupported response format: " + format);
         }

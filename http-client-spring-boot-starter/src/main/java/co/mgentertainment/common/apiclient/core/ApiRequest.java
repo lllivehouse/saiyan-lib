@@ -58,8 +58,6 @@ public abstract class ApiRequest<T extends ApiResponse> extends HttpRequest {
             byte[] data;
             if (FormatType.JSON == this.getHttpContentType()) {
                 data = ParameterHelper.getJsonData(bodyParameters);
-            } else if (FormatType.XML == this.getHttpContentType()) {
-                data = ParameterHelper.getXmlData(bodyParameters);
             } else if (FormatType.FORM == this.getHttpContentType()) {
                 data = ParameterHelper.getFormData(bodyParameters);
             } else if (FormatType.RAW == this.getHttpContentType()) {

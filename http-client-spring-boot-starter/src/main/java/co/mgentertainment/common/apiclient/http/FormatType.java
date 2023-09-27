@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 public enum FormatType {
 
-    XML(new String[]{"application/xml", "text/xml"}), JSON(new String[]{"application/json", "text/json"}),
+    JSON(new String[]{"application/json", "text/json"}),
     RAW(new String[]{"application/octet-stream"}), FORM(new String[]{"application/x-www-form-urlencoded"}),
     TEXT_EVENT_STREAM_VALUE(new String[]{"text/event-stream"});
 

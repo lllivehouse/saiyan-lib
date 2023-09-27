@@ -200,7 +200,7 @@ public class DefaultApiClient implements ApiClient {
 
     private <T extends ApiResponse> T parseApiResponse(ApiRequest<T> request, HttpResponse httpResponse) throws ClientException {
         FormatType format = httpResponse.getHttpContentType();
-        if (FormatType.JSON != format && FormatType.XML != format) {
+        if (FormatType.JSON != format) {
             throw new ClientException(String.format("Server response has a bad format type: %s;\nThe original return " +
                     "is: %s;", format, httpResponse.getHttpContentString()));
         } else if (httpResponse.isSuccess()) {
