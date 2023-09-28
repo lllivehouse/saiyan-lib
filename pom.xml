@@ -61,17 +61,17 @@
             <dependency>
                 <groupId>co.mgentertainment</groupId>
                 <artifactId>bom</artifactId>
-                <version>${revision}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>co.mgentertainment</groupId>
                 <artifactId>model</artifactId>
-                <version>${revision}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>co.mgentertainment</groupId>
                 <artifactId>common-utils</artifactId>
-                <version>${revision}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
