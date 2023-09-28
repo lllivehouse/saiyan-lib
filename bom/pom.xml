@@ -14,7 +14,6 @@
     <packaging>pom</packaging>
 
     <properties>
-        <common.lib.version>1.0.0-SNAPSHOT</common.lib.version>
         <dubbo.version>3.2.5</dubbo.version>
         <!--aws-->
         <aws.sdk.version>1.12.429</aws.sdk.version>
@@ -46,47 +45,47 @@
             <dependency>
                 <groupId>co.mgentertainment</groupId>
                 <artifactId>common-security-spring-boot-starter</artifactId>
-                <version>${common.lib.version}</version>
+                <version>${parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>co.mgentertainment</groupId>
                 <artifactId>common-mybatisplus-spring-boot-starter</artifactId>
-                <version>${common.lib.version}</version>
+                <version>${parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>co.mgentertainment</groupId>
                 <artifactId>common-syslog-spring-boot-starter</artifactId>
-                <version>${common.lib.version}</version>
+                <version>${parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>co.mgentertainment</groupId>
                 <artifactId>common-doc-spring-boot-starter</artifactId>
-                <version>${common.lib.version}</version>
+                <version>${parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>co.mgentertainment</groupId>
                 <artifactId>uid-generator-spring-boot-starter</artifactId>
-                <version>${common.lib.version}</version>
+                <version>${parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>co.mgentertainment</groupId>
                 <artifactId>distributed-event-spring-boot-starter</artifactId>
-                <version>${common.lib.version}</version>
+                <version>${parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>co.mgentertainment</groupId>
                 <artifactId>common-redis-spring-boot-starter</artifactId>
-                <version>${common.lib.version}</version>
+                <version>${parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>co.mgentertainment</groupId>
                 <artifactId>common-eventbus-spring-boot-starter</artifactId>
-                <version>${common.lib.version}</version>
+                <version>${parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>co.mgentertainment</groupId>
                 <artifactId>http-client-spring-boot-starter</artifactId>
-                <version>${common.lib.version}</version>
+                <version>${parent.version}</version>
             </dependency>
             <!-- Dubbo -->
             <dependency>
