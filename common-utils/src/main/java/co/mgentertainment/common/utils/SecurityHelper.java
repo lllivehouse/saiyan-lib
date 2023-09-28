@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * @author larry
@@ -21,6 +22,47 @@ import java.util.Date;
  * @description SecurityHelper
  */
 public class SecurityHelper {
+
+    /**
+     * 非对称加密
+     *
+     * @param plainText   明文
+     * @param publicKey   公钥
+     * @param expiredDate 过期时间
+     * @return
+     */
+    public static String rsaEncrypt(String plainText, String publicKey, Date expiredDate) {
+        RSA rsa = new RSA(null, publicKey);
+        plainText = String.format("%s;%d", plainText, expiredDate.getTime());
+        byte[] encrypt = rsa.encrypt(StrUtil.bytes(plainText, CharsetUtil.CHARSET_UTF_8), KeyType.PublicKey);
+        return HexUtil.encodeHexStr(encrypt);
+    }
+
+    /**
+     * 非对称解密
+     *
+     * @param encryptText 密文
+     * @param privateKey  私钥
+     * @param expiredDate 过期时间
+     * @return
+     */
+    public static String rsaDecrypt(String encryptText, String privateKey, Date expiredDate) {
+        RSA rsa = new RSA(privateKey, null);
+        try {
+            byte[] decodeHex = HexUtil.decodeHex(encryptText);
+            byte[] decrypt = rsa.decrypt(decodeHex, KeyType.PrivateKey);
+            String decode = StrUtil.str(decrypt, CharsetUtil.CHARSET_UTF_8);
+            String[] arr = StringUtils.split(decode, ";");
+            if (arr == null || arr.length != 2 || !StringUtils.isNumeric(arr[1])) {
+                return null;
+            }
+            if (new Date(Long.parseLong(arr[1])).before(Optional.of(expiredDate).orElse(new Date()))) {
+                return arr[0];
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
 
     /**
      * 非对称加密
