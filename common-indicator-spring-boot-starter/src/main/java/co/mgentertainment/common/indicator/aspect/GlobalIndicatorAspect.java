@@ -28,7 +28,11 @@ public class GlobalIndicatorAspect {
         } catch (Exception e) {
             throw e;
         } finally {
-            redisService.incr(indicator.name(), Long.valueOf(1));
+            try {
+                redisService.incr(indicator.name(), Long.valueOf(1));
+            } catch (Exception e) {
+                log.error("全局指标器[{}]采集异常", indicator.name(), e);
+            }
         }
         return result;
     }

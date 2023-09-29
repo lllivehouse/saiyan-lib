@@ -42,8 +42,12 @@ public class UserIndicatorAspect {
         } catch (Exception e) {
             throw e;
         } finally {
-            String username = SpelExpressionResolver.parseSpel(indicator.expressionToGetUser(), argNames, argValues);
-            redisService.hIncr(indicator.name(), username, Long.valueOf(1));
+            try {
+                String username = SpelExpressionResolver.parseSpel(indicator.expressionToGetUser(), argNames, argValues);
+                redisService.hIncr(indicator.name(), username, Long.valueOf(1));
+            } catch (Exception e) {
+                log.error("用户指标器[{}]采集异常", indicator.name(), e);
+            }
         }
         return result;
     }
