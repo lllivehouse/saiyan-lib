@@ -60,7 +60,7 @@ public class SecurityHelper {
             if (Objects.isNull(expiredDate)) {
                 return arr[0];
             }
-            if (StringUtils.isNumeric(arr[1]) && new Date(Long.parseLong(arr[1])).before(expiredDate)) {
+            if (StringUtils.isNumeric(arr[1]) && new Date().before(expiredDate)) {
                 return arr[0];
             }
         } catch (Exception ignored) {
@@ -99,7 +99,8 @@ public class SecurityHelper {
             if (arr == null || arr.length != 2 || !StringUtils.isNumeric(arr[1])) {
                 return null;
             }
-            if (new Date(Long.parseLong(arr[1])).before(DateUtils.addSeconds(new Date(), nonce))) {
+            if (new Date(Long.parseLong(arr[1])).before(DateUtils.addSeconds(new Date(), nonce)) &&
+                    new Date(Long.parseLong(arr[1])).after(new Date())) {
                 return arr[0];
             }
         } catch (Exception ignored) {
