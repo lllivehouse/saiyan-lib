@@ -8,6 +8,7 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import cn.hutool.crypto.symmetric.AES;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +23,7 @@ import java.util.Objects;
  * @createTime 2022/11/10
  * @description SecurityHelper
  */
+@Slf4j
 public class SecurityHelper {
 
     /**
@@ -81,6 +83,18 @@ public class SecurityHelper {
         return HexUtil.encodeHexStr(encrypt);
     }
 
+    public static String rsaDecrypt(String encryptText, String privateKey) {
+        RSA rsa = new RSA(privateKey, null);
+        try {
+            byte[] decodeHex = HexUtil.decodeHex(encryptText);
+            byte[] decrypt = rsa.decrypt(decodeHex, KeyType.PrivateKey);
+            return StrUtil.str(decrypt, CharsetUtil.CHARSET_UTF_8);
+        } catch (Exception e) {
+            log.error("error to rsa decrypt", e);
+        }
+        return null;
+    }
+
     /**
      * 非对称解密
      *
@@ -90,21 +104,22 @@ public class SecurityHelper {
      * @return
      */
     public static String rsaDecrypt(String encryptText, String privateKey, int nonce) {
-        RSA rsa = new RSA(privateKey, null);
-        try {
-            byte[] decodeHex = HexUtil.decodeHex(encryptText);
-            byte[] decrypt = rsa.decrypt(decodeHex, KeyType.PrivateKey);
-            String decode = StrUtil.str(decrypt, CharsetUtil.CHARSET_UTF_8);
-            String[] arr = StringUtils.split(decode, ";");
-            if (arr == null || arr.length != 2 || !StringUtils.isNumeric(arr[1])) {
-                return null;
-            }
-            if (new Date(Long.parseLong(arr[1])).before(DateUtils.addSeconds(new Date(), nonce)) &&
-                    new Date(Long.parseLong(arr[1])).after(new Date())) {
-                return arr[0];
-            }
-        } catch (Exception ignored) {
+        String plainText = rsaDecrypt(encryptText, privateKey);
+        String[] arr = StringUtils.split(plainText, ";");
+        if (arr == null || arr.length != 2 || !StringUtils.isNumeric(arr[1])) {
+            return null;
         }
+        Date dateToVerify = new Date(Long.parseLong(arr[1]));
+        Date matchedDate = DateUtils.addSeconds(new Date(), nonce);
+        Date now = new Date();
+        if (dateToVerify.before(matchedDate) && dateToVerify.after(now)) {
+            return arr[0];
+        }
+        log.error("RSA DECRYPTION FAILURE. Text:{}, dateToVerify:{} matchedDate:{} now:{}",
+                arr[0],
+                co.mgentertainment.common.utils.DateUtils.format(dateToVerify),
+                co.mgentertainment.common.utils.DateUtils.format(matchedDate),
+                co.mgentertainment.common.utils.DateUtils.format(now));
         return null;
     }
 
