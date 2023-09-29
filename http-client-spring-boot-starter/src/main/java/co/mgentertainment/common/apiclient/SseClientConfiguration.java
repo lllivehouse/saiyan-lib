@@ -13,12 +13,13 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(OpenApiClientProperties.class)
-@ConditionalOnExpression("!'${open-api-client.api.sse}'.isEmpty()")
+@ConditionalOnExpression("!'${open-api-client.app.configcenter}'.isEmpty()")
 public class SseClientConfiguration {
 
     @Bean(name = "sseConnectionManager")
     public SseConnectionManager getSseConnectionManager(OpenApiClientProperties properties) {
-        OpenApiClientProperties.ApiMetadata metadata = properties.getApi().get("sse");
-        return new SseConnectionManager(metadata);
+        OpenApiClientProperties.AppMetadata appMetadata = properties.getApp().get(OpenApiClientConfiguration.ApplicationName.CONFIG_CENTER.getValue());
+        OpenApiClientProperties.ApiMetadata apiMetadata = appMetadata.getApi().get("sse");
+        return new SseConnectionManager(appMetadata, apiMetadata);
     }
 }

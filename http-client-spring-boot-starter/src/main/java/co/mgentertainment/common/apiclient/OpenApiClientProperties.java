@@ -17,10 +17,10 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "open-api-client")
 public class OpenApiClientProperties {
 
-    private Map<String, ApiMetadata> api = new HashMap<>(0);
+    private Map<String, AppMetadata> app = new HashMap<>(0);
 
     @Data
-    public static class ApiMetadata {
+    public static class AppMetadata {
         /**
          * api服务地址
          */
@@ -30,6 +30,33 @@ public class OpenApiClientProperties {
          * api服务版本,例如: web/v1,api/v1
          */
         private String version = StringUtils.EMPTY;
+
+        /**
+         * 请求方法：get,post,put,delete
+         */
+        private Map<String, ApiMetadata> api = new HashMap<>(0);
+
+        /**
+         * 签名算法
+         */
+        private Sign sign = new Sign();
+
+        /**
+         * API请求头口令
+         */
+        private ApiToken apiToken = new ApiToken();
+    }
+
+    @Data
+    public static class Sign {
+        // value:rsa
+        private String algorithm;
+        private String identity;
+        private String encryptKey;
+    }
+
+    @Data
+    public static class ApiMetadata {
 
         /**
          * 请求方法：get,post,put,delete
@@ -45,22 +72,5 @@ public class OpenApiClientProperties {
          * api方法
          */
         private String action = StringUtils.EMPTY;
-
-        /**
-         * 签名算法
-         */
-        private SignAlgorithm signAlgorithm = new SignAlgorithm();
-
-        /**
-         * API请求头口令
-         */
-        private ApiToken apiToken = new ApiToken();
-    }
-
-    @Data
-    public static class SignAlgorithm {
-        // value:rsa
-        private String name;
-        private String encryptKey;
     }
 }

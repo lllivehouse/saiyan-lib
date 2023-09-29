@@ -1,5 +1,6 @@
 package co.mgentertainment.common.apiclient;
 
+import co.mgentertainment.common.apiclient.auth.ApiToken;
 import co.mgentertainment.common.apiclient.auth.Credential;
 import co.mgentertainment.common.apiclient.auth.RsaTokenCredential;
 import co.mgentertainment.common.apiclient.core.ApiClient;
@@ -12,6 +13,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -21,29 +23,68 @@ import java.util.Map;
  */
 @Configuration
 @EnableConfigurationProperties(OpenApiClientProperties.class)
-@ConditionalOnExpression("!T(org.springframework.util.CollectionUtils).isEmpty('${open-api-client.api}')")
+@ConditionalOnExpression("!T(org.springframework.util.CollectionUtils).isEmpty('${open-api-client.app}')")
 public class OpenApiClientConfiguration {
 
     @Bean(name = "openApiClients")
     public Map<String, ApiClient> getOpenApiClients(OpenApiClientProperties properties) {
         Map<String, ApiClient> apiClientMap = Maps.newHashMap();
-        properties.getApi().entrySet().stream().forEach(e -> {
-            String apiName = e.getKey();
-            OpenApiClientProperties.ApiMetadata apiMetadata = e.getValue();
-            DefaultClientProfile profile = DefaultClientProfile.getProfile(apiMetadata.getHost(), apiMetadata.getVersion());
-            OpenApiClientProperties.SignAlgorithm signAlgorithm = apiMetadata.getSignAlgorithm();
+        properties.getApp().entrySet().stream().forEach(e -> {
+            String appName = e.getKey();
+            OpenApiClientProperties.AppMetadata appMetadata = e.getValue();
+            ApiClient apiClient = OpenApiClientConfigUtil.newApiClient(appMetadata, false);
+            apiClientMap.put(appName, apiClient);
+        });
+        return apiClientMap;
+    }
+
+    public static class OpenApiClientConfigUtil {
+        public static ApiClient newApiClient(OpenApiClientProperties.AppMetadata appMetadata, boolean isLongConnection) {
+            DefaultClientProfile profile = DefaultClientProfile.getProfile(appMetadata.getHost(), appMetadata.getVersion());
+            if (isLongConnection) {
+                // 读永不超时
+                profile.getHttpClientConfig().setReadTimeoutMillis(0L);
+                // 自动重连
+                profile.getHttpClientConfig().setRetryOnConnectionFailure(true);
+            }
+            OpenApiClientProperties.Sign sign = appMetadata.getSign();
+            ApiToken apiToken = appMetadata.getApiToken();
             ApiClient client;
-            if (signAlgorithm != null && !StringUtils.isAnyBlank(signAlgorithm.getName(), signAlgorithm.getEncryptKey())) {
-                Credential credential = StringUtils.equalsAnyIgnoreCase(signAlgorithm.getName(), "rsa") ? new RsaTokenCredential(signAlgorithm.getEncryptKey(), signAlgorithm.getName())
+            if (sign != null && !StringUtils.isAnyBlank(sign.getAlgorithm(), sign.getEncryptKey(), sign.getIdentity())) {
+                Credential credential = StringUtils.equalsAnyIgnoreCase(sign.getAlgorithm(), "rsa") ? new RsaTokenCredential(sign.getEncryptKey(), sign.getIdentity())
                         : null;
                 client = new DefaultApiClient(profile, credential);
-            } else if (apiMetadata.getApiToken() != null && !StringUtils.isAnyBlank(apiMetadata.getApiToken().getHeaderName(), apiMetadata.getApiToken().getToken())) {
-                client = new DefaultApiClient(profile, apiMetadata.getApiToken());
+            } else if (apiToken != null && !StringUtils.isAnyBlank(apiToken.getHeaderName(), apiToken.getToken())) {
+                client = new DefaultApiClient(profile, apiToken);
             } else {
                 client = new DefaultApiClient(profile);
             }
-            apiClientMap.put(apiName, client);
-        });
-        return apiClientMap;
+            return client;
+        }
+    }
+
+
+    public enum ApplicationName {
+        FILE("file"),
+        CONFIG_CENTER("configcenter"),
+        ;
+
+        private String value;
+
+        ApplicationName(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public ApplicationName getByValue(String value) {
+            return Arrays.stream(ApplicationName.values()).filter(e -> StringUtils.equals(e.getValue(), value)).findFirst().orElse(null);
+        }
     }
 }

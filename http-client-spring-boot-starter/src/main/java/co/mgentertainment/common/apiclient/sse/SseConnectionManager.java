@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,10 +29,13 @@ public class SseConnectionManager {
 
     private static final Map<String, ServerSentEvent> SSE_CACHE = new ConcurrentHashMap<>();
 
+    private OpenApiClientProperties.AppMetadata appMetadata;
     private OpenApiClientProperties.ApiMetadata apiMetadata;
 
-    public SseConnectionManager(OpenApiClientProperties.ApiMetadata metadata) {
-        this.apiMetadata = metadata;
+    public SseConnectionManager(OpenApiClientProperties.AppMetadata metadata, OpenApiClientProperties.ApiMetadata apiMetadata) {
+        this.appMetadata = metadata;
+        this.apiMetadata = apiMetadata;
+
     }
 
     /**
@@ -106,13 +110,14 @@ public class SseConnectionManager {
     }
 
     private ApiClient newSSEClient(String clientId) {
-        DefaultClientProfile profile = DefaultClientProfile.getProfile(apiMetadata.getHost(), apiMetadata.getVersion());
+        DefaultClientProfile profile = DefaultClientProfile.getProfile(appMetadata.getHost(), appMetadata.getVersion());
         // 读永不超时
         profile.getHttpClientConfig().setReadTimeoutMillis(0L);
         // 自动重连
         profile.getHttpClientConfig().setRetryOnConnectionFailure(true);
-        Credential credential = new RsaTokenCredential(apiMetadata.getSignAlgorithm().getEncryptKey(), identityAddNonce(clientId));
-        return new DefaultApiClient(profile, credential);
+        Credential credential = StringUtils.equalsIgnoreCase(appMetadata.getSign().getAlgorithm(), "rsa") ?
+                new RsaTokenCredential(appMetadata.getSign().getEncryptKey(), identityAddNonce(clientId)) : null;
+        return credential != null ? new DefaultApiClient(profile, credential) : new DefaultApiClient(profile);
     }
 
     private String identityAddNonce(String identity) {
