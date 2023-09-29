@@ -1,6 +1,7 @@
 package co.mgentertainment.common.apiclient.auth;
 
 import co.mgentertainment.common.apiclient.core.ApiConstants;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author larry
@@ -11,6 +12,11 @@ public class EnvironmentVariablesCredentialProvider implements CredentialProvide
 
     @Override
     public Credential getCredential() {
-        return new RsaTokenCredential(System.getenv(ApiConstants.ENV_PUBLIC_KEY), System.getenv(ApiConstants.ENV_IDENTITY));
+        String publicKey = System.getenv(ApiConstants.ENV_PUBLIC_KEY);
+        String identity = System.getenv(ApiConstants.ENV_IDENTITY);
+        if (StringUtils.isAnyBlank(publicKey, identity)) {
+            return null;
+        }
+        return new RsaTokenCredential(publicKey, identity);
     }
 }

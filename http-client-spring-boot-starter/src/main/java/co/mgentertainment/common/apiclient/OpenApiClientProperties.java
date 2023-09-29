@@ -1,5 +1,6 @@
 package co.mgentertainment.common.apiclient;
 
+import co.mgentertainment.common.apiclient.auth.ApiToken;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -49,6 +50,11 @@ public class OpenApiClientProperties {
          * 签名算法
          */
         private SignAlgorithm signAlgorithm = new SignAlgorithm();
+
+        /**
+         * API请求头口令
+         */
+        private ApiToken apiToken = new ApiToken();
     }
 
     @Data

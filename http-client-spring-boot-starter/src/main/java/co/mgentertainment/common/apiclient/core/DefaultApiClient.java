@@ -10,6 +10,7 @@ import co.mgentertainment.common.apiclient.exception.ClientException;
 import co.mgentertainment.common.apiclient.exception.ServerException;
 import co.mgentertainment.common.apiclient.http.*;
 import co.mgentertainment.common.apiclient.sse.ServerSentEvent;
+import com.google.common.collect.Maps;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -66,8 +67,11 @@ public class DefaultApiClient implements ApiClient {
         HttpResponse httpResponse;
         if (this.apiToken != null) {
             httpResponse = this.doAction(request, MapUtil.builder(this.apiToken.getHeaderName(), this.apiToken.getToken()).build());
-        } else {
+        } else if (this.credential != null) {
             httpResponse = this.doAction(request, this.credential);
+        } else {
+            // 忽略token
+            httpResponse = this.doAction(request, Maps.newHashMap());
         }
         return this.parseApiResponse(request, httpResponse);
     }
@@ -80,7 +84,13 @@ public class DefaultApiClient implements ApiClient {
             } catch (ClientException var4) {
                 return null;
             }
-        }) : this.asyncDoAction(request, this.credential, callBack).thenApplyAsync((httpResponse) -> {
+        }) : this.credential != null ? this.asyncDoAction(request, this.credential, callBack).thenApplyAsync((httpResponse) -> {
+            try {
+                return this.parseApiResponse(request, httpResponse);
+            } catch (ClientException var4) {
+                return null;
+            }
+        }) : this.asyncDoAction(request, Maps.newHashMap(), callBack).thenApplyAsync((httpResponse) -> {
             try {
                 return this.parseApiResponse(request, httpResponse);
             } catch (ClientException var4) {

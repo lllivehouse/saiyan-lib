@@ -1,6 +1,7 @@
 package co.mgentertainment.common.apiclient.auth;
 
 import co.mgentertainment.common.apiclient.core.ApiConstants;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author larry
@@ -11,6 +12,11 @@ public class SystemPropertiesCredentialProvider implements CredentialProvider {
 
     @Override
     public Credential getCredential() {
-        return new RsaTokenCredential(System.getProperty(ApiConstants.SYSTEM_PROPERTY_PUBLIC_KEY), System.getProperty(ApiConstants.SYSTEM_PROPERTY_IDENTITY));
+        String publicKey = System.getProperty(ApiConstants.SYSTEM_PROPERTY_PUBLIC_KEY);
+        String identity = System.getProperty(ApiConstants.SYSTEM_PROPERTY_IDENTITY);
+        if (StringUtils.isAnyBlank(publicKey, identity)) {
+            return null;
+        }
+        return new RsaTokenCredential(publicKey, identity);
     }
 }

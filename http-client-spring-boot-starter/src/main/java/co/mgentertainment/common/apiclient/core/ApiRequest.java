@@ -1,10 +1,10 @@
 package co.mgentertainment.common.apiclient.core;
 
 import co.mgentertainment.common.apiclient.auth.Credential;
+import co.mgentertainment.common.apiclient.exception.ClientException;
 import co.mgentertainment.common.apiclient.http.FormatType;
 import co.mgentertainment.common.apiclient.http.HttpRequest;
 import co.mgentertainment.common.apiclient.http.ProtocolType;
-import co.mgentertainment.common.apiclient.exception.ClientException;
 import co.mgentertainment.common.apiclient.utils.ApiRequestUtils;
 import co.mgentertainment.common.apiclient.utils.ParameterHelper;
 

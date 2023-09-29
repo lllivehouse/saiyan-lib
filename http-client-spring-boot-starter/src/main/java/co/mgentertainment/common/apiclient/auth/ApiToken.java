@@ -1,7 +1,9 @@
 package co.mgentertainment.common.apiclient.auth;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author larry
@@ -9,6 +11,8 @@ import lombok.Data;
  * @description ApiToken
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ApiToken {
 
