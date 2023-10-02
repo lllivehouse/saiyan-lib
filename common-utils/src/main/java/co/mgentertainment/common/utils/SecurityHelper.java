@@ -46,23 +46,23 @@ public class SecurityHelper {
      *
      * @param encryptText 密文
      * @param privateKey  私钥
-     * @param expiredDate 过期时间 为空则不校验时间
      * @return
      */
-    public static String rsaPeriodDecrypt(String encryptText, String privateKey, @Nullable Date expiredDate) {
+    public static String rsaPeriodDecrypt(String encryptText, String privateKey) {
         RSA rsa = new RSA(privateKey, null);
         try {
             byte[] decodeHex = HexUtil.decodeHex(encryptText);
             byte[] decrypt = rsa.decrypt(decodeHex, KeyType.PrivateKey);
-            String decode = StrUtil.str(decrypt, CharsetUtil.CHARSET_UTF_8);
-            if (!StringUtils.contains(decode, ";")) {
-                return decode;
+            String plainText = StrUtil.str(decrypt, CharsetUtil.CHARSET_UTF_8);
+            if (!StringUtils.contains(plainText, ";")) {
+                return plainText;
             }
-            String[] arr = StringUtils.split(decode, ";");
+            String[] arr = StringUtils.split(plainText, ";");
             if (arr == null || arr.length != 2) {
                 return null;
             }
-            if (Objects.isNull(expiredDate) && new Date().before(expiredDate)) {
+            Long expiredTimestamp = Long.valueOf(arr[1]);
+            if (System.currentTimeMillis() < expiredTimestamp) {
                 return arr[0];
             }
         } catch (Exception ignored) {
