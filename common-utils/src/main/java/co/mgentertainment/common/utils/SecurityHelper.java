@@ -36,7 +36,7 @@ public class SecurityHelper {
      */
     public static String rsaPeriodEncrypt(String plainText, String publicKey, @Nullable Date expiredDate) {
         RSA rsa = new RSA(null, publicKey);
-        plainText = plainText + ';' + (Objects.nonNull(expiredDate) ? expiredDate.getTime() : StringUtils.SPACE);
+        plainText += Objects.nonNull(expiredDate) ? ';' + expiredDate.getTime() : StringUtils.EMPTY;
         byte[] encrypt = rsa.encrypt(StrUtil.bytes(plainText, CharsetUtil.CHARSET_UTF_8), KeyType.PublicKey);
         return HexUtil.encodeHexStr(encrypt);
     }
@@ -55,14 +55,14 @@ public class SecurityHelper {
             byte[] decodeHex = HexUtil.decodeHex(encryptText);
             byte[] decrypt = rsa.decrypt(decodeHex, KeyType.PrivateKey);
             String decode = StrUtil.str(decrypt, CharsetUtil.CHARSET_UTF_8);
+            if (!StringUtils.contains(decode, ";")) {
+                return decode;
+            }
             String[] arr = StringUtils.split(decode, ";");
             if (arr == null || arr.length != 2) {
                 return null;
             }
-            if (Objects.isNull(expiredDate)) {
-                return arr[0];
-            }
-            if (StringUtils.isNumeric(arr[1]) && new Date().before(expiredDate)) {
+            if (Objects.isNull(expiredDate) && new Date().before(expiredDate)) {
                 return arr[0];
             }
         } catch (Exception ignored) {
