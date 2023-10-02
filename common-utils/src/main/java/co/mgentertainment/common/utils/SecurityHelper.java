@@ -65,7 +65,8 @@ public class SecurityHelper {
             if (System.currentTimeMillis() < expiredTimestamp) {
                 return arr[0];
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            log.error("error to rsa period decrypt", e);
         }
         return null;
     }
