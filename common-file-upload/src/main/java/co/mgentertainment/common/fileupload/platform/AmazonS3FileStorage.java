@@ -118,6 +118,7 @@ public class AmazonS3FileStorage implements FileStorage {
                 BufferedInputStream bin = new BufferedInputStream(in, RequestClientOptions.DEFAULT_STREAM_BUFFER_SIZE);
                 PutObjectRequest request = new PutObjectRequest(bucketName, newFileKey, bin, metadata);
                 request.setCannedAcl(fileAcl);
+                // 50m
                 request.getRequestClientOptions().setReadLimit(50 * 1024 * 1024);
                 if (listener != null) {
                     AtomicLong progressSize = new AtomicLong();
