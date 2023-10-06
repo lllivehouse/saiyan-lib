@@ -54,6 +54,7 @@
         <module>common-eventbus-spring-boot-starter</module>
         <module>http-client-spring-boot-starter</module>
         <module>common-indicator-spring-boot-starter</module>
+        <module>common-file-upload</module>
         <module>mybatis-generator-plugin</module>
     </modules>
 
