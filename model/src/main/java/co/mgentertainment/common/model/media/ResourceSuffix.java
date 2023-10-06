@@ -8,4 +8,5 @@ package co.mgentertainment.common.model.media;
 public interface ResourceSuffix {
     String FEATURE_FILM = ".m3u8";
     String TRAILER = ".trailer.mp4";
+    String SHORT = ".s.mp4";
 }
