@@ -1,6 +1,6 @@
 package co.mgentertainment.common.indicator.annotation;
 
-import org.apache.commons.lang3.StringUtils;
+import co.mgentertainment.common.indicator.constant.GlobalIndicatorName;
 
 import java.lang.annotation.*;
 
@@ -18,6 +18,6 @@ public @interface GlobalIndicator {
      *
      * @return {String}
      */
-    String name() default StringUtils.EMPTY;
+    GlobalIndicatorName name() default GlobalIndicatorName.PAGE_VIEWS;
 
 }
