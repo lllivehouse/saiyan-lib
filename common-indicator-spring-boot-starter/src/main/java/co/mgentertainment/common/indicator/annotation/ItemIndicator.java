@@ -1,29 +1,30 @@
 package co.mgentertainment.common.indicator.annotation;
 
+import co.mgentertainment.common.indicator.constant.IndicatorName;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.annotation.*;
 
 /**
  * @author larry
- * @desc 用户指标采集注解
+ * @desc 关联指标采集注解
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface UserIndicator {
+public @interface ItemIndicator {
 
     /**
      * 指标名称
      *
      * @return {String}
      */
-    String name() default StringUtils.EMPTY;
+    IndicatorName name() default IndicatorName.User;
 
     /**
-     * spel表达式获取当前用户
+     * spel表达式获取当前关联项 如uid vid pid sid等
      *
      * @return
      */
-    String expressionToGetUser() default StringUtils.EMPTY;
+    String expressionToGetItem() default StringUtils.EMPTY;
 }
