@@ -35,8 +35,8 @@ public class IndicatorCollector {
         return count instanceof Long ? (Long) count : Long.valueOf(String.valueOf(count));
     }
 
-    public Long getGlobalIndicator(String indicatorName) {
-        Object obj = redisService.get(indicatorName);
+    public Long getGlobalIndicator(GlobalIndicatorName indicatorName) {
+        Object obj = redisService.get(getGlobalIndicatorKey(indicatorName));
         return obj instanceof Long ? (Long) obj : Long.valueOf(String.valueOf(obj));
     }
 
