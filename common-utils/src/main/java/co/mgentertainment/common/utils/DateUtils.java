@@ -213,12 +213,10 @@ public class DateUtils {
 
 
     public static String getStartDate(Date date) {
-
         return format(date, FORMAT_YYYY_MM_DD) + " 00:00:00";
     }
 
     public static String getEndDate(Date date) {
-
         return format(date, FORMAT_YYYY_MM_DD) + " 23:59:59";
     }
 
@@ -238,21 +236,21 @@ public class DateUtils {
     }
 
     /**
-     * 取前N天的日期，默认日期 yyyyMMdd
+     * 取前N天的日期，默认日期 yyyy-mm-dd
      */
     public static String getPreviousDay(int decreaseDay) {
-        return getPreviousDay(decreaseDay, new Date(), FORMAT_YYYYMMDD);
+        return getPreviousDay(decreaseDay, new Date(), FORMAT_YYYY_MM_DD);
     }
 
     /**
-     * 取前N天的日期，默认日期 yyyyMMdd
+     * 取前N天的日期，默认日期 yyyy-mm-dd
      */
     public static String getPreviousDay(int decreaseDay, Date date) {
-        return getPreviousDay(decreaseDay, date, FORMAT_YYYYMMDD);
+        return getPreviousDay(decreaseDay, date, FORMAT_YYYY_MM_DD);
     }
 
     /**
-     * 取前N天的日期，默认日期 yyyyMMdd
+     * 取几天前的日期
      * 取反值
      */
     public static String getPreviousDay(int decreaseDay, Date date, String format) {
@@ -261,12 +259,11 @@ public class DateUtils {
     }
 
     /**
-     * 取前N天的日期，默认日期 yyyyMMdd
+     * 取前N天的日期，默认日期 yyyy-mm-dd
      * 按照传入正负数进行计算
      */
-    public static String getPreviousDays(int decreaseDay, Date date) {
-        Date d = org.apache.commons.lang3.time.DateUtils.addDays(date, decreaseDay);
-        return format(d, FORMAT_YYYYMMDD);
+    public static String getPreviousDayStr(int decreaseDay, Date date) {
+        return getPreviousDay(decreaseDay, date, FORMAT_YYYY_MM_DD);
     }
 
     /*
@@ -285,16 +282,14 @@ public class DateUtils {
      * 获取上个月第一天
      */
     public static String getLastMonthFirstDay() {
-
-        return LocalDate.now().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()).format(FORMATER_YYYYMMDD);
+        return LocalDate.now().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()).format(FORMATER_YYYY_MM_DD);
     }
 
     /**
      * 获取上个月最后一天
      */
     public static String getLastMonthLastDay() {
-
-        return LocalDate.now().minusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).format(FORMATER_YYYYMMDD);
+        return LocalDate.now().minusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).format(FORMATER_YYYY_MM_DD);
     }
 
     /**
@@ -305,7 +300,7 @@ public class DateUtils {
      */
     public static String getLastYearFirstDay(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().minusYears(1).with(
-                TemporalAdjusters.firstDayOfYear()).format(FORMATER_YYYYMMDD);
+                TemporalAdjusters.firstDayOfYear()).format(FORMATER_YYYY_MM_DD);
     }
 
     /**
@@ -316,7 +311,7 @@ public class DateUtils {
      */
     public static String getLastYearLastDay(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().minusYears(1).with(
-                TemporalAdjusters.lastDayOfYear()).format(FORMATER_YYYYMMDD);
+                TemporalAdjusters.lastDayOfYear()).format(FORMATER_YYYY_MM_DD);
     }
 
     /**
@@ -370,17 +365,9 @@ public class DateUtils {
     }
 
     /**
-     * 获取当前月第一天
-     */
-    public static String getMonthFirstDay() {
-        return LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).format(FORMATER_YYYYMMDD);
-    }
-
-    /**
      * 获取上一个星期几
      */
     public static String getLastDayOfWeek(DayOfWeek dayOfWeek) {
-
         return LocalDate.now().with(TemporalAdjusters.previous(dayOfWeek)).format(FORMATER_YYYYMMDD);
     }
 
@@ -442,13 +429,13 @@ public class DateUtils {
     /**
      * 上个月的第一天
      *
-     * @param endDate
+     * @param date
      * @return
      */
-    public static String getLastMonthFirstDay(Date endDate) {
+    public static String getLastMonthFirstDay(Date date) {
         SimpleDateFormat df = new SimpleDateFormat(FORMAT_YYYYMMDD);
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(endDate);
+        calendar.setTime(date);
         calendar.add(Calendar.MONTH, -1);
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
         return df.format(calendar.getTime());
@@ -457,82 +444,116 @@ public class DateUtils {
     /**
      * 上个月的最后一天
      *
-     * @param endDate
+     * @param date
      * @return
      */
-    public static String getLastMonthLastDay(Date endDate) {
+    public static String getLastMonthLastDay(Date date) {
         SimpleDateFormat df = new SimpleDateFormat(FORMAT_YYYYMMDD);
         Calendar cal = Calendar.getInstance();
-        cal.setTime(endDate);
+        cal.setTime(date);
         cal.add(Calendar.MONTH, -1);
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         return df.format(cal.getTime());
     }
 
     /**
-     * 周一为第一天
+     * 获取今天开始时间
      *
-     * @param endDate
      * @return
      */
-    public static String getThisWeekFirstDay(Date endDate) {
-        SimpleDateFormat df = new SimpleDateFormat(FORMAT_YYYYMMDD);
+    public static String getTodayStartTime() {
+        return LocalDate.now().format(FORMATER_YYYY_MM_DD) + " 00:00:00";
+    }
+
+    /**
+     * 获取今天结束时间
+     *
+     * @return
+     */
+    public static String getTodayEndTime() {
+        return LocalDate.now().format(FORMATER_YYYY_MM_DD) + " 23:59:59";
+    }
+
+    /**
+     * 周一为第一天
+     *
+     * @return
+     */
+    public static String getThisWeekFirstDay() {
+        SimpleDateFormat df = new SimpleDateFormat(FORMAT_YYYY_MM_DD);
         Calendar calWeek = Calendar.getInstance();
         calWeek.setFirstDayOfWeek(Calendar.MONDAY);
-        calWeek.setTime(endDate);
+        calWeek.setTime(new Date());
         calWeek.add(Calendar.DATE, 0);
         calWeek.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         return df.format(calWeek.getTime());
     }
 
     /**
-     * 这个月的第一天
+     * 周日为最后一天
      *
-     * @param endDate
      * @return
      */
-    public static String getThisMonthFirstDay(Date endDate) {
-        SimpleDateFormat df = new SimpleDateFormat(FORMAT_YYYYMMDD);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(endDate);
-        calendar.add(Calendar.MONTH, 0);
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-        return df.format(calendar.getTime());
+    public static String getThisWeekLastDay() {
+        SimpleDateFormat df = new SimpleDateFormat(FORMAT_YYYY_MM_DD);
+        Calendar calWeek = Calendar.getInstance();
+        calWeek.setFirstDayOfWeek(Calendar.MONDAY);
+        calWeek.setTime(new Date());
+        calWeek.add(Calendar.DATE, 0);
+        calWeek.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        return df.format(calWeek.getTime());
+    }
+
+    /**
+     * 获取当前月第一天
+     */
+    public static String getThisMonthFirstDay() {
+        return LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).format(FORMATER_YYYY_MM_DD);
+    }
+
+    /**
+     * 获取当前月最后一天
+     */
+    public static String getThisMonthLastDay() {
+        return LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).format(FORMATER_YYYY_MM_DD);
     }
 
     /**
      * 今年的第一天
      *
-     * @param endDate
      * @return
      */
-    public static String getThisYearFirstDay(Date endDate) {
-        SimpleDateFormat df = new SimpleDateFormat(FORMAT_YYYYMMDD);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(endDate);
-        calendar.add(Calendar.YEAR, 0);
-        calendar.set(Calendar.DAY_OF_YEAR, calendar.getActualMinimum(Calendar.DAY_OF_YEAR));
-        return df.format(calendar.getTime());
+    public static String getThisYearFirstDay() {
+        return LocalDate.now().with(TemporalAdjusters.firstDayOfYear()).format(FORMATER_YYYYMMDD);
+    }
+
+    /**
+     * 今年的最后一天
+     *
+     * @return
+     */
+    public static String getThisYearLastDay() {
+        return LocalDate.now().with(TemporalAdjusters.lastDayOfYear()).format(FORMATER_YYYYMMDD);
     }
 
     /**
      * 这个财年的第一天
      *
-     * @param endDate
+     * @param date
      * @return
      */
-    public static String getThisFiscalYearFirstDay(Date endDate) throws ParseException {
+    public static String getThisFiscalYearFirstDay(Date date) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat(FORMAT_YYYY);
         SimpleDateFormat df1 = new SimpleDateFormat(FORMAT_YYYYMMDD);
         //年
-        String year = df.format(endDate);
+        String year = df.format(date);
         String fiscalYearStart = year + "0401";
         Date parse = df1.parse(fiscalYearStart);
-        if (endDate.compareTo(parse) >= 0) {
+        if (date.compareTo(parse) >= 0) {
             return fiscalYearStart;
         } else {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(endDate);
+            calendar.setTime(date);
             calendar.add(Calendar.YEAR, -1);
             String lastFiscalYear = df.format(calendar.getTime());
             return lastFiscalYear + "0401";
@@ -756,7 +777,7 @@ public class DateUtils {
         return endDate;
     }
 
-    public static Date getEarliestDateByBillingCycle(CycleEnum cycle) {
+    public static Date getEarliestDateByCycle(CycleEnum cycle) {
         Date endDate = DateUtils.getTodayDate(DateUtils.FORMAT_YYYY_MM_DD);
         switch (cycle) {
             case DAY:
