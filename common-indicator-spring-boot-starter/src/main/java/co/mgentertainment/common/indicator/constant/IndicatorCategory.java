@@ -13,6 +13,7 @@ public enum IndicatorCategory {
     VIDEO("video:"),
     POST("post:"),
     SEEK("seek:"),
+    COMMENT("comment:"),
     ;
 
     private String category;
