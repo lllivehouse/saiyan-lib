@@ -5,14 +5,15 @@ import co.mgentertainment.common.redis.service.impl.RedisServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.lettuce.*;
+import org.springframework.data.redis.connection.lettuce.LettuceConnection;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -21,7 +22,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @createTime 2023/8/29
  * @description CommonRedisAutoConfiguration
  */
-@Configurable
+@Configuration
 @EnableConfigurationProperties(RedisProperties.class)
 @RequiredArgsConstructor
 public class CommonRedisAutoConfiguration {

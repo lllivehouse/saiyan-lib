@@ -4,6 +4,7 @@ import co.mgentertainment.common.indicator.constant.GlobalIndicatorName;
 import co.mgentertainment.common.indicator.constant.IndicatorCategory;
 import co.mgentertainment.common.indicator.constant.IndicatorName;
 import co.mgentertainment.common.redis.service.RedisService;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -13,14 +14,11 @@ import java.util.stream.Collectors;
  * @createTime 2023/9/30
  * @description IndicatorCollector
  */
+@RequiredArgsConstructor
 public class IndicatorCollector {
     public static final String INDICATOR_PREFIX = "indicator:";
 
-    private RedisService redisService;
-
-    public IndicatorCollector(final RedisService redisService) {
-        this.redisService = redisService;
-    }
+    private final RedisService redisService;
 
     public Map<String, Long> getItemIndicatorCollection(IndicatorCategory type, IndicatorName name) {
         return redisService.hGetAll(getItemIndicatorKey(type, name)).entrySet().stream()
