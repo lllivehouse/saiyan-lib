@@ -25,6 +25,10 @@ public enum AppPlatformEnum {
     }
 
     public static AppPlatformEnum getByPlatformId(Integer platformId) {
-        return Arrays.stream(AppPlatformEnum.values()).filter(e -> e.getPlatformId().equals(platformId)).findFirst().orElse(null);
+        return Arrays.stream(values()).filter(e -> e.getPlatformId().equals(platformId)).findFirst().orElse(null);
+    }
+
+    public static AppPlatformEnum getByName(String platformName) {
+        return Arrays.stream(values()).filter(e -> e.name().equalsIgnoreCase(platformName)).findFirst().orElse(null);
     }
 }
