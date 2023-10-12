@@ -11,6 +11,7 @@ public enum AppPlatformEnum {
 
     ANDROID(0),
     IOS(1),
+    ALL(2),
     ;
 
     private Integer platformId;
