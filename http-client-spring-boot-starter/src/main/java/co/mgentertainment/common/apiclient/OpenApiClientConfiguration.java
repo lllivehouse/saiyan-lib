@@ -67,6 +67,7 @@ public class OpenApiClientConfiguration {
     public enum ApplicationName {
         FILE("file"),
         CONFIG_CENTER("configcenter"),
+        PAYMENT("payment"),
         ;
 
         private String value;
