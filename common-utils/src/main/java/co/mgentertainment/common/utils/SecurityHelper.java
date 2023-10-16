@@ -110,16 +110,16 @@ public class SecurityHelper {
         if (arr == null || arr.length != 2 || !StringUtils.isNumeric(arr[1])) {
             return null;
         }
-        Date dateToVerify = new Date(Long.parseLong(arr[1]));
-        Date matchedDate = DateUtils.addSeconds(new Date(), nonce);
+        Date timeToVerify = new Date(Long.parseLong(arr[1]));
+        Date checkingTime = DateUtils.addSeconds(new Date(), nonce);
         Date now = new Date();
-        if (dateToVerify.before(matchedDate) && dateToVerify.after(now)) {
+        if (timeToVerify.before(checkingTime) && timeToVerify.after(now)) {
             return arr[0];
         }
-        log.error("RSA DECRYPTION FAILURE. Text:{}, dateToVerify:{} matchedDate:{} now:{}",
+        log.error("RSA DECRYPTION FAILURE. Text:{}, timeToVerify:[{}] should before [{}] and after [{}]",
                 arr[0],
-                co.mgentertainment.common.utils.DateUtils.format(dateToVerify),
-                co.mgentertainment.common.utils.DateUtils.format(matchedDate),
+                co.mgentertainment.common.utils.DateUtils.format(timeToVerify),
+                co.mgentertainment.common.utils.DateUtils.format(checkingTime),
                 co.mgentertainment.common.utils.DateUtils.format(now));
         return null;
     }
