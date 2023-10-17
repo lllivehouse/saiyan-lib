@@ -11,7 +11,8 @@ public enum ResourcePathType {
     THUMBNAIL("thumbnail"),
     FEATURE_FILM("film"),
     TRAILER("trailer"),
-    SHORT("short");
+    SHORT("short"),
+    COVER("cover"),;
 
     private final String value;
 
