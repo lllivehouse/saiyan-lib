@@ -20,6 +20,8 @@ public enum UploadStatusEnum {
     SHORT_VIDEO_CUTTING_AND_UPLOADING(8, "短视频剪切上传中"),
     SHORT_VIDEO_FAILURE(9, "短视频剪切上传失败"),
     COMPLETED(10, "已完成"),
+    DEFAULT_COVER_CUTTING_AND_UPLOADING(11, "默认封面剪切上传中"),
+    DEFAULT_COVER_FAILURE(12, "默认封面剪切上传失败"),
     ;
 
     private final Integer value;

@@ -8,7 +8,8 @@ package co.mgentertainment.common.model.media;
 public enum VideoType {
     FEATURE_FILM("film"),
     TRAILER("trailer"),
-    SHORT_VIDEO("short");
+    SHORT_VIDEO("short"),
+    ORIGIN_VIDEO("orgin");
 
     private final String value;
 
