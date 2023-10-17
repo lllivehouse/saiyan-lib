@@ -9,4 +9,5 @@ public interface ResourceSuffix {
     String FEATURE_FILM = ".m3u8";
     String TRAILER = ".trailer.mp4";
     String SHORT = ".s.mp4";
+    String SCREENSHOT = "cover.jpg";
 }
