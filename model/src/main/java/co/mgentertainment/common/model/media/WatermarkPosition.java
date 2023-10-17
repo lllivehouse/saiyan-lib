@@ -31,7 +31,7 @@ public enum WatermarkPosition {
         return desc;
     }
 
-    public static WatermarkPosition getByCode(String code) {
+    public static WatermarkPosition getByCode(Integer code) {
         return Arrays.stream(values()).filter(e -> e.getCode().equals(code)).findFirst().orElse(null);
     }
 }
