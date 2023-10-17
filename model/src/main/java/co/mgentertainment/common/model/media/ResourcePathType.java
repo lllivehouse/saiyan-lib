@@ -12,7 +12,9 @@ public enum ResourcePathType {
     FEATURE_FILM("film"),
     TRAILER("trailer"),
     SHORT("short"),
-    COVER("cover"),;
+    COVER("cover"),
+    ORIGIN("origin"),
+    ;
 
     private final String value;
 
