@@ -1,6 +1,7 @@
 package co.mgentertainment.common.indicator.annotation;
 
 import co.mgentertainment.common.indicator.constant.IndicatorCategory;
+import co.mgentertainment.common.indicator.constant.IndicatorCounter;
 import co.mgentertainment.common.indicator.constant.IndicatorName;
 import org.apache.commons.lang3.StringUtils;
 
@@ -35,4 +36,11 @@ public @interface ItemIndicator {
      * @return
      */
     String expressionToGetItem() default StringUtils.EMPTY;
+
+    /**
+     * 计数器类型
+     *
+     * @return
+     */
+    IndicatorCounter counter() default IndicatorCounter.INCREASE;
 }

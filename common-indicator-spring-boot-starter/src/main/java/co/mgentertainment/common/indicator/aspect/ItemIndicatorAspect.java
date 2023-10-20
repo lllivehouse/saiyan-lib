@@ -2,6 +2,7 @@ package co.mgentertainment.common.indicator.aspect;
 
 import co.mgentertainment.common.indicator.IndicatorCollector;
 import co.mgentertainment.common.indicator.annotation.ItemIndicator;
+import co.mgentertainment.common.indicator.constant.IndicatorCounter;
 import co.mgentertainment.common.indicator.utils.SpelExpressionResolver;
 import co.mgentertainment.common.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class ItemIndicatorAspect {
         } finally {
             try {
                 String itemId = SpelExpressionResolver.parseSpel(indicator.expressionToGetItem(), argNames, argValues);
-                redisService.hIncr(IndicatorCollector.getItemIndicatorKey(indicator.type(), indicator.name()), itemId, Long.valueOf(1));
+                redisService.hIncr(IndicatorCollector.getItemIndicatorKey(indicator.type(), indicator.name()), itemId, Long.valueOf(indicator.counter() == IndicatorCounter.INCREASE ? 1 : -1));
             } catch (Exception e) {
                 log.error("指标器[{}]采集异常", indicator.type().getCategory() + indicator.name().getValue(), e);
             }

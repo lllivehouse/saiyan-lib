@@ -2,6 +2,7 @@ package co.mgentertainment.common.indicator.aspect;
 
 import co.mgentertainment.common.indicator.IndicatorCollector;
 import co.mgentertainment.common.indicator.annotation.GlobalIndicator;
+import co.mgentertainment.common.indicator.constant.IndicatorCounter;
 import co.mgentertainment.common.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -30,7 +31,7 @@ public class GlobalIndicatorAspect {
             throw e;
         } finally {
             try {
-                redisService.incr(IndicatorCollector.getGlobalIndicatorKey(indicator.name()), Long.valueOf(1));
+                redisService.incr(IndicatorCollector.getGlobalIndicatorKey(indicator.name()), Long.valueOf(indicator.counter() == IndicatorCounter.INCREASE ? 1 : -1));
             } catch (Exception e) {
                 log.error("全局指标器[{}]采集异常", indicator.name(), e);
             }

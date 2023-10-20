@@ -6,9 +6,6 @@ package co.mgentertainment.common.model.media;
  * @description VideoType
  */
 public enum ResourcePathType {
-    DEFAULT("default"),
-    IMAGE("image"),
-    THUMBNAIL("thumbnail"),
     FEATURE_FILM("film"),
     TRAILER("trailer"),
     SHORT("short"),

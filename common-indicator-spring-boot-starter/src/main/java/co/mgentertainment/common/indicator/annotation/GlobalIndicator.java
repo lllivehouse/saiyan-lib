@@ -1,6 +1,7 @@
 package co.mgentertainment.common.indicator.annotation;
 
 import co.mgentertainment.common.indicator.constant.GlobalIndicatorName;
+import co.mgentertainment.common.indicator.constant.IndicatorCounter;
 
 import java.lang.annotation.*;
 
@@ -19,5 +20,12 @@ public @interface GlobalIndicator {
      * @return {String}
      */
     GlobalIndicatorName name() default GlobalIndicatorName.PAGE_VIEWS;
+
+    /**
+     * 计数器类型
+     *
+     * @return
+     */
+    IndicatorCounter counter() default IndicatorCounter.INCREASE;
 
 }
