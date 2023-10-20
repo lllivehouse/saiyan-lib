@@ -115,7 +115,7 @@ public class JwtTokenService {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            log.error("fail to parse jwt", e);
+            log.warn("fail to parse jwt", e);
             return new DefaultClaims();
         }
     }
