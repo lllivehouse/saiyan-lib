@@ -11,4 +11,5 @@ public interface ResourceSuffix {
     String TRAILER = ".trailer.mp4";
     String SHORT = ".s.mp4";
     String SCREENSHOT = "screenshot.jpg";
+    String SCREENSHOT_THUMBNAIL = "screenshot.min.jpg";
 }
