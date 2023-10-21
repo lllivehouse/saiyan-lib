@@ -39,16 +39,20 @@ public class ItemIndicatorAspect {
         Object[] argValues = joinPoint.getArgs();
 
         Object result;
+        boolean error = false;
         try {
             result = joinPoint.proceed();
         } catch (Exception e) {
+            error = true;
             throw e;
         } finally {
-            try {
-                String itemId = SpelExpressionResolver.parseSpel(indicator.expressionToGetItem(), argNames, argValues);
-                redisService.hIncr(IndicatorCollector.getItemIndicatorKey(indicator.type(), indicator.name()), itemId, Long.valueOf(indicator.counter() == IndicatorCounter.INCREASE ? 1 : -1));
-            } catch (Exception e) {
-                log.error("指标器[{}]采集异常", indicator.type().getCategory() + indicator.name().getValue(), e);
+            if (!error) {
+                try {
+                    String itemId = SpelExpressionResolver.parseSpel(indicator.expressionToGetItem(), argNames, argValues);
+                    redisService.hIncr(IndicatorCollector.getItemIndicatorKey(indicator.type(), indicator.name()), itemId, Long.valueOf(indicator.counter() == IndicatorCounter.INCREASE ? 1 : -1));
+                } catch (Exception e) {
+                    log.error("指标器[{}]采集异常", indicator.type().getCategory() + indicator.name().getValue(), e);
+                }
             }
         }
         return result;
