@@ -105,6 +105,7 @@ public class SecurityHelper {
      * @return
      */
     public static String rsaDecrypt(String encryptText, String privateKey, int nonce) {
+        Date now = new Date();
         String plainText = rsaDecrypt(encryptText, privateKey);
         String[] arr = StringUtils.split(plainText, ";");
         if (arr == null || arr.length != 2 || !StringUtils.isNumeric(arr[1])) {
@@ -112,7 +113,6 @@ public class SecurityHelper {
         }
         Date timeToVerify = new Date(Long.parseLong(arr[1]));
         Date checkingTime = DateUtils.addSeconds(new Date(), nonce);
-        Date now = new Date();
         if (timeToVerify.before(checkingTime) && timeToVerify.after(now)) {
             return arr[0];
         }
