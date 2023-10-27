@@ -86,14 +86,14 @@ public class SchedulerPlusAutoConfiguration {
 
     @Bean
     @DependsOn("lockRegistry")
-    @ConditionalOnProperty(prefix = "scheduler-plus.plug-in", name = "locker", havingValue = "true")
+    @ConditionalOnProperty(prefix = "scheduler-plus.plug-in", name = "lock", havingValue = "true")
     @ConditionalOnMissingBean
     public LockStrengthen lockStrengthen(LockRegistry lockRegistry) {
         return new LockStrengthen(lockRegistry);
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "scheduler-plus.plug-in", name = "logger", havingValue = "true")
+    @ConditionalOnProperty(prefix = "scheduler-plus.plug-in", name = "log", havingValue = "true")
     @ConditionalOnMissingBean
     public LogStrengthen logStrengthen(SchedulerPlusTaskRepository schedulerPlusTaskRepository, SchedulerPlusLogRepository schedulerPlusLogRepository) {
         return new LogStrengthen(schedulerPlusTaskRepository, schedulerPlusLogRepository);
