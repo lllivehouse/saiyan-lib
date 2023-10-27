@@ -20,6 +20,7 @@
         <lombok.version>1.18.24</lombok.version>
         <!--springboot lib-->
         <spring.boot.version>2.7.14</spring.boot.version>
+        <spring.integration.version>5.5.19</spring.integration.version>
         <!--spring cloud lib-->
         <spring.cloud.version>2021.0.8</spring.cloud.version>
         <spring.cloud.alibaba.version>2021.0.5.0</spring.cloud.alibaba.version>
@@ -38,6 +39,7 @@
         <!--others-->
         <hutool.version>5.8.21</hutool.version>
         <disruptor.version>3.4.4</disruptor.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
     </properties>
 
     <modules>
@@ -55,6 +57,7 @@
         <module>http-client-spring-boot-starter</module>
         <module>common-indicator-spring-boot-starter</module>
         <module>common-file-upload</module>
+        <module>scheduler-plus-spring-boot-starter</module>
         <module>mybatis-generator-plugin</module>
     </modules>
 
@@ -132,6 +135,11 @@
             </dependency>
             <dependency>
                 <groupId>co.mgentertainment</groupId>
+                <artifactId>scheduler-plus-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>co.mgentertainment</groupId>
                 <artifactId>mybatis-generator-plugin</artifactId>
                 <version>${revision}</version>
             </dependency>
@@ -156,6 +164,17 @@
                 <version>${spring.cloud.alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.integration</groupId>
+                <artifactId>spring-integration-core</artifactId>
+                <version>${spring.integration.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.integration</groupId>
+                <artifactId>spring-integration-jdbc</artifactId>
+                <version>${spring.integration.version}</version>
             </dependency>
 
             <dependency>
@@ -227,10 +246,17 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+
             <dependency>
                 <groupId>com.lmax</groupId>
                 <artifactId>disruptor</artifactId>
                 <version>${disruptor.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

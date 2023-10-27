@@ -22,6 +22,7 @@ public enum ErrorCodeEnum {
     VERSION_NOT_SUPPORT(505, "HTTP版本不支持"),
     API_VALIDATION_FAILED(10001, "open api校验异常"),
     TOKEN_VALIDATION_FAILED(10002, "token校验失败"),
+    NOT_ENOUGH_COIN(5001, "金币不足"),
 
     ;
 
