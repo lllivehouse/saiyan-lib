@@ -17,7 +17,7 @@ import java.util.List;
 @ToString
 public class CursorResult<T> implements Serializable {
 
-    private static final long serialVersionUID = -5983847187357226981L;
+    private static final long serialVersionUID = 7319206916713429407L;
 
     private final List<T> records;
     private final int size;

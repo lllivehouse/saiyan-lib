@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,8 +15,9 @@ import java.util.Date;
 @Getter
 @SuperBuilder
 @ToString
-public class CursorPage {
+public class CursorPage implements Serializable {
 
+    private static final long serialVersionUID = 8810202745936806477L;
     /**
      * 每页的大小
      * -- GETTER --
