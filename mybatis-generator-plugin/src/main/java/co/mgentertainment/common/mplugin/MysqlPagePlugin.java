@@ -79,25 +79,25 @@ public class MysqlPagePlugin extends PluginAdapter {
 
     @Override
     public boolean sqlMapUpdateByExampleSelectiveElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        element.addElement(generateUpdateAndDeleteLimitElement("example."));
+//        element.addElement(generateUpdateAndDeleteLimitElement("example."));
         return true;
     }
 
     @Override
     public boolean sqlMapUpdateByExampleWithBLOBsElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        element.addElement(generateUpdateAndDeleteLimitElement("example."));
+//        element.addElement(generateUpdateAndDeleteLimitElement("example."));
         return true;
     }
 
     @Override
     public boolean sqlMapUpdateByExampleWithoutBLOBsElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        element.addElement(generateUpdateAndDeleteLimitElement("example."));
+//        element.addElement(generateUpdateAndDeleteLimitElement("example."));
         return true;
     }
 
     @Override
     public boolean sqlMapDeleteByExampleElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        element.addElement(generateUpdateAndDeleteLimitElement());
+//        element.addElement(generateUpdateAndDeleteLimitElement());
         return true;
     }
 
@@ -118,14 +118,14 @@ public class MysqlPagePlugin extends PluginAdapter {
         return ifLimitNotNullElement;
     }
 
-    private XmlElement generateUpdateAndDeleteLimitElement() {
-        return generateUpdateAndDeleteLimitElement("");
-    }
+//    private XmlElement generateUpdateAndDeleteLimitElement() {
+//        return generateUpdateAndDeleteLimitElement("");
+//    }
 
-    private XmlElement generateUpdateAndDeleteLimitElement(String prefix) {
-        XmlElement ifLimitNotNullElement = new XmlElement("if");
-        ifLimitNotNullElement.addAttribute(new Attribute("test", prefix + "limit != null"));
-        ifLimitNotNullElement.addElement(new TextElement("limit ${" + prefix + "limit}"));
-        return ifLimitNotNullElement;
-    }
+//    private XmlElement generateUpdateAndDeleteLimitElement(String prefix) {
+//        XmlElement ifLimitNotNullElement = new XmlElement("if");
+//        ifLimitNotNullElement.addAttribute(new Attribute("test", prefix + "limit != null"));
+//        ifLimitNotNullElement.addElement(new TextElement("limit ${" + prefix + "limit}"));
+//        return ifLimitNotNullElement;
+//    }
 }
