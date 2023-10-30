@@ -46,7 +46,7 @@ public class LockStrengthen implements SchedulerPlusStrength {
     }
 
     @Override
-    public void afterFinally(Object bean, Method method, Object[] args, SchedulerPlusMeta metadata) {
+    public void afterFinally(Object bean, Method method, Object[] args, SchedulerPlusMeta metadata, Object result) {
         if (this.lock != null && locked.get()) {
             // 释放锁
             lock.unlock();

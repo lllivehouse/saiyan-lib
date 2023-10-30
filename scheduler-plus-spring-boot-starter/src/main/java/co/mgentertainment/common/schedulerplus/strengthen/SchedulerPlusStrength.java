@@ -33,8 +33,9 @@ public interface SchedulerPlusStrength {
      * @param method   执行的方法对象
      * @param args     方法参数
      * @param metadata 任务元数据
+     * @param result   任务执行结果
      */
-    void afterFinally(Object bean, Method method, Object[] args, SchedulerPlusMeta metadata);
+    void afterFinally(Object bean, Method method, Object[] args, SchedulerPlusMeta metadata, Object result);
 
     /**
      * 后置强化方法

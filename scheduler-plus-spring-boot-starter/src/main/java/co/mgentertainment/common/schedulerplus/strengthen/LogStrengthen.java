@@ -1,5 +1,6 @@
 package co.mgentertainment.common.schedulerplus.strengthen;
 
+import co.mgentertainment.common.model.R;
 import co.mgentertainment.common.schedulerplus.annontation.StrengthenOrder;
 import co.mgentertainment.common.schedulerplus.core.SchedulerPlusMeta;
 import co.mgentertainment.common.schedulerplus.core.SchedulerPlusTaskStatusEnum;
@@ -35,8 +36,11 @@ public class LogStrengthen implements SchedulerPlusStrength {
     }
 
     @Override
-    public void afterFinally(Object bean, Method method, Object[] args, SchedulerPlusMeta metadata) {
+    public void afterFinally(Object bean, Method method, Object[] args, SchedulerPlusMeta metadata, Object result) {
         schedulerPlusTaskRepository.updateTaskStatus(metadata.getSchedulerId(), SchedulerPlusTaskStatusEnum.DONE);
+        if (result instanceof R) {
+            schedulerPlusLogRepository.updateLog(metadata.getSchedulerId(), ((R) result).getCode(), ((R) result).getMsg(), new Date());
+        }
     }
 
     @Override
