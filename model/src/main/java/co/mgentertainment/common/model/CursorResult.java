@@ -20,13 +20,13 @@ public class CursorResult<T> implements Serializable {
 
     private final List<T> records;
     private final int size;
-    private Long lastCreateTimestamp;
+    private final Long lastCreateTimestamp;
     private final boolean hasNext;
 
     public CursorResult(int pageSize, Long lastCreateTimestamp, List<T> rows) {
         this.size = pageSize;
-        this.lastCreateTimestamp = lastCreateTimestamp;
         this.records = rows;
+        this.lastCreateTimestamp = lastCreateTimestamp;
         this.hasNext = rows.size() == pageSize;
     }
 
