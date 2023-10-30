@@ -60,7 +60,7 @@ public class CommonRedisAutoConfiguration {
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        GsonRedisSerializer gsonRedisSerializer = new GsonRedisSerializer(Object.class);
+        GsonRedisSerializer gsonRedisSerializer = new GsonRedisSerializer();
         redisTemplate.setValueSerializer(gsonRedisSerializer);
         redisTemplate.setHashValueSerializer(gsonRedisSerializer);
         redisTemplate.afterPropertiesSet();

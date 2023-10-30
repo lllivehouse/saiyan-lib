@@ -1,6 +1,7 @@
 package co.mgentertainment.common.redis.config;
 
 import co.mgentertainment.common.utils.GsonFactory;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -14,22 +15,22 @@ import java.nio.charset.StandardCharsets;
  * @description GsonRedisSerializer
  */
 @Slf4j
-public class GsonRedisSerializer<T> implements RedisSerializer<T> {
+public class GsonRedisSerializer implements RedisSerializer {
 
-    private final Class<T> clazz;
+    private final Gson gson;
 
-    public GsonRedisSerializer(Class<T> clazz) {
+    public GsonRedisSerializer() {
         super();
-        this.clazz = clazz;
+        this.gson = GsonFactory.getGson();
     }
 
     @Override
-    public byte[] serialize(T t) throws SerializationException {
-        if (t == null) {
+    public byte[] serialize(Object obj) throws SerializationException {
+        if (obj == null) {
             return new byte[0];
         }
         try {
-            String json = GsonFactory.getGson().toJson(t, clazz);
+            String json = gson.toJson(obj);
             if (StringUtils.isNotBlank(json)) {
                 return json.getBytes(StandardCharsets.UTF_8);
             }
@@ -40,11 +41,11 @@ public class GsonRedisSerializer<T> implements RedisSerializer<T> {
     }
 
     @Override
-    public T deserialize(byte[] bytes) throws SerializationException {
+    public Object deserialize(byte[] bytes) throws SerializationException {
         if (bytes == null || bytes.length == 0) {
             return null;
         }
         String str = new String(bytes, StandardCharsets.UTF_8);
-        return GsonFactory.getGson().fromJson(str, clazz);
+        return gson.fromJson(str, Object.class);
     }
 }
