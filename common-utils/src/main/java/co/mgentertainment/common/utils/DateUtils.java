@@ -21,6 +21,7 @@ import java.util.*;
 public class DateUtils {
 
     public static final String DEFAULT_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String DEFAULT_MILLSEC_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
     public static final String TIME_FORMAT = "HH:mm";
     public static final String FORMAT_YYYY_MM_DD = "yyyy-MM-dd";
     public static final String FORMAT_YYYYMMDD = "yyyyMMdd";
@@ -73,6 +74,7 @@ public class DateUtils {
     public static final DateTimeFormatter TIME_FORMATER = DateTimeFormatter.ofPattern(TIME_FORMAT);
     public static final DateTimeFormatter FORMATER_YYYY_MM_DD = DateTimeFormatter.ofPattern(FORMAT_YYYY_MM_DD);
     public static final DateTimeFormatter FORMATER_YYYYMMDD = DateTimeFormatter.ofPattern(FORMAT_YYYYMMDD);
+    public static final DateTimeFormatter DEFAULT_MILLSEC_FORMATER = DateTimeFormatter.ofPattern(DEFAULT_MILLSEC_FORMAT);
 
     public static final long MILLS_SECOND = 1000L;
 

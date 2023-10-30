@@ -5,7 +5,6 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,22 +16,22 @@ import java.util.List;
 @ToString
 public class CursorResult<T> implements Serializable {
 
-    private static final long serialVersionUID = 7319206916713429407L;
+    private static final long serialVersionUID = 4189964944909648114L;
 
     private final List<T> records;
     private final int size;
-    private final Date lastCreateTime;
+    private Long lastCreateTimestamp;
     private final boolean hasNext;
 
-    public CursorResult(int pageSize, Date lastCreateTime, List<T> rows) {
+    public CursorResult(int pageSize, Long lastCreateTimestamp, List<T> rows) {
         this.size = pageSize;
-        this.lastCreateTime = lastCreateTime;
+        this.lastCreateTimestamp = lastCreateTimestamp;
         this.records = rows;
         this.hasNext = rows.size() == pageSize;
     }
 
-    public static <T> CursorResult<T> createCursorResult(int pageSize, Date lastCreateTime, List<T> rows) {
-        return new CursorResult<>(pageSize, lastCreateTime, rows);
+    public static <T> CursorResult<T> createCursorResult(int pageSize, Long lastCreateTimestamp, List<T> rows) {
+        return new CursorResult<>(pageSize, lastCreateTimestamp, rows);
     }
 
     public static <T> CursorResult<T> emptyPageResult() {

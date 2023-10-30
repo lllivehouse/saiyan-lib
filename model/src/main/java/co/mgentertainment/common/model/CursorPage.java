@@ -5,7 +5,6 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author larry
@@ -17,7 +16,8 @@ import java.util.Date;
 @ToString
 public class CursorPage implements Serializable {
 
-    private static final long serialVersionUID = 8810202745936806477L;
+    private static final long serialVersionUID = 286378689379757976L;
+
     /**
      * 每页的大小
      * -- GETTER --
@@ -28,16 +28,16 @@ public class CursorPage implements Serializable {
     private int pageSize = 10;
 
     /**
-     * 最后一条记录的创建时间
+     * 最后一条记录的创建时间戳
      */
-    private Date lastCreateTime;
+    private Long lastCreateTimestamp;
 
     public CursorPage() {
     }
 
-    public CursorPage(int pageSize, Date lastCreateTime) {
+    public CursorPage(int pageSize, Long lastCreateTimestamp) {
         this.pageSize = pageSize;
-        this.lastCreateTime = lastCreateTime;
+        this.lastCreateTimestamp = lastCreateTimestamp;
     }
 
     /**
@@ -52,9 +52,9 @@ public class CursorPage implements Serializable {
     /**
      * 获取最后一条记录的创建时间
      *
-     * @param lastCreateTime
+     * @param lastCreateTimestamp
      */
-    public void setLastCreateTime(Date lastCreateTime) {
-        this.lastCreateTime = lastCreateTime;
+    public void setLastCreateTimestamp(Long lastCreateTimestamp) {
+        this.lastCreateTimestamp = lastCreateTimestamp;
     }
 }
