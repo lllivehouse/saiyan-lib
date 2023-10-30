@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @createTime 2023/10/26
  * @description ThreadPoolTaskSchedulerProperties
  */
-@ConfigurationProperties(prefix = "schedulerPlus.threadPool")
+@ConfigurationProperties(prefix = "scheduler-plus.thread-pool")
 public class ThreadPoolTaskSchedulerProperties {
     private Integer poolSize = 10;
     private String threadNamePrefix;

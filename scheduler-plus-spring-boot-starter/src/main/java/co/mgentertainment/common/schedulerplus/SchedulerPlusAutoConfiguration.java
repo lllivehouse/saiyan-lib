@@ -66,7 +66,7 @@ public class SchedulerPlusAutoConfiguration {
         return new SchedulerPlusLogRepository(schedulerPlusDataSource);
     }
 
-    @Bean
+    @Bean(name = "lockRegistry")
     public LockRegistry getDefaultLockRegistry(@Qualifier("schedulerPlusDataSource") DataSource schedulerPlusDataSource) throws UnknownHostException {
         DefaultLockRepository lockRepository = new DefaultLockRepository(schedulerPlusDataSource,
                 InetAddress.getLocalHost().getHostAddress() + ":" + System.getProperty("server.port"));
@@ -86,14 +86,14 @@ public class SchedulerPlusAutoConfiguration {
 
     @Bean
     @DependsOn("lockRegistry")
-    @ConditionalOnProperty(prefix = "schedulerPlus.plugin", name = "lock", havingValue = "true")
+    @ConditionalOnProperty(prefix = "scheduler-plus.plugin", name = "lock", havingValue = "true")
     @ConditionalOnMissingBean
-    public LockStrengthen lockStrengthen(LockRegistry lockRegistry) {
+    public LockStrengthen lockStrengthen(@Qualifier("lockRegistry") LockRegistry lockRegistry) {
         return new LockStrengthen(lockRegistry);
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "schedulerPlus.plugin", name = "log", havingValue = "true")
+    @ConditionalOnProperty(prefix = "scheduler-plus.plugin", name = "log", havingValue = "true")
     @ConditionalOnMissingBean
     public LogStrengthen logStrengthen(SchedulerPlusTaskRepository schedulerPlusTaskRepository, SchedulerPlusLogRepository schedulerPlusLogRepository) {
         return new LogStrengthen(schedulerPlusTaskRepository, schedulerPlusLogRepository);
