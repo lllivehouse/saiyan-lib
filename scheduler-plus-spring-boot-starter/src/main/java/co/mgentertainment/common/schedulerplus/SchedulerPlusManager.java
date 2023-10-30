@@ -104,9 +104,7 @@ public class SchedulerPlusManager {
      */
     public void updateSchedulerTime(String schedulerId, String cronExpression) {
         schedulerPlusTaskRepository.updateTaskCron(schedulerId, cronExpression);
-        SchedulerPlusTaskItem item = new SchedulerPlusTaskItem();
-        item.setSchedulerId(schedulerId);
-        item.setCronExpression(cronExpression);
+        SchedulerPlusTaskItem item = SchedulerPlusTaskItem.builder().schedulerId(schedulerId).cronExpression(cronExpression).build();
         try {
             distributedEventProvider.fire(SchedulerPlusEventKey.UPDATE_CRON, GsonFactory.getGson().toJson(item));
         } catch (NacosException e) {
