@@ -16,23 +16,26 @@ public interface SchedulerPlusObjectMapper {
 
     SchedulerPlusObjectMapper INSTANCE = Mappers.getMapper(SchedulerPlusObjectMapper.class);
 
+    @Mappings({
+            @Mapping(target = "jobName", expression = "java(schedulerPlusTaskItem.getJobClass().getSimpleName())")
+    })
     SchedulerPlusTaskDO toSchedulerPlusTaskDO(SchedulerPlusTaskItem schedulerPlusTaskItem);
 
     @Mappings({
             @Mapping(source = "scheduledMode.code", target = "scheduledMode"),
-            @Mapping(source = "jobBeanName", target = "jobName"),
             @Mapping(source = "schedulerDesc", target = "taskDesc"),
             @Mapping(source = "status.code", target = "taskStatus"),
-            @Mapping(target = "taskArgs", expression = "java(SchedulerPlusMeta.parseContextArgs(schedulerPlusMeta.getContextArgs()))")
+            @Mapping(target = "taskArgs", expression = "java(SchedulerPlusMeta.parseContextArgs(schedulerPlusMeta.getContextArgs()))"),
+            @Mapping(target = "jobClass", expression = "java(schedulerPlusMeta.getJob().getClass())")
     })
     SchedulerPlusTaskItem toSchedulerPlusTaskItem(SchedulerPlusMeta schedulerPlusMeta);
 
     @Mappings({
             @Mapping(source = "scheduledMode.code", target = "scheduledMode"),
-            @Mapping(source = "jobBeanName", target = "jobName"),
             @Mapping(source = "schedulerDesc", target = "taskDesc"),
             @Mapping(source = "status.code", target = "taskStatus"),
-            @Mapping(target = "taskArgs", expression = "java(SchedulerPlusMeta.parseContextArgs(schedulerPlusMeta.getContextArgs()))")
+            @Mapping(target = "taskArgs", expression = "java(SchedulerPlusMeta.parseContextArgs(schedulerPlusMeta.getContextArgs()))"),
+            @Mapping(target = "jobName", expression = "java(schedulerPlusMeta.getJob().getClass().getSimpleName())")
     })
     SchedulerPlusTaskDO toSchedulerPlusTaskDO(SchedulerPlusMeta schedulerPlusMeta);
 

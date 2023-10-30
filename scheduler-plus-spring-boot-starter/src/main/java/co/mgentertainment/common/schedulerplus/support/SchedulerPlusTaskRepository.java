@@ -128,7 +128,6 @@ public class SchedulerPlusTaskRepository implements InitializingBean {
                 .schedulerId(task.getSchedulerId())
                 .scheduledMode(ScheduledModeEnum.getByCode(task.getScheduledMode()))
                 .contextArgs(SchedulerPlusMeta.parseContextArgs(task.getTaskArgs()))
-                .jobBeanName(task.getJobName())
                 .job(job)
                 .cronExpression(task.getCronExpression())
                 .schedulerDesc(task.getTaskDesc())

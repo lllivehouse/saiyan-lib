@@ -1,5 +1,6 @@
 package co.mgentertainment.common.schedulerplus.support;
 
+import co.mgentertainment.common.schedulerplus.core.SchedulerPlusJob;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,7 +14,7 @@ public class SchedulerPlusTaskItem implements Serializable {
 
     private Integer scheduledMode;
 
-    private String jobName;
+    private Class<? extends SchedulerPlusJob> jobClass;
 
     private String cronExpression;
 

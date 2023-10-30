@@ -25,8 +25,6 @@ public class SchedulerPlusMeta<T extends SchedulerPlusJob> {
 
     private ScheduledModeEnum scheduledMode;
 
-    private String jobBeanName;
-
     private T job;
 
     private String cronExpression;
