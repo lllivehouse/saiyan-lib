@@ -10,18 +10,14 @@ import java.util.Arrays;
 public enum UploadStatusEnum {
 
     CONVERTING(0, "转码中"),
-    UPLOADING(1, "正片上传中"),
-    TRAILER_CUTTING_AND_UPLOADING(2, "预告片剪切上传中"),
+    UPLOADING_FILM(1, "正片上传中"),
+    CAPTURING_AND_UPLOADING_COVER(2, "封面剪切上传中"),
     CONVERT_FAILURE(3, "转码失败"),
     UPLOAD_FAILURE(4, "正片上传失败"),
-    TRAILER_CUT_FAILURE(5, "预告片剪切失败"),
-    TRAILER_UPLOAD_FAILURE(6, "预告片上传失败"),
+    CAPTURE_FAILURE(5, "封面剪切失败"),
+    UPLOAD_COVER_FAILURE(6, "封面上传失败"),
     VIDEO_DAMAGED_OR_LOST(7, "视频已损坏或丢失"),
-    SHORT_VIDEO_CUTTING_AND_UPLOADING(8, "短视频剪切上传中"),
-    SHORT_VIDEO_FAILURE(9, "短视频剪切上传失败"),
-    COMPLETED(10, "已完成"),
-    DEFAULT_COVER_CUTTING_AND_UPLOADING(11, "默认封面剪切上传中"),
-    DEFAULT_COVER_FAILURE(12, "默认封面剪切上传失败"),
+    COMPLETED(10, "主流程完成"),
     ;
 
     private final Integer value;
