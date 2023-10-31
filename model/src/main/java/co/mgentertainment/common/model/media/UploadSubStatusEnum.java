@@ -9,6 +9,7 @@ import java.util.Arrays;
  */
 public enum UploadSubStatusEnum {
 
+    NONE(0, "无"),
     PRINTING(11, "打水印中"),
     UPLOADING_ORIGIN(12, "水印原片上传中"),
     CUTTING_TRAILER(13, "预告片剪切中"),
