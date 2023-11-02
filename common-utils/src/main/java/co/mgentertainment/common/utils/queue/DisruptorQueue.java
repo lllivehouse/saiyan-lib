@@ -13,18 +13,44 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author larry
- * @createTime 2023/2/11
- * @description DisruptorDecorator
+ * @createTime 2023/11/02
+ * @description DisruptorQueue
  */
 public class DisruptorQueue<T> {
+    private static volatile DisruptorQueue instance;
+    private AtomicBoolean initialized = new AtomicBoolean(false);
+    private CountDownLatch latch = new CountDownLatch(1);
 
     private Disruptor<DisruptorEvent<T>> disruptor;
     private RingBuffer<DisruptorEvent<T>> ringBuffer;
     private ExecutorService executor;
     private WorkerPool<DisruptorEvent<T>> workerPool;
+
+    public static <T> DisruptorQueue sharedPubSubInstance(int bufferSize, boolean multiProducer, AbstractDisruptorConsumer<T>... consumers) {
+        if (instance == null) {
+            synchronized (DisruptorQueue.class) {
+                if (instance == null) {
+                    instance = new DisruptorQueue(bufferSize, multiProducer, consumers);
+                }
+            }
+        }
+        return instance;
+    }
+
+    public static <T> DisruptorQueue independentPubSubInstance(int bufferSize, boolean multiProducer, AbstractDisruptorWorkConsumer<T>... consumers) {
+        if (instance == null) {
+            synchronized (DisruptorQueue.class) {
+                if (instance == null) {
+                    instance = new DisruptorQueue(bufferSize, multiProducer, consumers);
+                }
+            }
+        }
+        return instance;
+    }
 
     /**
      * 创建"广播订阅模式"队列，即同一事件会被多个消费者重复并行消费
@@ -34,7 +60,7 @@ public class DisruptorQueue<T> {
      * @param consumers
      * @return
      */
-    public DisruptorQueue(int bufferSize, boolean multiProducer, AbstractDisruptorConsumer<T>... consumers) {
+    private DisruptorQueue(int bufferSize, boolean multiProducer, AbstractDisruptorConsumer<T>... consumers) {
         this.disruptor = new Disruptor(new DisruptorEventFactory(),
                 bufferSize, DaemonThreadFactory.INSTANCE,
                 multiProducer ? ProducerType.MULTI : ProducerType.SINGLE,
@@ -53,7 +79,7 @@ public class DisruptorQueue<T> {
      * @param multiProducer
      * @param consumers
      */
-    public DisruptorQueue(int bufferSize, boolean multiProducer, AbstractDisruptorWorkConsumer<T>... consumers) {
+    private DisruptorQueue(int bufferSize, boolean multiProducer, AbstractDisruptorWorkConsumer<T>... consumers) {
         Preconditions.checkArgument(consumers != null && consumers.length > 0, "consumers can not be empty");
         this.ringBuffer = RingBuffer.create(multiProducer ? ProducerType.MULTI : ProducerType.SINGLE, new DisruptorEventFactory<>(), bufferSize,
                 new YieldingWaitStrategy());
