@@ -1,10 +1,7 @@
 package co.mgentertainment.common.utils.queue;
 
 import com.google.common.base.Preconditions;
-import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.SequenceBarrier;
-import com.lmax.disruptor.WorkerPool;
-import com.lmax.disruptor.YieldingWaitStrategy;
+import com.lmax.disruptor.*;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
@@ -12,7 +9,8 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -82,7 +80,7 @@ public class DisruptorQueue<T> {
     private DisruptorQueue(int bufferSize, boolean multiProducer, ExecutorService executor, AbstractDisruptorWorkConsumer<T>... consumers) {
         Preconditions.checkArgument(consumers != null && consumers.length > 0, "consumers can not be empty");
         this.ringBuffer = RingBuffer.create(multiProducer ? ProducerType.MULTI : ProducerType.SINGLE, new DisruptorEventFactory<>(), bufferSize,
-                new YieldingWaitStrategy());
+                new BlockingWaitStrategy());
         SequenceBarrier barriers = this.ringBuffer.newBarrier();
         this.workerPool = new WorkerPool<>(this.ringBuffer, barriers, new DisruptorEventExceptionHandler(), consumers);
         this.ringBuffer.addGatingSequences(workerPool.getWorkerSequences());
