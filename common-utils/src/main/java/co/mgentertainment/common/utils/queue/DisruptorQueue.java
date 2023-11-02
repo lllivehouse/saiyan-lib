@@ -24,7 +24,6 @@ public class DisruptorQueue<T> {
     private static volatile DisruptorQueue instance;
     private AtomicBoolean initialized = new AtomicBoolean(false);
     private CountDownLatch latch = new CountDownLatch(1);
-
     private Disruptor<DisruptorEvent<T>> disruptor;
     private RingBuffer<DisruptorEvent<T>> ringBuffer;
     private ExecutorService executor;
@@ -41,11 +40,11 @@ public class DisruptorQueue<T> {
         return instance;
     }
 
-    public static <T> DisruptorQueue independentPubSubInstance(int bufferSize, boolean multiProducer, AbstractDisruptorWorkConsumer<T>... consumers) {
+    public static <T> DisruptorQueue independentPubSubInstance(int bufferSize, boolean multiProducer, ExecutorService executor, AbstractDisruptorWorkConsumer<T>... consumers) {
         if (instance == null) {
             synchronized (DisruptorQueue.class) {
                 if (instance == null) {
-                    instance = new DisruptorQueue(bufferSize, multiProducer, consumers);
+                    instance = new DisruptorQueue(bufferSize, multiProducer, executor, consumers);
                 }
             }
         }
@@ -77,27 +76,18 @@ public class DisruptorQueue<T> {
      *
      * @param bufferSize
      * @param multiProducer
+     * @param executor
      * @param consumers
      */
-    private DisruptorQueue(int bufferSize, boolean multiProducer, AbstractDisruptorWorkConsumer<T>... consumers) {
+    private DisruptorQueue(int bufferSize, boolean multiProducer, ExecutorService executor, AbstractDisruptorWorkConsumer<T>... consumers) {
         Preconditions.checkArgument(consumers != null && consumers.length > 0, "consumers can not be empty");
         this.ringBuffer = RingBuffer.create(multiProducer ? ProducerType.MULTI : ProducerType.SINGLE, new DisruptorEventFactory<>(), bufferSize,
                 new YieldingWaitStrategy());
         SequenceBarrier barriers = this.ringBuffer.newBarrier();
         this.workerPool = new WorkerPool<>(this.ringBuffer, barriers, new DisruptorEventExceptionHandler(), consumers);
         this.ringBuffer.addGatingSequences(workerPool.getWorkerSequences());
-        // Fixed Thread Pool
-        int workerSize = consumers.length;
-        this.executor = new ThreadPoolExecutor(workerSize, workerSize, 0L, TimeUnit.MILLISECONDS,
-                new ArrayBlockingQueue<>(10), new ThreadFactory() {
-            private int counter = 0;
-
-            @Override
-            public Thread newThread(Runnable r) {
-                return new Thread(r, "DisruptorWorker-" + counter++);
-            }
-        });
-        this.workerPool.start(this.executor);
+        this.executor = executor;
+        this.workerPool.start(executor);
     }
 
     public void add(T t) {
