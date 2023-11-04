@@ -114,4 +114,9 @@ public class CommonRedisAutoConfiguration {
     public RedisService redisService(RedisTemplate<String, Object> redisTemplate) {
         return new RedisServiceImpl(redisTemplate);
     }
+
+    @Bean(name = "redisPublisher")
+    public MessagePublisher redisPublisher(RedisTemplate<String, Object> redisTemplate) {
+        return new RedisPublisher(redisTemplate);
+    }
 }
