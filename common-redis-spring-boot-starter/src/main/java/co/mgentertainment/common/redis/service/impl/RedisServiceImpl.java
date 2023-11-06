@@ -203,4 +203,25 @@ public class RedisServiceImpl implements RedisService {
     public Long lRemove(String key, long count, Object value) throws RuntimeException {
         return redisTemplate.opsForList().remove(key, count, value);
     }
+
+    @Override
+    public Boolean zAdd(String key, Object value, long score) {
+        return redisTemplate.opsForZSet().add(key, value, score);
+    }
+
+    @Override
+    public Set<Object> zRange(String key, long min, long max, long offset, long count) {
+        return redisTemplate.opsForZSet().rangeByScore(key, new Long(min).doubleValue(), new Long(max).doubleValue(), offset, count);
+    }
+
+    @Override
+    public Set<Object> zReverseRange(String key, long min, long max, long offset, long count) {
+        return redisTemplate.opsForZSet().reverseRangeByScore(key, new Long(min).doubleValue(), new Long(max).doubleValue(), offset, count);
+    }
+
+    @Override
+    public Long zRemoveRange(String key, long min, long max) {
+        return redisTemplate.opsForZSet().removeRangeByScore(key, new Long(min).doubleValue(), new Long(max).doubleValue());
+    }
+
 }

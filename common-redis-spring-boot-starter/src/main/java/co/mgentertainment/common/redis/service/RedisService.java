@@ -15,9 +15,10 @@ public interface RedisService {
 
     /**
      * redis 批量事务操作
+     *
      * @param callback
-     * @return
      * @param <T>
+     * @return
      */
     <T> T execute(SessionCallback<T> callback) throws RuntimeException;
 
@@ -190,4 +191,44 @@ public interface RedisService {
      * 从List结构中移除属性
      */
     Long lRemove(String key, long count, Object value) throws RuntimeException;
+
+    /**
+     * zset 添加元素
+     *
+     * @param key
+     * @param value
+     * @param score
+     * @return
+     */
+    Boolean zAdd(String key, Object value, long score);
+
+    /**
+     * zset 获取元素
+     *
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
+    Set<Object> zRange(String key, long min, long max, long offset, long count);
+
+    /**
+     * zset 分数倒序获取元素
+     * @param key
+     * @param min
+     * @param max
+     * @param offset
+     * @param count
+     * @return
+     */
+    Set<Object> zReverseRange(String key, long min, long max, long offset, long count);
+
+    /**
+     * zset 删除元素
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
+    Long zRemoveRange(String key, long min, long max);
 }
