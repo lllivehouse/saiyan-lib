@@ -203,7 +203,7 @@ public interface RedisService {
     Boolean zAdd(String key, Object value, long score);
 
     /**
-     * zset 获取元素
+     * zrange 获取元素
      *
      * @param key
      * @param min
@@ -213,7 +213,18 @@ public interface RedisService {
     Set<Object> zRange(String key, long min, long max, long offset, long count);
 
     /**
+     * zrange 获取元素
+     *
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
+    Set<Object> zRange(String key, Long min, Long max);
+
+    /**
      * zset 分数倒序获取元素
+     *
      * @param key
      * @param min
      * @param max
@@ -225,6 +236,7 @@ public interface RedisService {
 
     /**
      * zset 删除元素
+     *
      * @param key
      * @param min
      * @param max
