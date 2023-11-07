@@ -11,6 +11,7 @@ public enum PaymentMethodEnum {
 
     ALIPAY(0, "支付宝"),
     WECHAT_PAY(1, "微信支付"),
+    UDST(2, "USDT"),
     ;
 
     private Integer code;
