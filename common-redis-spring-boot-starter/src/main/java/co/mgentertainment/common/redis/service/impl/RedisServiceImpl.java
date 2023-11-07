@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
+import org.springframework.data.redis.core.ZSetOperations;
 
 import java.util.List;
 import java.util.Map;
@@ -210,6 +211,11 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
+    public Long zAdd(String key, Set<ZSetOperations.TypedTuple<Object>> tuples) {
+        return redisTemplate.opsForZSet().add(key, tuples);
+    }
+
+    @Override
     public Set<Object> zRange(String key, long min, long max, long offset, long count) {
         return redisTemplate.opsForZSet().rangeByScore(key, new Long(min).doubleValue(), new Long(max).doubleValue(), offset, count);
     }
@@ -222,6 +228,16 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public Set<Object> zReverseRange(String key, long min, long max, long offset, long count) {
         return redisTemplate.opsForZSet().reverseRangeByScore(key, new Long(min).doubleValue(), new Long(max).doubleValue(), offset, count);
+    }
+
+    @Override
+    public Object zPopMax(String key) {
+        return redisTemplate.opsForZSet().popMax(key).getValue();
+    }
+
+    @Override
+    public Object zPopMin(String key) {
+        return redisTemplate.opsForZSet().popMin(key).getValue();
     }
 
     @Override

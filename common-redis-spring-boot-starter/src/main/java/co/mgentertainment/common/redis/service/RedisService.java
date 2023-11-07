@@ -1,6 +1,7 @@
 package co.mgentertainment.common.redis.service;
 
 import org.springframework.data.redis.core.SessionCallback;
+import org.springframework.data.redis.core.ZSetOperations;
 
 import java.util.List;
 import java.util.Map;
@@ -203,6 +204,15 @@ public interface RedisService {
     Boolean zAdd(String key, Object value, long score);
 
     /**
+     * 批量添加
+     *
+     * @param key
+     * @param tuples
+     * @return
+     */
+    Long zAdd(String key, Set<ZSetOperations.TypedTuple<Object>> tuples);
+
+    /**
      * zrange 获取元素
      *
      * @param key
@@ -243,4 +253,20 @@ public interface RedisService {
      * @return
      */
     Long zRemoveRange(String key, long min, long max);
+
+    /**
+     * zset 弹出最大元素
+     *
+     * @param key
+     * @return
+     */
+    Object zPopMax(String key);
+
+    /**
+     * zset 弹出最小元素
+     *
+     * @param key
+     * @return
+     */
+    Object zPopMin(String key);
 }
