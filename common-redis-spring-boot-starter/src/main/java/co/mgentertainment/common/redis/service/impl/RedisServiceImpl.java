@@ -83,6 +83,11 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
+    public Map<Object, Object> hEntries(String key) throws RuntimeException {
+        return redisTemplate.opsForHash().entries(key);
+    }
+
+    @Override
     public Boolean hSet(String key, String hashKey, Object value, long time) throws RuntimeException {
         redisTemplate.opsForHash().put(key, hashKey, value);
         return expire(key, time);
