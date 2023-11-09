@@ -11,7 +11,6 @@ import org.springframework.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author larry
@@ -24,7 +23,7 @@ public class SchedulerPlusExecutorProxy implements MethodInterceptor {
 
     private final List<SchedulerPlusStrength> strengthens;
 
-    public SchedulerPlusExecutor createProxy(SchedulerPlusMeta constructorArg) {
+    public SchedulerPlusExecutor createProxy(SchedulerPlusMeta metadata) {
         Enhancer enhancer = new Enhancer();
         // 设置代理目标
         enhancer.setSuperclass(SchedulerPlusExecutor.class);
@@ -33,31 +32,29 @@ public class SchedulerPlusExecutorProxy implements MethodInterceptor {
         // 设置类加载器
         enhancer.setClassLoader(SchedulerPlusExecutor.class.getClassLoader());
         // 创建有参构造函数的代理对象
-        return (SchedulerPlusExecutor) enhancer.create(new Class[]{SchedulerPlusMeta.class}, new Object[]{constructorArg});
+        return (SchedulerPlusExecutor) enhancer.create(new Class[]{SchedulerPlusMeta.class}, new Object[]{metadata});
     }
 
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
-        if (!(obj instanceof SchedulerPlusExecutor)) {
+        if (!"invoke".equals(method.getName())) {
             return methodProxy.invokeSuper(obj, args);
         }
         Object result = null;
-        SchedulerPlusExecutor executor = (SchedulerPlusExecutor) obj;
-        SchedulerPlusMeta schedulerPlusMeta = Optional.ofNullable(executor.getMetadata()).orElse(SchedulerPlusMeta.builder().build());
         strengthens.stream().forEach(strengthen -> {
             try {
-                strengthen.before(obj, method, args, schedulerPlusMeta);
+                strengthen.before(obj, method, args);
             } catch (Exception e) {
                 log.error("before strengthen [{}] error", strengthen.getClass(), e);
             }
         });
         try {
-            result = executor.invoke();
+            result = methodProxy.invokeSuper(obj, args);
         } catch (Exception e) {
             log.error("proxy obj [{}] execution error", obj.getClass().getName(), e);
             strengthens.stream().forEach(strengthen -> {
                 try {
-                    strengthen.exception(obj, method, args, schedulerPlusMeta);
+                    strengthen.exception(obj, method, args);
                 } catch (Exception ex) {
                     log.error("exception strengthen [{}] error", strengthen.getClass(), ex);
                 }
@@ -66,7 +63,7 @@ public class SchedulerPlusExecutorProxy implements MethodInterceptor {
             Object finalResult = result;
             strengthens.stream().forEach(strengthen -> {
                 try {
-                    strengthen.afterFinally(obj, method, args, schedulerPlusMeta, finalResult);
+                    strengthen.afterFinally(obj, method, args, finalResult);
                 } catch (Exception e) {
                     log.error("afterFinally strengthen [{}] error", strengthen.getClass(), e);
                 }
@@ -74,7 +71,7 @@ public class SchedulerPlusExecutorProxy implements MethodInterceptor {
         }
         strengthens.stream().forEach(strengthen -> {
             try {
-                strengthen.after(obj, method, args, schedulerPlusMeta);
+                strengthen.after(obj, method, args);
             } catch (Exception e) {
                 log.error("after strengthen [{}] error", strengthen.getClass(), e);
             }

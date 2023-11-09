@@ -55,7 +55,7 @@ public class SchedulerPlusJobPostProcessor implements BeanPostProcessor, Applica
             int order = Optional.ofNullable(annotation).map(StrengthenOrder::value).orElse(Integer.MAX_VALUE);
             return new Pair<>(order, strengthen);
         }).sorted(Comparator.comparing(Pair::getKey)).map(pair -> pair.getValue()).collect(Collectors.toList());
-        schedulerPlusCache.setNameToSchedulerPlusJob(jobBeans);
+        jobBeans.entrySet().forEach(e -> schedulerPlusCache.addNameToSchedulerPlusJob(e.getKey(), e.getValue()));
         schedulerPlusCache.setStrengths(strengths);
         return bean;
     }

@@ -1,11 +1,13 @@
 package co.mgentertainment.common.schedulerplus.core;
 
+import co.mgentertainment.common.schedulerplus.strategy.RunStrategyEnum;
 import co.mgentertainment.common.utils.GsonFactory;
 import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +29,11 @@ public class SchedulerPlusMeta<T extends SchedulerPlusJob> {
 
     private T job;
 
-    private String cronExpression;
+    private RunStrategyEnum strategy;
+
+    private String strategyValue;
+
+    private Date invokeTime;
 
     private Map<String, Object> contextArgs;
 

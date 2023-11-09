@@ -1,6 +1,7 @@
 package co.mgentertainment.common.schedulerplus.core;
 
 import co.mgentertainment.common.schedulerplus.strengthen.SchedulerPlusStrength;
+import org.apache.commons.collections4.map.CaseInsensitiveMap;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.concurrent.ScheduledFuture;
  */
 public class SchedulerPlusCache {
 
-    private Map<String, SchedulerPlusJob> nameToSchedulerPlusJob = new ConcurrentHashMap<>();
+    private Map<String, SchedulerPlusJob> nameToSchedulerPlusJob = new CaseInsensitiveMap<>();
 
     private List<SchedulerPlusStrength> strengths = new CopyOnWriteArrayList<>();
 
@@ -25,10 +26,6 @@ public class SchedulerPlusCache {
 
     public Map<String, SchedulerPlusJob> getNameToSchedulerPlusJob() {
         return nameToSchedulerPlusJob;
-    }
-
-    public void setNameToSchedulerPlusJob(Map<String, SchedulerPlusJob> nameToSchedulerPlusJob) {
-        this.nameToSchedulerPlusJob = nameToSchedulerPlusJob;
     }
 
     public void addNameToSchedulerPlusJob(String jobName, SchedulerPlusJob schedulerPlusJob) {

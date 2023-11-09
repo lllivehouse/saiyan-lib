@@ -6,6 +6,7 @@ import co.mgentertainment.common.schedulerplus.core.SchedulerPlusCache;
 import co.mgentertainment.common.schedulerplus.core.SchedulerPlusExecutor;
 import co.mgentertainment.common.schedulerplus.exception.SchedulerPlusException;
 import co.mgentertainment.common.schedulerplus.listener.SchedulerPlusEventKey;
+import co.mgentertainment.common.schedulerplus.strategy.RunStrategyEnum;
 import co.mgentertainment.common.schedulerplus.support.*;
 import co.mgentertainment.common.utils.GsonFactory;
 import com.alibaba.nacos.api.exception.NacosException;
@@ -50,18 +51,19 @@ public class SchedulerPlusManager {
      */
     public void addScheduler(SchedulerPlusTaskItem item) {
         Preconditions.checkArgument(item != null, "定时任务不能为空");
-        boolean cronInvalidOrExpired = CronUtils.isCronInvalidOrExpired(item.getCronExpression());
+        boolean cronInvalidOrExpired = StrategyValueUtils.isStrategyValueInvalidOrExpired(item.getStrategy(), item.getStrategyValue());
         if (cronInvalidOrExpired) {
-            throw new SchedulerPlusException("cron表达式无效或者已经过期");
+            throw new SchedulerPlusException("策略值无效或者已经过期");
         }
         String schedulerId = item.getSchedulerId();
         if (getAllSchedulerIds().contains(schedulerId)) {
             throw new SchedulerPlusException("定时任务" + schedulerId + "已经被启动过了");
         }
-        schedulerPlusTaskRepository.createTask(SchedulerPlusObjectMapper.INSTANCE.toSchedulerPlusTaskDO(item));
+
         try {
+            schedulerPlusTaskRepository.createTask(SchedulerPlusObjectMapper.INSTANCE.toSchedulerPlusTaskDO(item));
             distributedEventProvider.fire(SchedulerPlusEventKey.ADD, GsonFactory.getGson().toJson(item));
-        } catch (NacosException e) {
+        } catch (Exception e) {
             log.error("添加定时任务事件失败", e);
         }
     }
@@ -100,11 +102,12 @@ public class SchedulerPlusManager {
      * 修改Scheduled的执行周期
      *
      * @param schedulerId
-     * @param cronExpression
+     * @param strategy
+     * @param strategyValue
      */
-    public void updateSchedulerTime(String schedulerId, String cronExpression) {
-        schedulerPlusTaskRepository.updateTaskCron(schedulerId, cronExpression);
-        SchedulerPlusTaskItem item = SchedulerPlusTaskItem.builder().schedulerId(schedulerId).cronExpression(cronExpression).build();
+    public void updateSchedulerTime(String schedulerId, RunStrategyEnum strategy, String strategyValue) {
+        schedulerPlusTaskRepository.updateTaskStrategy(schedulerId, strategy, strategyValue);
+        SchedulerPlusTaskItem item = SchedulerPlusTaskItem.builder().schedulerId(schedulerId).strategy(strategy).strategyValue(strategyValue).build();
         try {
             distributedEventProvider.fire(SchedulerPlusEventKey.UPDATE_CRON, GsonFactory.getGson().toJson(item));
         } catch (NacosException e) {

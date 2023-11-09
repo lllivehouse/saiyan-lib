@@ -19,7 +19,18 @@ public class ScheduledFutureFactory {
      * @param executor                定时任务执行期
      */
     public static ScheduledFuture<?> create(ThreadPoolTaskScheduler threadPoolTaskScheduler, SchedulerPlusExecutor executor) {
-        ScheduleStrategy scheduleStrategy = new CronStrategy();
+        RunStrategyEnum strategy = executor.getMetadata().getStrategy();
+        ScheduleStrategy scheduleStrategy;
+        switch (strategy) {
+            case ONE_TIME:
+                scheduleStrategy = new OneTimeStrategy();
+                break;
+            case CRON_EXPRESSION:
+                scheduleStrategy = new CronStrategy();
+                break;
+            default:
+                throw new IllegalArgumentException("strategy not support");
+        }
         return scheduleStrategy.schedule(threadPoolTaskScheduler, executor);
     }
 }

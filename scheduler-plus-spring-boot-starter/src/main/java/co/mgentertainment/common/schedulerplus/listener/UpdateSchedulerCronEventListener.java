@@ -45,8 +45,6 @@ public class UpdateSchedulerCronEventListener implements DistributedEventCallbac
         if (executor == null) {
             log.warn("任务{}不存在", schedulerId);
         }
-        SchedulerPlusMeta metadata = executor.getMetadata();
-        metadata.setCronExpression(item.getCronExpression());
         // 终止原先的任务
         ScheduledFuture scheduledFuture = schedulerPlusCache.getIdToScheduledFuture().get(schedulerId);
         if (scheduledFuture != null) {
@@ -54,6 +52,7 @@ public class UpdateSchedulerCronEventListener implements DistributedEventCallbac
             schedulerPlusCache.getIdToScheduledFuture().remove(schedulerId);
         }
         // 创建新的任务
+        SchedulerPlusMeta metadata = executor.getMetadata();
         SchedulerPlusTaskDO task = SchedulerPlusObjectMapper.INSTANCE.toSchedulerPlusTaskDO(metadata);
         schedulerPlusTaskRepository.startTask(task, schedulerPlusCache, threadPoolTaskScheduler);
     }

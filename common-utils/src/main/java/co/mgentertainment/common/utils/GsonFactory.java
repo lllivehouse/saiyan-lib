@@ -38,6 +38,7 @@ public class GsonFactory {
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer(dateFormat))
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer(dateFormat))
                 .registerTypeAdapter(Json.class, new SpringfoxJsonToGsonAdapter())
+                .registerTypeAdapter(Class.class, new ClassCodec())
                 .create();
     }
 
@@ -171,6 +172,23 @@ public class GsonFactory {
         @Override
         public void write(JsonWriter out, Object value) throws IOException {
             delegate.write(out, value);
+        }
+    }
+
+    public static class ClassCodec implements JsonSerializer<Class<?>>, JsonDeserializer<Class<?>> {
+        @Override
+        public Class<?> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            try {
+                String str = json.getAsString();
+                return Class.forName(str);
+            } catch (ClassNotFoundException e) {
+                throw new JsonParseException(e);
+            }
+        }
+
+        @Override
+        public JsonElement serialize(Class<?> src, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(src.getSimpleName());
         }
     }
 

@@ -2,15 +2,15 @@ package co.mgentertainment.common.schedulerplus.strengthen;
 
 import co.mgentertainment.common.model.R;
 import co.mgentertainment.common.schedulerplus.annontation.StrengthenOrder;
-import co.mgentertainment.common.schedulerplus.core.SchedulerPlusMeta;
+import co.mgentertainment.common.schedulerplus.core.SchedulerPlusExecutor;
 import co.mgentertainment.common.schedulerplus.core.SchedulerPlusTaskStatusEnum;
 import co.mgentertainment.common.schedulerplus.support.SchedulerPlusLogRepository;
 import co.mgentertainment.common.schedulerplus.support.SchedulerPlusTaskRepository;
+import com.google.common.base.Preconditions;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
-import java.util.Date;
 
 /**
  * @author larry
@@ -25,26 +25,36 @@ public class LogStrengthen implements SchedulerPlusStrength {
     private final SchedulerPlusLogRepository schedulerPlusLogRepository;
 
     @Override
-    public void before(Object bean, Method method, Object[] args, SchedulerPlusMeta metadata) {
-        schedulerPlusTaskRepository.updateTaskStatus(metadata.getSchedulerId(), SchedulerPlusTaskStatusEnum.IN_PROGRESS);
-        schedulerPlusLogRepository.createLog(metadata.getSchedulerId());
+    public void before(Object bean, Method method, Object[] args) {
+        String schedulerId = getSchedulerId(bean);
+        schedulerPlusTaskRepository.updateTaskStatus(schedulerId, SchedulerPlusTaskStatusEnum.IN_PROGRESS);
+        schedulerPlusLogRepository.createLog(schedulerId);
     }
 
     @Override
-    public void exception(Object bean, Method method, Object[] args, SchedulerPlusMeta metadata) {
-        schedulerPlusLogRepository.updateLog(metadata.getSchedulerId(), 1, "exception", new Date());
+    public void exception(Object bean, Method method, Object[] args) {
+        String schedulerId = getSchedulerId(bean);
+        schedulerPlusLogRepository.updateLog(schedulerId, 1, "exception");
     }
 
     @Override
-    public void afterFinally(Object bean, Method method, Object[] args, SchedulerPlusMeta metadata, Object result) {
-        schedulerPlusTaskRepository.updateTaskStatus(metadata.getSchedulerId(), SchedulerPlusTaskStatusEnum.DONE);
+    public void afterFinally(Object bean, Method method, Object[] args, Object result) {
+        String schedulerId = getSchedulerId(bean);
+        schedulerPlusTaskRepository.updateTaskStatus(schedulerId, SchedulerPlusTaskStatusEnum.DONE);
         if (result instanceof R) {
-            schedulerPlusLogRepository.updateLog(metadata.getSchedulerId(), ((R) result).getCode(), ((R) result).getMsg(), new Date());
+            schedulerPlusLogRepository.updateLog(schedulerId, ((R) result).getCode(), ((R) result).getMsg());
         }
     }
 
     @Override
-    public void after(Object bean, Method method, Object[] args, SchedulerPlusMeta metadata) {
-        schedulerPlusLogRepository.updateLog(metadata.getSchedulerId(), 0, StringUtils.EMPTY, new Date());
+    public void after(Object bean, Method method, Object[] args) {
+        schedulerPlusLogRepository.updateLog(getSchedulerId(bean), 0, StringUtils.EMPTY);
+    }
+
+    private String getSchedulerId(Object bean) {
+        Preconditions.checkArgument(bean instanceof SchedulerPlusExecutor, "invalid proxy bean");
+        SchedulerPlusExecutor executor = (SchedulerPlusExecutor) bean;
+        Preconditions.checkArgument(executor.getMetadata() != null && StringUtils.isNotBlank(executor.getMetadata().getSchedulerId()), "not found schedulerId");
+        return executor.getMetadata().getSchedulerId();
     }
 }

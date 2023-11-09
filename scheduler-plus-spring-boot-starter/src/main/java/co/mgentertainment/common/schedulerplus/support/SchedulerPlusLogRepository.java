@@ -1,6 +1,7 @@
 package co.mgentertainment.common.schedulerplus.support;
 
 import co.mgentertainment.common.utils.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author larry
@@ -18,10 +20,10 @@ import java.util.List;
  */
 public class SchedulerPlusLogRepository implements InitializingBean {
 
-    private static final String SQL_QUERY_LOG = "select id, scheduler_id, failed, info, run_start_time, run_end_time, create_time, updated_time, deleted from scheduler_plus_log where deleted=0 and scheduler_id='?' and create_time < '?' limit ? order by create_time desc";
-    private static final String SQL_INSERT_LOG = "insert into scheduler_plus_log(scheduler_id, run_start_time) values('?',now())";
-    private static final String SQL_UPDATE_LOG = "update scheduler_plus_log set failed=?, info='?' run_end_time='?' where scheduler_id='?'";
-    private static final String SQL_REMOVE_LOG = "update scheduler_plus_log set deleted=1 where scheduler_id='?'";
+    private static final String SQL_QUERY_LOG = "select id, scheduler_id, failed, info, run_start_time, run_end_time, create_time, updated_time, deleted from scheduler_plus_log where deleted=0 and scheduler_id=? and create_time < ? limit ? order by create_time desc";
+    private static final String SQL_INSERT_LOG = "insert into scheduler_plus_log(scheduler_id, run_start_time) values(?,now())";
+    private static final String SQL_UPDATE_LOG = "update scheduler_plus_log set failed=?, info=?, run_end_time=now() where scheduler_id=?";
+    private static final String SQL_REMOVE_LOG = "update scheduler_plus_log set deleted=1 where scheduler_id=?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -67,11 +69,10 @@ public class SchedulerPlusLogRepository implements InitializingBean {
     }
 
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
-    public boolean updateLog(String schedulerId, Integer failed, String info, Date endTime) {
+    public boolean updateLog(String schedulerId, Integer failed, String info) {
         return jdbcTemplate.update(SQL_UPDATE_LOG,
                 failed,
-                info,
-                endTime,
+                Optional.ofNullable(info).orElse(StringUtils.EMPTY),
                 schedulerId) > 0;
     }
 

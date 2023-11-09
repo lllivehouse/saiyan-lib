@@ -1,6 +1,7 @@
 package co.mgentertainment.common.schedulerplus.support;
 
 import co.mgentertainment.common.schedulerplus.core.SchedulerPlusJob;
+import co.mgentertainment.common.schedulerplus.strategy.RunStrategyEnum;
 import lombok.Builder;
 import lombok.Data;
 
@@ -18,7 +19,9 @@ public class SchedulerPlusTaskItem implements Serializable {
 
     private Class<? extends SchedulerPlusJob> jobClass;
 
-    private String cronExpression;
+    private RunStrategyEnum strategy;
+
+    private String strategyValue;
 
     private String taskArgs;
 

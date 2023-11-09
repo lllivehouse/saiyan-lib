@@ -17,7 +17,9 @@ public interface SchedulerPlusObjectMapper {
     SchedulerPlusObjectMapper INSTANCE = Mappers.getMapper(SchedulerPlusObjectMapper.class);
 
     @Mappings({
-            @Mapping(target = "jobName", expression = "java(schedulerPlusTaskItem.getJobClass().getSimpleName())")
+            @Mapping(target = "jobName", expression = "java(schedulerPlusTaskItem.getJobClass().getSimpleName())"),
+            @Mapping(source = "strategy.id", target = "runStrategyId"),
+            @Mapping(source = "strategyValue", target = "runStrategyValue"),
     })
     SchedulerPlusTaskDO toSchedulerPlusTaskDO(SchedulerPlusTaskItem schedulerPlusTaskItem);
 
@@ -25,7 +27,7 @@ public interface SchedulerPlusObjectMapper {
             @Mapping(source = "scheduledMode.code", target = "scheduledMode"),
             @Mapping(source = "schedulerDesc", target = "taskDesc"),
             @Mapping(source = "status.code", target = "taskStatus"),
-            @Mapping(target = "taskArgs", expression = "java(SchedulerPlusMeta.parseContextArgs(schedulerPlusMeta.getContextArgs()))"),
+            @Mapping(target = "taskArgs", expression = "java(co.mgentertainment.common.utils.GsonFactory.getGson().toJson(schedulerPlusMeta.getContextArgs()))"),
             @Mapping(target = "jobClass", expression = "java(schedulerPlusMeta.getJob().getClass())")
     })
     SchedulerPlusTaskItem toSchedulerPlusTaskItem(SchedulerPlusMeta schedulerPlusMeta);
@@ -34,8 +36,10 @@ public interface SchedulerPlusObjectMapper {
             @Mapping(source = "scheduledMode.code", target = "scheduledMode"),
             @Mapping(source = "schedulerDesc", target = "taskDesc"),
             @Mapping(source = "status.code", target = "taskStatus"),
-            @Mapping(target = "taskArgs", expression = "java(SchedulerPlusMeta.parseContextArgs(schedulerPlusMeta.getContextArgs()))"),
-            @Mapping(target = "jobName", expression = "java(schedulerPlusMeta.getJob().getClass().getSimpleName())")
+            @Mapping(target = "taskArgs", expression = "java(co.mgentertainment.common.utils.GsonFactory.getGson().toJson(schedulerPlusMeta.getContextArgs()))"),
+            @Mapping(target = "jobName", expression = "java(schedulerPlusMeta.getJob().getClass().getSimpleName())"),
+            @Mapping(source = "strategy.id", target = "runStrategyId"),
+            @Mapping(source = "strategyValue", target = "runStrategyValue"),
     })
     SchedulerPlusTaskDO toSchedulerPlusTaskDO(SchedulerPlusMeta schedulerPlusMeta);
 
