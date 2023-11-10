@@ -16,22 +16,10 @@
             <groupId>co.mgentertainment</groupId>
             <artifactId>distributed-event-spring-boot-starter</artifactId>
         </dependency>
-        <!--分布式锁依赖-begin-->
         <dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-core</artifactId>
+            <groupId>co.mgentertainment</groupId>
+            <artifactId>distributed-lock-spring-boot-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-jdbc</artifactId>
-        </dependency>
-        <!--分布式锁依赖-end-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-
         <dependency>
             <groupId>co.mgentertainment</groupId>
             <artifactId>model</artifactId>
@@ -42,16 +30,23 @@
             <artifactId>common-utils</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-            <scope>provided</scope>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

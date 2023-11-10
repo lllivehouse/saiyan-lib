@@ -1,4 +1,4 @@
-CREATE TABLE `scheduler_plus_lock` (
+CREATE TABLE `distributed_lock` (
                                        `lock_key` varchar(36) NOT NULL,
                                        `region` varchar(100) NOT NULL,
                                        `client_id` varchar(36),

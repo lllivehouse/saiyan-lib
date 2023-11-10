@@ -4,10 +4,10 @@ import co.mgentertainment.common.schedulerplus.annontation.StrengthenOrder;
 import co.mgentertainment.common.schedulerplus.core.ScheduledModeEnum;
 import co.mgentertainment.common.schedulerplus.core.SchedulerPlusExecutor;
 import co.mgentertainment.common.schedulerplus.exception.SchedulerPlusException;
+import co.mgentertainment.dlock.registry.LockRegistry;
 import com.google.common.base.Preconditions;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.integration.support.locks.LockRegistry;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicBoolean;

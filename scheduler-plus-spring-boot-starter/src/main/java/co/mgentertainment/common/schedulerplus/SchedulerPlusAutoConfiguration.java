@@ -6,10 +6,12 @@ import co.mgentertainment.common.schedulerplus.core.SchedulerPlusCache;
 import co.mgentertainment.common.schedulerplus.initial.SchedulerPlusApplicationRunner;
 import co.mgentertainment.common.schedulerplus.initial.SchedulerPlusJobPostProcessor;
 import co.mgentertainment.common.schedulerplus.properties.ThreadPoolTaskSchedulerProperties;
-import co.mgentertainment.common.schedulerplus.strengthen.LogStrengthen;
 import co.mgentertainment.common.schedulerplus.strengthen.LockStrengthen;
+import co.mgentertainment.common.schedulerplus.strengthen.LogStrengthen;
 import co.mgentertainment.common.schedulerplus.support.SchedulerPlusLogRepository;
 import co.mgentertainment.common.schedulerplus.support.SchedulerPlusTaskRepository;
+import co.mgentertainment.dlock.DistributedLockAutoConfiguration;
+import co.mgentertainment.dlock.registry.LockRegistry;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -19,14 +21,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.integration.jdbc.lock.DefaultLockRepository;
-import org.springframework.integration.jdbc.lock.JdbcLockRegistry;
-import org.springframework.integration.support.locks.LockRegistry;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import javax.sql.DataSource;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /**
  * @author larry
@@ -34,7 +31,7 @@ import java.net.UnknownHostException;
  * @description SchedulerPlusAutoConfiguration
  */
 @Configuration
-@EnableConfigurationProperties(value = {ThreadPoolTaskSchedulerProperties.class})
+@EnableConfigurationProperties(value = {ThreadPoolTaskSchedulerProperties.class, DistributedLockAutoConfiguration.class})
 @EnableDistributedEvent
 public class SchedulerPlusAutoConfiguration {
 
@@ -64,19 +61,6 @@ public class SchedulerPlusAutoConfiguration {
     @Bean
     public SchedulerPlusLogRepository schedulerPlusLogRepository(@Qualifier("schedulerPlusDataSource") DataSource schedulerPlusDataSource) {
         return new SchedulerPlusLogRepository(schedulerPlusDataSource);
-    }
-
-    @Bean(name = "lockRegistry")
-    public LockRegistry getDefaultLockRegistry(@Qualifier("schedulerPlusDataSource") DataSource schedulerPlusDataSource) throws UnknownHostException {
-        DefaultLockRepository lockRepository = new DefaultLockRepository(schedulerPlusDataSource,
-                InetAddress.getLocalHost().getHostAddress() + ":" + System.getProperty("server.port"));
-        // 设置分布式锁表的前缀
-        lockRepository.setPrefix("scheduler_plus_");
-        //设置分布式锁的过期时间,单位为毫秒,默认为15秒
-        lockRepository.setTimeToLive(15_000);
-        //调用方法对锁的变量进行初始化
-        lockRepository.afterPropertiesSet();
-        return new JdbcLockRegistry(lockRepository);
     }
 
     @Bean
