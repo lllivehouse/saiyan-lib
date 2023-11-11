@@ -3,6 +3,7 @@ package co.mgentertainment.common.indicator.config;
 import co.mgentertainment.common.indicator.IndicatorCollector;
 import co.mgentertainment.common.indicator.aspect.GlobalIndicatorAspect;
 import co.mgentertainment.common.indicator.aspect.ItemIndicatorAspect;
+import co.mgentertainment.common.redis.annonation.EnableCommonRedis;
 import co.mgentertainment.common.redis.service.RedisService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * @description IndicatorAutoConfiguration
  */
 @Configuration
+@EnableCommonRedis
 public class IndicatorAutoConfiguration {
 
     @Bean(name = "indicatorCollector")

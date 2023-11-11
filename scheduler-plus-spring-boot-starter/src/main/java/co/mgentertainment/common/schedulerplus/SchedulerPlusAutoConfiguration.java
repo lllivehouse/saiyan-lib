@@ -10,7 +10,7 @@ import co.mgentertainment.common.schedulerplus.strengthen.LockStrengthen;
 import co.mgentertainment.common.schedulerplus.strengthen.LogStrengthen;
 import co.mgentertainment.common.schedulerplus.support.SchedulerPlusLogRepository;
 import co.mgentertainment.common.schedulerplus.support.SchedulerPlusTaskRepository;
-import co.mgentertainment.dlock.DistributedLockAutoConfiguration;
+import co.mgentertainment.dlock.annotation.EnableDistributedLock;
 import co.mgentertainment.dlock.registry.LockRegistry;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,8 +31,9 @@ import javax.sql.DataSource;
  * @description SchedulerPlusAutoConfiguration
  */
 @Configuration
-@EnableConfigurationProperties(value = {ThreadPoolTaskSchedulerProperties.class, DistributedLockAutoConfiguration.class})
+@EnableDistributedLock
 @EnableDistributedEvent
+@EnableConfigurationProperties(value = {ThreadPoolTaskSchedulerProperties.class})
 public class SchedulerPlusAutoConfiguration {
 
     @Bean(name = "threadPoolTaskScheduler")
