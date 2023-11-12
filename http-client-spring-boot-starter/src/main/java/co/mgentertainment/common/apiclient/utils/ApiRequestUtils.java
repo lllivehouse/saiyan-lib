@@ -43,8 +43,8 @@ public class ApiRequestUtils {
         }
         urlBuilder.append(hostname)
                 .append(StringUtils.isNotBlank(version) ? '/' + version : StringUtils.EMPTY)
-                .append('/').append(module)
-                .append('/').append(action);
+                .append(StringUtils.isNotBlank(module) ? '/' + module : StringUtils.EMPTY)
+                .append(StringUtils.isNotBlank(action) ? '/' + action : StringUtils.EMPTY);
         if (queryParameters.isEmpty()) {
             return urlBuilder.toString();
         }
