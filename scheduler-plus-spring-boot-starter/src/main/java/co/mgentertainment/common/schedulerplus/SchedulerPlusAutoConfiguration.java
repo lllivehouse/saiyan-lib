@@ -36,9 +36,8 @@ import javax.sql.DataSource;
 @EnableConfigurationProperties(value = {ThreadPoolTaskSchedulerProperties.class})
 public class SchedulerPlusAutoConfiguration {
 
-    @Bean(name = "threadPoolTaskScheduler")
-    @ConditionalOnMissingBean
-    public ThreadPoolTaskScheduler threadPoolTaskScheduler(ThreadPoolTaskSchedulerProperties threadPoolTaskSchedulerProperties) {
+    @Bean(name = "spTaskScheduler")
+    public ThreadPoolTaskScheduler spTaskScheduler(ThreadPoolTaskSchedulerProperties threadPoolTaskSchedulerProperties) {
         ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
         taskScheduler.setPoolSize(threadPoolTaskSchedulerProperties.getPoolSize());
         taskScheduler.setThreadNamePrefix(threadPoolTaskSchedulerProperties.getThreadNamePrefix());
@@ -90,8 +89,8 @@ public class SchedulerPlusAutoConfiguration {
     }
 
     @Bean
-    public SchedulerPlusApplicationRunner schedulerPlusApplicationRunner(ThreadPoolTaskScheduler threadPoolTaskScheduler, SchedulerPlusCache schedulerPlusCache, SchedulerPlusTaskRepository schedulerPlusTaskRepository) {
-        return new SchedulerPlusApplicationRunner(threadPoolTaskScheduler, schedulerPlusCache, schedulerPlusTaskRepository);
+    public SchedulerPlusApplicationRunner schedulerPlusApplicationRunner(@Qualifier("spTaskScheduler") ThreadPoolTaskScheduler spTaskScheduler, SchedulerPlusCache schedulerPlusCache, SchedulerPlusTaskRepository schedulerPlusTaskRepository) {
+        return new SchedulerPlusApplicationRunner(spTaskScheduler, schedulerPlusCache, schedulerPlusTaskRepository);
     }
 
     @Bean

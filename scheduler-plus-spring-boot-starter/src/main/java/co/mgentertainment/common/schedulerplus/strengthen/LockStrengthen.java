@@ -28,7 +28,7 @@ public class LockStrengthen implements SchedulerPlusStrength {
     private final transient AtomicBoolean locked = new AtomicBoolean(false);
 
     @Override
-    public void before(Object bean, Method method, Object[] args) {
+    public Long before(Object bean, Method method, Object[] args) {
         Preconditions.checkArgument(bean instanceof SchedulerPlusExecutor, "invalid proxy bean");
         SchedulerPlusExecutor executor = (SchedulerPlusExecutor) bean;
         Preconditions.checkArgument(executor.getMetadata() != null && StringUtils.isNotBlank(executor.getMetadata().getSchedulerId()), "schedulerId can not be blank");
@@ -40,15 +40,15 @@ public class LockStrengthen implements SchedulerPlusStrength {
             }
             locked.set(true);
         }
+        return null;
     }
 
     @Override
-    public void exception(Object bean, Method method, Object[] args) {
-
+    public void exception(Object bean, Method method, Object[] args, Long id) {
     }
 
     @Override
-    public void afterFinally(Object bean, Method method, Object[] args, Object result) {
+    public void afterFinally(Object bean, Method method, Object[] args, Object result, Long id) {
         if (this.lock != null && locked.get()) {
             // 释放锁
             lock.unlock();
@@ -56,7 +56,6 @@ public class LockStrengthen implements SchedulerPlusStrength {
     }
 
     @Override
-    public void after(Object bean, Method method, Object[] args) {
-
+    public void after(Object bean, Method method, Object[] args, Long id) {
     }
 }

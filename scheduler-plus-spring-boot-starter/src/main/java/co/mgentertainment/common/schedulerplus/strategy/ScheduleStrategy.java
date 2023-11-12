@@ -11,5 +11,5 @@ import java.util.concurrent.ScheduledFuture;
  * @description ScheduleStrategy
  */
 public interface ScheduleStrategy {
-    ScheduledFuture<?> schedule(ThreadPoolTaskScheduler threadPoolTaskScheduler, SchedulerPlusExecutor executor);
+    ScheduledFuture<?> schedule(ThreadPoolTaskScheduler spTaskScheduler, SchedulerPlusExecutor executor);
 }

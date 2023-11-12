@@ -58,7 +58,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @since 4.3
  */
-public class JdbcLockRegistry implements ExpirableLockRegistry, RenewableLockRegistry {
+public final class JdbcLockRegistry implements ExpirableLockRegistry, RenewableLockRegistry {
 
 	private static final int DEFAULT_IDLE = 100;
 

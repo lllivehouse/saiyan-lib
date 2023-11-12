@@ -15,10 +15,10 @@ public class ScheduledFutureFactory {
     /**
      * 策略启动定时任务
      *
-     * @param threadPoolTaskScheduler 定时任务线程池
-     * @param executor                定时任务执行期
+     * @param spTaskScheduler 定时任务线程池
+     * @param executor        定时任务执行期
      */
-    public static ScheduledFuture<?> create(ThreadPoolTaskScheduler threadPoolTaskScheduler, SchedulerPlusExecutor executor) {
+    public static ScheduledFuture<?> create(ThreadPoolTaskScheduler spTaskScheduler, SchedulerPlusExecutor executor) {
         RunStrategyEnum strategy = executor.getMetadata().getStrategy();
         ScheduleStrategy scheduleStrategy;
         switch (strategy) {
@@ -31,6 +31,6 @@ public class ScheduledFutureFactory {
             default:
                 throw new IllegalArgumentException("strategy not support");
         }
-        return scheduleStrategy.schedule(threadPoolTaskScheduler, executor);
+        return scheduleStrategy.schedule(spTaskScheduler, executor);
     }
 }

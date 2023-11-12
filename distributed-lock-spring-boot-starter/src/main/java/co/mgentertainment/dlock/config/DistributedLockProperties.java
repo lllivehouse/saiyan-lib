@@ -11,10 +11,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = "dlock")
 public class DistributedLockProperties {
-    private static final String LOCK_BY_DB = "jdbc";
-    private static final String LOCK_BY_REDIS = "redis";
+    public static final String LOCK_BY_DB = "jdbc";
+    public static final String LOCK_BY_REDIS = "redis";
 
-    private String lockType = LOCK_BY_DB;
+    private String by;
 
     private String redisRegistryKey = "mg.dlock";
 

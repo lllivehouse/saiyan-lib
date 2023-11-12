@@ -106,9 +106,9 @@ public class SchedulerPlusTaskRepository implements InitializingBean {
      *
      * @param task
      * @param cache
-     * @param threadPoolTaskScheduler
+     * @param spTaskScheduler
      */
-    public void startTask(SchedulerPlusTaskDO task, SchedulerPlusCache cache, ThreadPoolTaskScheduler threadPoolTaskScheduler) {
+    public void startTask(SchedulerPlusTaskDO task, SchedulerPlusCache cache, ThreadPoolTaskScheduler spTaskScheduler) {
         String jobName = task.getJobName();
         Map<String, SchedulerPlusJob> jobs = cache.getNameToSchedulerPlusJob();
         SchedulerPlusJob schedulerPlusJob = jobs.get(jobName);
@@ -119,7 +119,7 @@ public class SchedulerPlusTaskRepository implements InitializingBean {
         cache.addIdToSchedulerPlusExecutor(task.getSchedulerId(), proxy);
         // 任务启动
         try {
-            ScheduledFuture<?> scheduledFuture = ScheduledFutureFactory.create(threadPoolTaskScheduler, proxy);
+            ScheduledFuture<?> scheduledFuture = ScheduledFutureFactory.create(spTaskScheduler, proxy);
             cache.addIdToScheduledFuture(task.getSchedulerId(), scheduledFuture);
         } catch (Exception e) {
             log.error("任务{}启动失败，错误信息：{}", jobName, e.getLocalizedMessage());

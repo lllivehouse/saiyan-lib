@@ -31,7 +31,7 @@ public class UpdateSchedulerCronEventListener implements DistributedEventCallbac
 
     private final SchedulerPlusCache schedulerPlusCache;
     private final SchedulerPlusTaskRepository schedulerPlusTaskRepository;
-    private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
+    private final ThreadPoolTaskScheduler spTaskScheduler;
 
     @Override
     public void onComplete(String json) {
@@ -54,6 +54,6 @@ public class UpdateSchedulerCronEventListener implements DistributedEventCallbac
         // 创建新的任务
         SchedulerPlusMeta metadata = executor.getMetadata();
         SchedulerPlusTaskDO task = SchedulerPlusObjectMapper.INSTANCE.toSchedulerPlusTaskDO(metadata);
-        schedulerPlusTaskRepository.startTask(task, schedulerPlusCache, threadPoolTaskScheduler);
+        schedulerPlusTaskRepository.startTask(task, schedulerPlusCache, spTaskScheduler);
     }
 }

@@ -5,10 +5,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +26,9 @@ import java.util.Optional;
 public class SchedulerPlusLogRepository implements InitializingBean {
 
     private static final String SQL_QUERY_LOG = "select id, scheduler_id, failed, info, run_start_time, run_end_time, create_time, updated_time, deleted from scheduler_plus_log where deleted=0 and scheduler_id=? and create_time < ? limit ? order by create_time desc";
-    private static final String SQL_INSERT_LOG = "insert into scheduler_plus_log(scheduler_id, run_start_time) values(?,now())";
-    private static final String SQL_UPDATE_LOG = "update scheduler_plus_log set failed=?, info=?, run_end_time=now() where scheduler_id=?";
-    private static final String SQL_REMOVE_LOG = "update scheduler_plus_log set deleted=1 where scheduler_id=?";
+    private static final String SQL_INSERT_LOG = "insert into scheduler_plus_log(scheduler_id, run_start_time) values('%s',now())";
+    private static final String SQL_UPDATE_LOG = "update scheduler_plus_log set failed=?, info=?, run_end_time=now() where id=?";
+    private static final String SQL_REMOVE_LOG = "update scheduler_plus_log set deleted=1 where id=?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -64,21 +69,26 @@ public class SchedulerPlusLogRepository implements InitializingBean {
     }
 
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
-    public boolean createLog(String schedulerId) {
-        return jdbcTemplate.update(SQL_INSERT_LOG, schedulerId) > 0;
+    public Long createLog(String schedulerId) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        PreparedStatementCreator preparedStatementCreator = con -> {
+            PreparedStatement ps = con.prepareStatement(String.format(SQL_INSERT_LOG, schedulerId), Statement.RETURN_GENERATED_KEYS);
+            return ps;
+        };
+        jdbcTemplate.update(preparedStatementCreator, keyHolder);
+        return keyHolder.getKey().longValue();
     }
 
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
-    public boolean updateLog(String schedulerId, Integer failed, String info) {
+    public boolean updateLog(Long id, Integer failed, String info) {
         return jdbcTemplate.update(SQL_UPDATE_LOG,
                 failed,
                 Optional.ofNullable(info).orElse(StringUtils.EMPTY),
-                schedulerId) > 0;
+                id) > 0;
     }
 
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
-    public boolean removeLogForSchedulerId(String schedulerId) {
-        Object[] args = new Object[]{schedulerId};
-        return jdbcTemplate.update(SQL_REMOVE_LOG, args) > 0;
+    public boolean removeLogForSchedulerId(Long id) {
+        return jdbcTemplate.update(SQL_REMOVE_LOG, id) > 0;
     }
 }

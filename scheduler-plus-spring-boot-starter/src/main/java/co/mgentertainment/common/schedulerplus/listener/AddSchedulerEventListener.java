@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AddSchedulerEventListener implements DistributedEventCallback {
 
-    private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
+    private final ThreadPoolTaskScheduler spTaskScheduler;
 
     private final SchedulerPlusTaskRepository schedulerPlusTaskRepository;
 
@@ -39,6 +39,6 @@ public class AddSchedulerEventListener implements DistributedEventCallback {
             throw new SchedulerPlusException("定时任务" + schedulerId + "已经被启动过了");
         }
         SchedulerPlusTaskDO task = SchedulerPlusObjectMapper.INSTANCE.toSchedulerPlusTaskDO(item);
-        schedulerPlusTaskRepository.startTask(task, schedulerPlusCache, threadPoolTaskScheduler);
+        schedulerPlusTaskRepository.startTask(task, schedulerPlusCache, spTaskScheduler);
     }
 }

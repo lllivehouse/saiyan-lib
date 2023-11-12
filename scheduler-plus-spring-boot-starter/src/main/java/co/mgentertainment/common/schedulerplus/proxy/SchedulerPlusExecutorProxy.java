@@ -11,6 +11,7 @@ import org.springframework.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author larry
@@ -41,9 +42,13 @@ public class SchedulerPlusExecutorProxy implements MethodInterceptor {
             return methodProxy.invokeSuper(obj, args);
         }
         Object result = null;
+        AtomicLong logId = new AtomicLong();
         strengthens.stream().forEach(strengthen -> {
             try {
-                strengthen.before(obj, method, args);
+                Long id = strengthen.before(obj, method, args);
+                if (id != null) {
+                    logId.set(id);
+                }
             } catch (Exception e) {
                 log.error("before strengthen [{}] error", strengthen.getClass(), e);
             }
@@ -54,7 +59,7 @@ public class SchedulerPlusExecutorProxy implements MethodInterceptor {
             log.error("proxy obj [{}] execution error", obj.getClass().getName(), e);
             strengthens.stream().forEach(strengthen -> {
                 try {
-                    strengthen.exception(obj, method, args);
+                    strengthen.exception(obj, method, args, logId.get());
                 } catch (Exception ex) {
                     log.error("exception strengthen [{}] error", strengthen.getClass(), ex);
                 }
@@ -63,7 +68,7 @@ public class SchedulerPlusExecutorProxy implements MethodInterceptor {
             Object finalResult = result;
             strengthens.stream().forEach(strengthen -> {
                 try {
-                    strengthen.afterFinally(obj, method, args, finalResult);
+                    strengthen.afterFinally(obj, method, args, finalResult, logId.get());
                 } catch (Exception e) {
                     log.error("afterFinally strengthen [{}] error", strengthen.getClass(), e);
                 }
@@ -71,7 +76,7 @@ public class SchedulerPlusExecutorProxy implements MethodInterceptor {
         }
         strengthens.stream().forEach(strengthen -> {
             try {
-                strengthen.after(obj, method, args);
+                strengthen.after(obj, method, args, logId.get());
             } catch (Exception e) {
                 log.error("after strengthen [{}] error", strengthen.getClass(), e);
             }

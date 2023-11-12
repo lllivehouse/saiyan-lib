@@ -25,30 +25,30 @@ public class LogStrengthen implements SchedulerPlusStrength {
     private final SchedulerPlusLogRepository schedulerPlusLogRepository;
 
     @Override
-    public void before(Object bean, Method method, Object[] args) {
+    public Long before(Object bean, Method method, Object[] args) {
         String schedulerId = getSchedulerId(bean);
         schedulerPlusTaskRepository.updateTaskStatus(schedulerId, SchedulerPlusTaskStatusEnum.IN_PROGRESS);
-        schedulerPlusLogRepository.createLog(schedulerId);
+        Long id = schedulerPlusLogRepository.createLog(schedulerId);
+        return id;
     }
 
     @Override
-    public void exception(Object bean, Method method, Object[] args) {
-        String schedulerId = getSchedulerId(bean);
-        schedulerPlusLogRepository.updateLog(schedulerId, 1, "exception");
+    public void exception(Object bean, Method method, Object[] args, Long id) {
+        schedulerPlusLogRepository.updateLog(id, 1, "exception");
     }
 
     @Override
-    public void afterFinally(Object bean, Method method, Object[] args, Object result) {
+    public void afterFinally(Object bean, Method method, Object[] args, Object result, Long id) {
         String schedulerId = getSchedulerId(bean);
         schedulerPlusTaskRepository.updateTaskStatus(schedulerId, SchedulerPlusTaskStatusEnum.DONE);
         if (result instanceof R) {
-            schedulerPlusLogRepository.updateLog(schedulerId, ((R) result).getCode(), ((R) result).getMsg());
+            schedulerPlusLogRepository.updateLog(id, ((R) result).getCode(), ((R) result).getMsg());
         }
     }
 
     @Override
-    public void after(Object bean, Method method, Object[] args) {
-        schedulerPlusLogRepository.updateLog(getSchedulerId(bean), 0, StringUtils.EMPTY);
+    public void after(Object bean, Method method, Object[] args, Long id) {
+        schedulerPlusLogRepository.updateLog(id, 0, StringUtils.EMPTY);
     }
 
     private String getSchedulerId(Object bean) {
