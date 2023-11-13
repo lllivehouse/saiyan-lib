@@ -33,8 +33,8 @@ public class ApiRequestUtils {
 
     public static String composeUrl(ProtocolType protocol, String hostname, String version, String module,
                                     String action, Map<String, Object> queryParameters) throws ClientException {
-        if (Objects.isNull(hostname) || Objects.isNull(version) || Objects.isNull(module) || Objects.isNull(action)) {
-            throw new ClientException("hostname,version,module,action must not be null.");
+        if (Objects.isNull(hostname)) {
+            throw new ClientException("hostname must not be null.");
         }
         StringBuilder urlBuilder = new StringBuilder();
         String findStr = "://";
