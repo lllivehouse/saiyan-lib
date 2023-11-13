@@ -228,7 +228,7 @@ public class OkClient extends AbstractHttpClient {
                         resolveRawTypeRequestBody(httpRequest) :
                         hasHttpContent ? RequestBody.create(httpContent,
                                 MediaType.parse(FormatType.mapFormatToAccept(httpRequest.getHttpContentType()))) :
-                                RequestBody.create(null, new byte[0]))
+                                MethodType.GET.equals(httpRequest.getMethod()) ? null : RequestBody.create(null, new byte[0]))
                 .build();
     }
 
