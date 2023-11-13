@@ -41,8 +41,11 @@ public class ApiRequestUtils {
         if (hostname.indexOf(findStr) == -1) {
             urlBuilder.append(protocol.toString()).append(findStr);
         }
+        if (hostname.endsWith("/")) {
+            hostname = hostname.substring(0, hostname.length() - 1);
+        }
         urlBuilder.append(hostname)
-                .append(StringUtils.isNotBlank(version) ? '/' + version : StringUtils.EMPTY)
+                .append(StringUtils.isNotBlank(version) ? '/' + (version.startsWith("/") ? version.substring(1) : version) : StringUtils.EMPTY)
                 .append(StringUtils.isNotBlank(module) ? '/' + module : StringUtils.EMPTY)
                 .append(StringUtils.isNotBlank(action) ? '/' + action : StringUtils.EMPTY);
         if (queryParameters.isEmpty()) {
