@@ -62,8 +62,14 @@ public class SysLogUtils {
         if (authentication == null) {
             return null;
         }
-        User user = (User) authentication.getPrincipal();
-        return user.getUsername();
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof User) {
+            return ((User) principal).getUsername();
+        }
+        if (principal instanceof String) {
+            return String.valueOf(principal);
+        }
+        return StringUtils.EMPTY;
     }
 
     /**
