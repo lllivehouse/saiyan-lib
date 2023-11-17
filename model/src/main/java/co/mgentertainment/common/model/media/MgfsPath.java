@@ -11,11 +11,13 @@ public interface MgfsPath {
     String MAIN_PATH = ROOT_PATH + "/main";
     String VICE_PATH = ROOT_PATH + "/vice";
     String MZK_PATH = "/tmp/mzk";
+    String MZK_SV_PATH = "/tmp/sv_mzk";
 
     enum MgfsPathType {
         MAIN(MAIN_PATH),
         VICE(VICE_PATH),
-        MZK(MZK_PATH);
+        MZK(MZK_PATH),
+        MZK_SHORT(MZK_SV_PATH);
 
         private String value;
 
