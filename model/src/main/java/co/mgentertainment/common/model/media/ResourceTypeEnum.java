@@ -9,9 +9,12 @@ import java.util.Arrays;
  */
 public enum ResourceTypeEnum {
 
+    // 长视频
     VIDEO(0),
-    IMAGE(1),
-    PACKAGE(2),
+    // 短视频
+    SHORT(1),
+    IMAGE(2),
+    PACKAGE(3),
     OTHER(100);
 
     private final Integer value;
