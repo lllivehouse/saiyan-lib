@@ -56,9 +56,12 @@ public class SseConnectionManager {
                         @Override
                         public void onMessage(ServerSentEvent sse, String id, String event, String message) {
                             log.debug("New SSE message id={} event={} message={}", id, event, message);
-                            ServerSentMessage ssm = GsonFactory.getGson().fromJson(message,
-                                    ServerSentMessage.class);
-                            callback.accept(ssm);
+                            try {
+                                ServerSentMessage ssm = GsonFactory.getGson().fromJson(message, ServerSentMessage.class);
+                                callback.accept(ssm);
+                            } catch (Throwable t) {
+                                log.error("SSE on message error, message:{}", message, t);
+                            }
                         }
 
                         @Override
