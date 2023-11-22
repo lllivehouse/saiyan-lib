@@ -11,6 +11,7 @@ import co.mgentertainment.common.schedulerplus.support.SchedulerPlusTaskItem;
 import co.mgentertainment.common.schedulerplus.support.SchedulerPlusTaskRepository;
 import co.mgentertainment.common.utils.GsonFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Component;
 @DistributedEventListener(eventKey = SchedulerPlusEventKey.ADD)
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class AddSchedulerEventListener implements DistributedEventCallback {
 
     private final ThreadPoolTaskScheduler spTaskScheduler;
@@ -32,10 +34,12 @@ public class AddSchedulerEventListener implements DistributedEventCallback {
 
     @Override
     public void onComplete(String value) {
+        log.info("监听到添加定时任务: {}", value);
         SchedulerPlusTaskItem item = GsonFactory.getGson().fromJson(value, SchedulerPlusTaskItem.class);
         String schedulerId = item.getSchedulerId();
         SchedulerPlusExecutor executor = schedulerPlusCache.getIdToSchedulerPlusExecutor().get(schedulerId);
         if (executor != null) {
+            log.error("定时任务: {}已经被启动过了", schedulerId);
             throw new SchedulerPlusException("定时任务" + schedulerId + "已经被启动过了");
         }
         SchedulerPlusTaskDO task = SchedulerPlusObjectMapper.INSTANCE.toSchedulerPlusTaskDO(item);
