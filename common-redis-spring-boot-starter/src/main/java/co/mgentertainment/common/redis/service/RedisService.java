@@ -262,17 +262,26 @@ public interface RedisService {
      * @param count
      * @return
      */
-    Set<Object> zReverseRange(String key, long min, long max, long offset, long count);
+    Set<Object> zReverseRangeByScope(String key, long min, long max, long offset, long count);
 
     /**
-     * zset 删除元素
+     * zset 按照偏移量删除元素
+     * @param key
+     * @param startOffset
+     * @param endOffset
+     * @return
+     */
+    Long zRemoveRange(String key, long startOffset, long endOffset);
+
+    /**
+     * zset 按照范围删除元素
      *
      * @param key
      * @param min
      * @param max
      * @return
      */
-    Long zRemoveRange(String key, long min, long max);
+    Long zRemoveRangeByScope(String key, long min, long max);
 
     /**
      * zset 弹出最大元素

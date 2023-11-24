@@ -236,7 +236,7 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Set<Object> zReverseRange(String key, long min, long max, long offset, long count) {
+    public Set<Object> zReverseRangeByScope(String key, long min, long max, long offset, long count) {
         return redisTemplate.opsForZSet().reverseRangeByScore(key, new Long(min).doubleValue(), new Long(max).doubleValue(), offset, count);
     }
 
@@ -251,8 +251,12 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Long zRemoveRange(String key, long min, long max) {
-        return redisTemplate.opsForZSet().removeRangeByScore(key, new Long(min).doubleValue(), new Long(max).doubleValue());
+    public Long zRemoveRange(String key, long startOffset, long endOffset) {
+        return redisTemplate.opsForZSet().removeRange(key, startOffset, endOffset);
     }
 
+    @Override
+    public Long zRemoveRangeByScope(String key, long min, long max) {
+        return redisTemplate.opsForZSet().removeRangeByScore(key, new Long(min).doubleValue(), new Long(max).doubleValue());
+    }
 }
