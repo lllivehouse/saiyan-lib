@@ -221,12 +221,17 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Set<Object> zRange(String key, long min, long max, long offset, long count) {
+    public Set<Object> zRange(String key, long startOffset, long endOffset) {
+        return redisTemplate.opsForZSet().range(key, startOffset, endOffset);
+    }
+
+    @Override
+    public Set<Object> zRangeByScope(String key, long min, long max, long offset, long count) {
         return redisTemplate.opsForZSet().rangeByScore(key, new Long(min).doubleValue(), new Long(max).doubleValue(), offset, count);
     }
 
     @Override
-    public Set<Object> zRange(String key, Long min, Long max) {
+    public Set<Object> zRangeByScope(String key, Long min, Long max) {
         return redisTemplate.opsForZSet().rangeByScore(key, new Long(min).doubleValue(), new Long(max).doubleValue());
     }
 

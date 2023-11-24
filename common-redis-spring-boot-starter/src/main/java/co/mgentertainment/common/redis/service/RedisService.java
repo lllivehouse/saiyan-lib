@@ -224,21 +224,33 @@ public interface RedisService {
      * zrange 获取元素
      *
      * @param key
-     * @param min
-     * @param max
+     * @param offset
+     * @param count
      * @return
      */
-    Set<Object> zRange(String key, long min, long max, long offset, long count);
+    <T> Set<T> zRange(String key, long offset, long count);
 
     /**
-     * zrange 获取元素
+     * zrange 获取范围值内的元素
+     *
+     * @param key
+     * @param min
+     * @param max
+     * @param offset
+     * @param count
+     * @return
+     */
+    Set<Object> zRangeByScope(String key, long min, long max, long offset, long count);
+
+    /**
+     * zrange 获取范围值内的元素
      *
      * @param key
      * @param min
      * @param max
      * @return
      */
-    Set<Object> zRange(String key, Long min, Long max);
+    Set<Object> zRangeByScope(String key, Long min, Long max);
 
     /**
      * zset 分数倒序获取元素
