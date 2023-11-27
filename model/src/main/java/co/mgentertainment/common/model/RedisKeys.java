@@ -8,8 +8,6 @@ package co.mgentertainment.common.model;
  */
 public interface RedisKeys {
 
-    // hashkey表示注册用户，hash value:clientId,{userInfo}
-    String PLAYER_USER_REG_CLIENT = "p_client";
     // hashkey表示设备登录用户，hash value:clientId,loginUid
     String PLAYER_USER_LOGIN_CLIENT = "p_client_user";
 
