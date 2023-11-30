@@ -1,11 +1,10 @@
 package co.mgentertainment.common.schedulerplus.strengthen;
 
+import co.mgentertainment.common.model.R;
 import co.mgentertainment.common.schedulerplus.annontation.StrengthenOrder;
 import co.mgentertainment.common.schedulerplus.core.ScheduledModeEnum;
 import co.mgentertainment.common.schedulerplus.core.SchedulerPlusExecutor;
-import co.mgentertainment.common.schedulerplus.exception.SchedulerPlusException;
 import co.mgentertainment.dlock.registry.LockRegistry;
-import com.google.common.base.Preconditions;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,19 +27,23 @@ public class LockStrengthen implements SchedulerPlusStrength {
     private final transient AtomicBoolean locked = new AtomicBoolean(false);
 
     @Override
-    public Long before(Object bean, Method method, Object[] args) {
-        Preconditions.checkArgument(bean instanceof SchedulerPlusExecutor, "invalid proxy bean");
+    public R<Long> before(Object bean, Method method, Object[] args) {
+        if (!(bean instanceof SchedulerPlusExecutor)) {
+            return R.failed("invalid proxy bean");
+        }
         SchedulerPlusExecutor executor = (SchedulerPlusExecutor) bean;
-        Preconditions.checkArgument(executor.getMetadata() != null && StringUtils.isNotBlank(executor.getMetadata().getSchedulerId()), "schedulerId can not be blank");
+        if (executor.getMetadata() == null || StringUtils.isBlank(executor.getMetadata().getSchedulerId())) {
+            return R.failed("schedulerId can not be blank");
+        }
         if (ScheduledModeEnum.SINGLE_INSTANCE.equals(executor.getMetadata().getScheduledMode())) {
             this.lock = lockRegistry.obtain(executor.getMetadata().getSchedulerId());
             // 获取锁
             if (!this.lock.tryLock()) {
-                throw new SchedulerPlusException("fail to obtain distributed-lock");
+                return R.failed("fail to obtain distributed-lock");
             }
             locked.set(true);
         }
-        return null;
+        return R.ok();
     }
 
     @Override
@@ -51,7 +54,7 @@ public class LockStrengthen implements SchedulerPlusStrength {
     public void afterFinally(Object bean, Method method, Object[] args, Object result, Long id) {
         if (this.lock != null && locked.get()) {
             // 释放锁
-            lock.unlock();
+            this.lock.unlock();
         }
     }
 

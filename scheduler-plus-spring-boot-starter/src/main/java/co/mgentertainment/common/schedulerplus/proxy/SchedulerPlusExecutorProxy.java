@@ -1,5 +1,6 @@
 package co.mgentertainment.common.schedulerplus.proxy;
 
+import co.mgentertainment.common.model.R;
 import co.mgentertainment.common.schedulerplus.core.SchedulerPlusExecutor;
 import co.mgentertainment.common.schedulerplus.core.SchedulerPlusMeta;
 import co.mgentertainment.common.schedulerplus.strengthen.SchedulerPlusStrength;
@@ -43,44 +44,55 @@ public class SchedulerPlusExecutorProxy implements MethodInterceptor {
         }
         Object result = null;
         AtomicLong logId = new AtomicLong();
-        strengthens.stream().forEach(strengthen -> {
+        boolean lockObtained = true;
+        for (SchedulerPlusStrength strengthen : strengthens) {
             try {
-                Long id = strengthen.before(obj, method, args);
-                if (id != null) {
-                    logId.set(id);
+                R<Long> res = strengthen.before(obj, method, args);
+                if (!res.isSuccess()) {
+                    lockObtained = false;
+                    break;
+                }
+                if (res.getData() != null) {
+                    logId.set(res.getData());
                 }
             } catch (Exception e) {
-                log.error("before strengthen [{}] error", strengthen.getClass(), e);
+                log.debug("before strengthen [{}] error", strengthen.getClass(), e);
+                break;
             }
-        });
+        }
         try {
-            result = methodProxy.invokeSuper(obj, args);
+            if (lockObtained) {
+                result = methodProxy.invokeSuper(obj, args);
+            }
         } catch (Exception e) {
             log.error("proxy obj [{}] execution error", obj.getClass().getName(), e);
-            strengthens.stream().forEach(strengthen -> {
+            for (SchedulerPlusStrength strengthen : strengthens) {
                 try {
                     strengthen.exception(obj, method, args, logId.get());
                 } catch (Exception ex) {
                     log.error("exception strengthen [{}] error", strengthen.getClass(), ex);
+                    break;
                 }
-            });
+            }
         } finally {
             Object finalResult = result;
-            strengthens.stream().forEach(strengthen -> {
+            for (SchedulerPlusStrength strengthen : strengthens) {
                 try {
                     strengthen.afterFinally(obj, method, args, finalResult, logId.get());
                 } catch (Exception e) {
                     log.error("afterFinally strengthen [{}] error", strengthen.getClass(), e);
+                    break;
                 }
-            });
+            }
         }
-        strengthens.stream().forEach(strengthen -> {
+        for (SchedulerPlusStrength strengthen : strengthens) {
             try {
                 strengthen.after(obj, method, args, logId.get());
             } catch (Exception e) {
                 log.error("after strengthen [{}] error", strengthen.getClass(), e);
+                break;
             }
-        });
+        }
         return result;
     }
 }

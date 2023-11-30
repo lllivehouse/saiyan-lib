@@ -1,5 +1,7 @@
 package co.mgentertainment.common.schedulerplus.strengthen;
 
+import co.mgentertainment.common.model.R;
+
 import java.lang.reflect.Method;
 
 public interface SchedulerPlusStrength {
@@ -12,7 +14,7 @@ public interface SchedulerPlusStrength {
      * @param args   方法参数
      * @return 返回值 日志表主键id
      */
-    Long before(Object bean, Method method, Object[] args);
+    R<Long> before(Object bean, Method method, Object[] args);
 
     /**
      * 异常强化方法

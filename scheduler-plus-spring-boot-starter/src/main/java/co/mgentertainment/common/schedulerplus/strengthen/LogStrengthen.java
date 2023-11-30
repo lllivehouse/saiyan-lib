@@ -25,11 +25,11 @@ public class LogStrengthen implements SchedulerPlusStrength {
     private final SchedulerPlusLogRepository schedulerPlusLogRepository;
 
     @Override
-    public Long before(Object bean, Method method, Object[] args) {
+    public R<Long> before(Object bean, Method method, Object[] args) {
         String schedulerId = getSchedulerId(bean);
         schedulerPlusTaskRepository.updateTaskStatus(schedulerId, SchedulerPlusTaskStatusEnum.IN_PROGRESS);
         Long id = schedulerPlusLogRepository.createLog(schedulerId);
-        return id;
+        return R.ok(id);
     }
 
     @Override
