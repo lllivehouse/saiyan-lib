@@ -68,6 +68,7 @@ public class OpenApiClientConfiguration {
         FILE("file"),
         CONFIG_CENTER("configcenter"),
         PAYMENT("payment"),
+        DATA_CENTER("datacenter"),
         ;
 
         private String value;
