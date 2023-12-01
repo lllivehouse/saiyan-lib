@@ -5,7 +5,7 @@ package co.mgentertainment.common.apiclient.exception;
  * @createTime 2022/12/8
  * @description ClientException
  */
-public class ClientException extends Exception {
+public class ClientException extends RuntimeException {
     private String requestId;
     private String errCode;
     private String errMsg;
