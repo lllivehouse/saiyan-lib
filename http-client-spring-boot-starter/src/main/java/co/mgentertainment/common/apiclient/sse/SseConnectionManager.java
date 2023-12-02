@@ -40,10 +40,11 @@ public class SseConnectionManager {
     /**
      * 服务端断线，会触发close事件自动重连
      *
-     * @param clientId
      * @param retryTimes
      */
-    public void connect(String clientId, int retryTimes, Consumer<ServerSentMessage> callback) {
+    public void connect(int retryTimes, Consumer<ServerSentMessage> callback) {
+        OpenApiClientProperties.Sign sign = appMetadata.getSign();
+        String clientId = sign.getIdentity();
         try {
             ServerSentEvent sse = newSSEClient(clientId).requestSse(new SseConnectRequest(apiMetadata.getModule(), apiMetadata.getAction(), "clientId", clientId),
                     new ServerSentEvent.Listener() {
@@ -89,7 +90,7 @@ public class SseConnectionManager {
                             } catch (InterruptedException ex) {
                                 // ignored
                             }
-                            connect(clientId, times, callback);
+                            connect(times, callback);
                         }
 
                         @Override
@@ -118,7 +119,8 @@ public class SseConnectionManager {
         // 自动重连
         profile.getHttpClientConfig().setRetryOnConnectionFailure(true);
         OpenApiClientProperties.Sign sign = appMetadata.getSign();
-        Credential credential = StringUtils.equalsIgnoreCase(sign.getAlgorithm(), "rsa") ?
+        Credential credential = StringUtils.equalsIgnoreCase(sign.getAlgorithm(), "rsa")
+                && !StringUtils.isAnyBlank(sign.getTokenName(), sign.getEncryptKey(), sign.getIdentity()) ?
                 new RsaTokenCredential(sign.getTokenName(), sign.getEncryptKey(), clientId, sign.getNonce()) : null;
         return credential != null ? new DefaultApiClient(profile, credential) : new DefaultApiClient(profile);
     }
