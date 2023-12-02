@@ -12,6 +12,6 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Import(SseClientConfiguration.class)
+@Import({ConfigCenterSseClientConfiguration.class, PaySseClientConfiguration.class})
 public @interface EnableSseClient {
 }
