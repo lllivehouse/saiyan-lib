@@ -1,10 +1,10 @@
 package co.mgentertainment.common.apiclient.utils;
 
 import co.mgentertainment.common.apiclient.auth.Credential;
+import co.mgentertainment.common.apiclient.auth.RsaSigner;
 import co.mgentertainment.common.apiclient.auth.RsaTokenCredential;
-import co.mgentertainment.common.apiclient.auth.Signer;
-import co.mgentertainment.common.apiclient.http.ProtocolType;
 import co.mgentertainment.common.apiclient.exception.ClientException;
+import co.mgentertainment.common.apiclient.http.ProtocolType;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -21,11 +21,10 @@ public class ApiRequestUtils {
 
     public static Map<String, String> getSignedHeader(Credential credential) throws ClientException {
         Map<String, String> signedHeader = new HashMap<>(0);
-        Signer signer = Signer.getSigner(credential);
         if (credential instanceof RsaTokenCredential) {
-            String token = signer.sign(credential);
+            String token = new RsaSigner().sign(credential);
             if (Objects.nonNull(token)) {
-                signedHeader.put(signer.getTokenName(), token);
+                signedHeader.put(credential.getTokenName(), token);
             }
         }
         return signedHeader;

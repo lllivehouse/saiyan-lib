@@ -8,11 +8,6 @@ import co.mgentertainment.common.apiclient.exception.ClientException;
  * @description Signer
  */
 public abstract class Signer {
-    private static final Signer RSA_SIGNER = new RsaSigner();
-
-    public static Signer getSigner(Credential credential) {
-        return credential instanceof RsaTokenCredential ? RSA_SIGNER : null;
-    }
 
     /**
      * 签名
@@ -41,19 +36,4 @@ public abstract class Signer {
      * @throws ClientException
      */
     public abstract String resign(String oldToken, Credential credential) throws ClientException;
-
-    /**
-     * token name
-     *
-     * @return
-     */
-    public abstract String getTokenName();
-
-    /**
-     * token prefix
-     *
-     * @return
-     */
-    public abstract String getTokenPrefix();
-
 }

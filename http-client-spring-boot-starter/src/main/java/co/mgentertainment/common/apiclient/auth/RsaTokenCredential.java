@@ -1,6 +1,8 @@
 package co.mgentertainment.common.apiclient.auth;
 
-import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.annotation.Nullable;
 
 /**
  * @author larry
@@ -9,18 +11,30 @@ import java.util.Objects;
  */
 public class RsaTokenCredential implements Credential {
 
+    private final String tokenName;
     private final String publicKey;
     private final String clientId;
+    private final Integer nonce;
 
-    public RsaTokenCredential(String publicKey, String clientId) {
-        if (Objects.isNull(publicKey)) {
-            throw new IllegalArgumentException("publicKey cannot be null.");
+    public RsaTokenCredential(String tokenName, String publicKey, String clientId, @Nullable Integer nonce) {
+        if (StringUtils.isBlank(tokenName)) {
+            throw new IllegalArgumentException("publicKey cannot be blank.");
         }
-        if (Objects.isNull(clientId)) {
-            throw new IllegalArgumentException("clientId cannot be null.");
+        this.tokenName = tokenName;
+        if (StringUtils.isBlank(publicKey)) {
+            throw new IllegalArgumentException("publicKey cannot be blank.");
         }
         this.publicKey = publicKey;
+        if (StringUtils.isBlank(clientId)) {
+            throw new IllegalArgumentException("clientId cannot be blank.");
+        }
         this.clientId = clientId;
+        this.nonce = nonce;
+    }
+
+    @Override
+    public String getTokenName() {
+        return this.tokenName;
     }
 
     @Override
@@ -31,5 +45,10 @@ public class RsaTokenCredential implements Credential {
     @Override
     public String getIdentity() {
         return this.clientId;
+    }
+
+    @Override
+    public Integer getNonce() {
+        return this.nonce;
     }
 }

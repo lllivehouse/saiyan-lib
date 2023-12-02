@@ -1,9 +1,8 @@
 package co.mgentertainment.common.apiclient.auth;
 
 import co.mgentertainment.common.apiclient.exception.ClientException;
-import co.mgentertainment.common.model.HttpClientConstants;
 import co.mgentertainment.common.utils.SecurityHelper;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.RandomUtils;
 
 /**
  * @author larry
@@ -15,7 +14,8 @@ public class RsaSigner extends Signer {
     @Override
     public String sign(Credential credential) {
         try {
-            return SecurityHelper.rsaEncrypt(credential.getIdentity(), credential.getEncryptKey());
+            String identity = credential.getNonce() != null ? identityAddNonce(credential.getIdentity(), credential.getNonce()) : credential.getIdentity();
+            return SecurityHelper.rsaEncrypt(identity, credential.getEncryptKey());
         } catch (Exception e) {
             return null;
         }
@@ -31,13 +31,7 @@ public class RsaSigner extends Signer {
         throw new ClientException("operation not support");
     }
 
-    @Override
-    public String getTokenName() {
-        return HttpClientConstants.SSE_HEADER_NAME;
-    }
-
-    @Override
-    public String getTokenPrefix() {
-        return StringUtils.EMPTY;
+    private String identityAddNonce(String identity, Integer nonce) {
+        return identity + ';' + (System.currentTimeMillis() + RandomUtils.nextInt(3000, nonce * 1000));
     }
 }

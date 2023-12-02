@@ -12,11 +12,13 @@ public class EnvironmentVariablesCredentialProvider implements CredentialProvide
 
     @Override
     public Credential getCredential() {
+        String tokenName = System.getenv(ApiConstants.ENV_TOKEN_NAME);
         String publicKey = System.getenv(ApiConstants.ENV_PUBLIC_KEY);
         String identity = System.getenv(ApiConstants.ENV_IDENTITY);
-        if (StringUtils.isAnyBlank(publicKey, identity)) {
+        if (StringUtils.isAnyBlank(tokenName, publicKey, identity)) {
             return null;
         }
-        return new RsaTokenCredential(publicKey, identity);
+        String nonce = System.getenv(ApiConstants.ENV_NONCE);
+        return new RsaTokenCredential(tokenName, publicKey, identity, StringUtils.isNumeric(nonce) ? Integer.parseInt(nonce) : null);
     }
 }

@@ -12,11 +12,13 @@ public class SystemPropertiesCredentialProvider implements CredentialProvider {
 
     @Override
     public Credential getCredential() {
+        String tokenName = System.getProperty(ApiConstants.SYSTEM_PROPERTY_TOKEN_NAME);
         String publicKey = System.getProperty(ApiConstants.SYSTEM_PROPERTY_PUBLIC_KEY);
         String identity = System.getProperty(ApiConstants.SYSTEM_PROPERTY_IDENTITY);
-        if (StringUtils.isAnyBlank(publicKey, identity)) {
+        if (StringUtils.isAnyBlank(tokenName, publicKey, identity)) {
             return null;
         }
-        return new RsaTokenCredential(publicKey, identity);
+        String nonce = System.getenv(ApiConstants.SYSTEM_PROPERTY_NONCE);
+        return new RsaTokenCredential(tokenName, publicKey, identity, StringUtils.isNumeric(nonce) ? Integer.parseInt(nonce) : null);
     }
 }

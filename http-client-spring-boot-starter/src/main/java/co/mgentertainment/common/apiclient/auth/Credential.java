@@ -8,6 +8,13 @@ package co.mgentertainment.common.apiclient.auth;
 public interface Credential {
 
     /**
+     * 获取口令名称
+     *
+     * @return
+     */
+    String getTokenName();
+
+    /**
      * 获取加密key
      *
      * @return
@@ -20,4 +27,10 @@ public interface Credential {
      * @return
      */
     String getIdentity();
+
+    /**
+     * 获取盐值可为空
+     * @return
+     */
+    Integer getNonce();
 }

@@ -11,7 +11,6 @@ import co.mgentertainment.common.utils.GsonFactory;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -118,12 +117,9 @@ public class SseConnectionManager {
         profile.getHttpClientConfig().setReadTimeoutMillis(0L);
         // 自动重连
         profile.getHttpClientConfig().setRetryOnConnectionFailure(true);
-        Credential credential = StringUtils.equalsIgnoreCase(appMetadata.getSign().getAlgorithm(), "rsa") ?
-                new RsaTokenCredential(appMetadata.getSign().getEncryptKey(), identityAddNonce(clientId)) : null;
+        OpenApiClientProperties.Sign sign = appMetadata.getSign();
+        Credential credential = StringUtils.equalsIgnoreCase(sign.getAlgorithm(), "rsa") ?
+                new RsaTokenCredential(sign.getTokenName(), sign.getEncryptKey(), clientId, sign.getNonce()) : null;
         return credential != null ? new DefaultApiClient(profile, credential) : new DefaultApiClient(profile);
-    }
-
-    private String identityAddNonce(String identity) {
-        return identity + ';' + (System.currentTimeMillis() + RandomUtils.nextInt(0, 9000));
     }
 }

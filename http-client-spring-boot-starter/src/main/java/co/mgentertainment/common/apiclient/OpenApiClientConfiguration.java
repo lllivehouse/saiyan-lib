@@ -50,8 +50,9 @@ public class OpenApiClientConfiguration {
             OpenApiClientProperties.Sign sign = appMetadata.getSign();
             ApiToken apiToken = appMetadata.getApiToken();
             ApiClient client;
-            if (sign != null && !StringUtils.isAnyBlank(sign.getAlgorithm(), sign.getEncryptKey(), sign.getIdentity())) {
-                Credential credential = StringUtils.equalsAnyIgnoreCase(sign.getAlgorithm(), "rsa") ? new RsaTokenCredential(sign.getEncryptKey(), sign.getIdentity())
+            if (sign != null && !StringUtils.isAnyBlank(sign.getTokenName(), sign.getAlgorithm(), sign.getEncryptKey(), sign.getIdentity())) {
+                Credential credential = StringUtils.equalsAnyIgnoreCase(sign.getAlgorithm(), "rsa") ?
+                        new RsaTokenCredential(sign.getTokenName(), sign.getEncryptKey(), sign.getIdentity(), sign.getNonce())
                         : null;
                 client = new DefaultApiClient(profile, credential);
             } else if (apiToken != null && !StringUtils.isAnyBlank(apiToken.getHeaderName(), apiToken.getToken())) {

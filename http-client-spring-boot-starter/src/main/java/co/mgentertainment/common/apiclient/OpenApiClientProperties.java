@@ -37,22 +37,23 @@ public class OpenApiClientProperties {
         private Map<String, ApiMetadata> api = new HashMap<>(0);
 
         /**
-         * 签名算法
+         * API请求动态口令
          */
         private Sign sign = new Sign();
 
         /**
-         * API请求头口令
+         * API请求头固定口令
          */
         private ApiToken apiToken = new ApiToken();
     }
 
     @Data
     public static class Sign {
-        // value:rsa
+        private String tokenName;
         private String algorithm;
         private String identity;
         private String encryptKey;
+        private Integer nonce;
     }
 
     @Data
