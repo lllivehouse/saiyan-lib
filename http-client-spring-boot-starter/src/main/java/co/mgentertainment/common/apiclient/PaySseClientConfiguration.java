@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 public class PaySseClientConfiguration {
 
     @Bean(name = "paySseConnectionManager")
-    public SseConnectionManager getSseConnectionManager(OpenApiClientProperties properties) {
+    public SseConnectionManager paySseConnectionManager(OpenApiClientProperties properties) {
         OpenApiClientProperties.AppMetadata appMetadata = properties.getApp().get(OpenApiClientConfiguration.ApplicationName.PAYMENT.getValue());
         OpenApiClientProperties.ApiMetadata apiMetadata = appMetadata.getApi().get("sse");
         return new SseConnectionManager(appMetadata, apiMetadata);

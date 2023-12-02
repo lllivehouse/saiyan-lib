@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 public class ConfigCenterSseClientConfiguration {
 
     @Bean(name = "ccSseConnectionManager")
-    public SseConnectionManager getSseConnectionManager(OpenApiClientProperties properties) {
+    public SseConnectionManager ccSseConnectionManager(OpenApiClientProperties properties) {
         OpenApiClientProperties.AppMetadata appMetadata = properties.getApp().get(OpenApiClientConfiguration.ApplicationName.CONFIG_CENTER.getValue());
         OpenApiClientProperties.ApiMetadata apiMetadata = appMetadata.getApi().get("sse");
         return new SseConnectionManager(appMetadata, apiMetadata);
