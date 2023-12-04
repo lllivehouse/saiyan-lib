@@ -27,6 +27,10 @@ public enum PaymentMethodEnum {
         return Arrays.stream(values()).filter(e -> e.getCode().equals(code)).findFirst().orElse(null);
     }
 
+    public static PaymentMethodEnum getByDesc(String desc) {
+        return Arrays.stream(values()).filter(e -> e.getDesc().equalsIgnoreCase(desc)).findFirst().orElse(null);
+    }
+
     public Integer getCode() {
         return code;
     }
