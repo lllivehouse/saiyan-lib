@@ -83,11 +83,6 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Boolean hHashKey(String key, String hashKey) throws RuntimeException {
-        return redisTemplate.opsForHash().hasKey(key, hashKey);
-    }
-
-    @Override
     public Map<Object, Object> hEntries(String key) throws RuntimeException {
         return redisTemplate.opsForHash().entries(key);
     }
