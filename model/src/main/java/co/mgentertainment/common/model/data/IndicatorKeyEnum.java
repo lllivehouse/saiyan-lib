@@ -9,7 +9,6 @@ import java.util.Arrays;
  */
 public enum IndicatorKeyEnum {
 
-    USER_COUNT("USER_COUNT", "用户数"),
     ACTIVE_USER_COUNT("ACTIVE_USER_COUNT", "活跃用户数"),
     ACTIVE_IP_COUNT("ACTIVE_IP_COUNT", "活跃IP数"),
     ACTIVE_ANDROID_USER_COUNT("ACTIVE_ANDROID_USER_COUNT", "安卓活跃用户数"),
