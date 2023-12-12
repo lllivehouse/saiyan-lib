@@ -198,6 +198,16 @@ public class DateUtils {
         }
     }
 
+    public static boolean isDate(String dateStr, String pattern) {
+        FastDateFormat fdf = FastDateFormat.getInstance(pattern);
+        try {
+            fdf.parse(dateStr);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
     /**
      * java.sql.Timestamp和java.sql.Date虽然都继承java.util.Date,不能用equals来比,要有转换
      */
