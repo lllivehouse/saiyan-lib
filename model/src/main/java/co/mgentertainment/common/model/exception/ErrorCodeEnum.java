@@ -24,6 +24,7 @@ public enum ErrorCodeEnum {
     TOKEN_VALIDATION_FAILED(10002, "token校验失败"),
     NOT_ENOUGH_COIN(5001, "金币不足"),
     USER_NOT_FOUND(5002, "用户不存在"),
+    USER_INDICATOR_SPEND_FAILED(5003, "用户业务指标扣减异常"),
 
     ;
 
