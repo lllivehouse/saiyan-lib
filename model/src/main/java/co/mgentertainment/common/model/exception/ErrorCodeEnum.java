@@ -25,7 +25,7 @@ public enum ErrorCodeEnum {
     NOT_ENOUGH_COIN(5001, "金币不足"),
     USER_NOT_FOUND(5002, "用户不存在"),
     USER_INDICATOR_SPEND_FAILED(5003, "用户业务指标扣减异常"),
-
+    NOT_VIP(5004, "非会员"),
     ;
 
     private int code;
