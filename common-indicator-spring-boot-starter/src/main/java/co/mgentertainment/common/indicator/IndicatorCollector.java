@@ -3,6 +3,7 @@ package co.mgentertainment.common.indicator;
 import co.mgentertainment.common.indicator.constant.GlobalIndicatorName;
 import co.mgentertainment.common.indicator.constant.IndicatorCategory;
 import co.mgentertainment.common.indicator.constant.IndicatorName;
+import co.mgentertainment.common.model.RedisKeys;
 import co.mgentertainment.common.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +17,6 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 public class IndicatorCollector {
-    public static final String INDICATOR_PREFIX = "indicator:";
 
     private final RedisService redisService;
 
@@ -39,10 +39,10 @@ public class IndicatorCollector {
     }
 
     public static String getItemIndicatorKey(IndicatorCategory type, IndicatorName name) {
-        return INDICATOR_PREFIX + type.getCategory() + name.getValue();
+        return RedisKeys.PLAYER_INDICATOR_PREFIX + type.getCategory() + name.getValue();
     }
 
     public static String getGlobalIndicatorKey(GlobalIndicatorName name) {
-        return INDICATOR_PREFIX + name.getValue();
+        return RedisKeys.PLAYER_INDICATOR_PREFIX + name.getValue();
     }
 }
