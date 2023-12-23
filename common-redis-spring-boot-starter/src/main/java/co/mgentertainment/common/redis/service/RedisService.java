@@ -79,6 +79,11 @@ public interface RedisService {
     Object hGet(String key, String hashKey) throws RuntimeException;
 
     /**
+     * 获取Hash结构中的key集合
+     */
+    Set<String> hKeys(String key) throws RuntimeException;
+
+    /**
      * 获取Hash结构中的所有键值对
      * @param key
      * @return

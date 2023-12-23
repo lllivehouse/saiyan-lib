@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author larry
@@ -80,6 +81,11 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public Object hGet(String key, String hashKey) throws RuntimeException {
         return redisTemplate.opsForHash().get(key, hashKey);
+    }
+
+    @Override
+    public Set<String> hKeys(String key) throws RuntimeException {
+        return redisTemplate.opsForHash().keys(key).stream().map(k -> String.valueOf(k)).collect(Collectors.toSet());
     }
 
     @Override
