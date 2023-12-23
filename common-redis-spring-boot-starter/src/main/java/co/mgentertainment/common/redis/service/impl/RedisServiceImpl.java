@@ -39,6 +39,11 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
+    public Set<String> keysStartWith(String keyPrefix) throws RuntimeException {
+        return redisTemplate.keys(keyPrefix + "*");
+    }
+
+    @Override
     public Object get(String key) throws RuntimeException {
         return redisTemplate.opsForValue().get(key);
     }

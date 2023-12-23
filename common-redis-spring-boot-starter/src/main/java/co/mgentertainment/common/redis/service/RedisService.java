@@ -34,6 +34,14 @@ public interface RedisService {
     void set(String key, Object value) throws RuntimeException;
 
     /**
+     * 获取指定前缀的所有key
+     * @param keyPrefix
+     * @return
+     * @throws RuntimeException
+     */
+    Set<String> keysStartWith(String keyPrefix) throws RuntimeException;
+
+    /**
      * 获取属性
      */
     Object get(String key) throws RuntimeException;
