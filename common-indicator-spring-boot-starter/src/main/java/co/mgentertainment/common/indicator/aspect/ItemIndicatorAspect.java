@@ -8,6 +8,7 @@ import co.mgentertainment.common.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -49,9 +50,11 @@ public class ItemIndicatorAspect {
             if (!error) {
                 try {
                     String itemId = SpelExpressionResolver.parseSpel(indicator.expressionToGetItem(), argNames, argValues);
-                    redisService.hIncr(IndicatorCollector.getItemIndicatorKey(indicator.type(), indicator.name()), itemId, Long.valueOf(indicator.counter() == IndicatorCounter.INCREASE ? 1 : -1));
+                    if (StringUtils.isNotBlank(itemId)) {
+                        redisService.hIncr(IndicatorCollector.getItemIndicatorKey(indicator.type(), indicator.name()), itemId, Long.valueOf(indicator.counter() == IndicatorCounter.INCREASE ? 1 : -1));
+                    }
                 } catch (Exception e) {
-                    log.error("指标器[{}]采集异常", indicator.type().getCategory() + indicator.name().getValue(), e);
+                    log.error("Item指标器[{}]采集异常", indicator.type().getCategory() + indicator.name().getValue(), e);
                 }
             }
         }
