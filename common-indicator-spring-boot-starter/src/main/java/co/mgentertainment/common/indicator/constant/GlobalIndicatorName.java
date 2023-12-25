@@ -9,6 +9,7 @@ import java.util.Arrays;
  */
 public enum GlobalIndicatorName {
 
+    SEARCH_TIMES("search", "搜索次数"),
     PAGE_VIEWS("pv", "页面访问量"),
     ;
 
