@@ -2,6 +2,7 @@ package co.mgentertainment.common.indicator.annotation;
 
 import co.mgentertainment.common.indicator.constant.GlobalIndicatorName;
 import co.mgentertainment.common.indicator.constant.IndicatorCounter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.annotation.*;
 
@@ -20,6 +21,13 @@ public @interface GlobalIndicator {
      * @return {String}
      */
     GlobalIndicatorName name() default GlobalIndicatorName.PAGE_VIEWS;
+
+    /**
+     * spel表达式获取指标分类，对应hkey
+     *
+     * @return
+     */
+    String expressionToGetCategory() default StringUtils.EMPTY;
 
     /**
      * 计数器类型
