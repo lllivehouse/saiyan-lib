@@ -6,6 +6,7 @@ import co.mgentertainment.common.indicator.constant.IndicatorName;
 import co.mgentertainment.common.model.RedisKeys;
 import co.mgentertainment.common.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,9 +34,12 @@ public class IndicatorCollector {
         return count instanceof Long ? (Long) count : Long.valueOf(String.valueOf(count));
     }
 
-    public Long getGlobalIndicator(GlobalIndicatorName indicatorName) {
-        Object obj = redisService.get(getGlobalIndicatorKey(indicatorName));
-        return obj instanceof Long ? (Long) obj : Long.valueOf(String.valueOf(obj));
+    public Map<String, Long> getGlobalIndicatorCollection(GlobalIndicatorName indicatorName) {
+        return redisService.hGetAll(getGlobalIndicatorKey(indicatorName)).entrySet().stream()
+                .collect(Collectors.toMap(
+                        e -> String.valueOf(e.getKey()),
+                        e -> e.getValue() instanceof Long ? (Long) e.getValue() :
+                                Long.valueOf(String.valueOf(e.getValue()).replace("\"", StringUtils.EMPTY))));
     }
 
     public static String getItemIndicatorKey(IndicatorCategory type, IndicatorName name) {
