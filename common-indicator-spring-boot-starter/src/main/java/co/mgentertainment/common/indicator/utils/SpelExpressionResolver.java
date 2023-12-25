@@ -2,7 +2,8 @@ package co.mgentertainment.common.indicator.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.expression.EvaluationContext;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -16,7 +17,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 @Slf4j
 public class SpelExpressionResolver {
 
-    public static String parseSpel(String spelExpression, String[] argNames, Object[] argVals) {
+    public static String parseSpel(String spelExpression, String[] argNames, Object[] argVals, ApplicationContext applicationContext) {
         if (!StringUtils.contains(spelExpression, "#")) {
             return spelExpression;
         }
@@ -28,7 +29,9 @@ public class SpelExpressionResolver {
             // 解析后的SPEL
             Expression expression = parser.parseExpression(spelExpression);
             // Spring表达式上下文
-            EvaluationContext context = new StandardEvaluationContext();
+            StandardEvaluationContext context = new StandardEvaluationContext();
+            // 设置BeanResolver
+            context.setBeanResolver(new BeanFactoryResolver(applicationContext));
             // 添加方法入参到上下文
             for (int i = 0; i < argNames.length; i++) {
                 context.setVariable(argNames[i], argVals[i]);

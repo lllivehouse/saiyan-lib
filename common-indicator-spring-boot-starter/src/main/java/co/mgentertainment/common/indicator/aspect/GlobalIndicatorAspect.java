@@ -13,6 +13,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 
 import java.lang.reflect.Method;
@@ -24,11 +27,13 @@ import java.util.Optional;
 @Aspect
 @Slf4j
 @RequiredArgsConstructor
-public class GlobalIndicatorAspect {
+public class GlobalIndicatorAspect implements ApplicationContextAware {
 
     private final DefaultParameterNameDiscoverer nameDiscoverer = new DefaultParameterNameDiscoverer();
 
     private final RedisService redisService;
+
+    private ApplicationContext applicationContext;
 
     @Around("@annotation(indicator)")
     @SneakyThrows
@@ -48,7 +53,7 @@ public class GlobalIndicatorAspect {
         } finally {
             if (!error) {
                 try {
-                    String itemId = SpelExpressionResolver.parseSpel(indicator.expressionToGetCategory(), argNames, argValues);
+                    String itemId = SpelExpressionResolver.parseSpel(indicator.expressionToGetCategory(), argNames, argValues, this.applicationContext);
                     if (StringUtils.isNotBlank(itemId)) {
                         redisService.hIncr(IndicatorCollector.getGlobalIndicatorKey(indicator.name()), itemId, Long.valueOf(indicator.counter() == IndicatorCounter.INCREASE ? 1 : -1));
                     }
@@ -58,5 +63,10 @@ public class GlobalIndicatorAspect {
             }
         }
         return result;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }
