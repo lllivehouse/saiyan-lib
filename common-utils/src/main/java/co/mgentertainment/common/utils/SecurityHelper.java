@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author larry
@@ -107,7 +108,7 @@ public class SecurityHelper {
     public static String rsaDecrypt(String encryptText, String privateKey, int nonce) {
         Date now = new Date();
         String plainText = rsaDecrypt(encryptText, privateKey);
-        String[] arr = StringUtils.split(plainText, ";");
+        String[] arr = StringUtils.split(Optional.ofNullable(plainText).orElse(StringUtils.EMPTY), ";");
         if (arr == null || arr.length != 2 || !StringUtils.isNumeric(arr[1])) {
             return null;
         }
