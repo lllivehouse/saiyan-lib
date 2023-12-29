@@ -17,5 +17,4 @@ public interface RedisKeys {
     String PLAYER_SMS_BIND_PHONE = "SMS:Bind:Phone:{}";
     String PLAYER_SMS_LOGIN_PHONE = "SMS:Login:Phone:{}";
     String PLAYER_SMS_FIND_ACCOUNT = "SMS:Find:Phone:{}";
-    String USER_HOME_PAGE_PREFIX = "homedata:";
 }
