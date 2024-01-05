@@ -527,8 +527,8 @@ public class DateUtils {
      *
      * @return
      */
-    public static String getThisYearFirstDay() {
-        return LocalDate.now().with(TemporalAdjusters.firstDayOfYear()).format(FORMATER_YYYYMMDD);
+    public static Date getThisYearFirstDay() {
+        return Date.from(LocalDate.now().with(TemporalAdjusters.firstDayOfYear()).atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     /**
@@ -536,8 +536,8 @@ public class DateUtils {
      *
      * @return
      */
-    public static String getThisYearLastDay() {
-        return LocalDate.now().with(TemporalAdjusters.lastDayOfYear()).format(FORMATER_YYYYMMDD);
+    public static Date getThisYearLastDay() {
+        return Date.from(LocalDate.now().with(TemporalAdjusters.lastDayOfYear()).atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     /**
