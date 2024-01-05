@@ -332,12 +332,11 @@ public class DateUtils {
      * @param date
      * @return
      */
-    public static String getLastWeekThisDay(Date date) {
-        SimpleDateFormat df = new SimpleDateFormat(FORMAT_YYYYMMDD);
+    public static Date getLastWeekThisDay(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_WEEK, -7);
-        return df.format(calendar.getTime());
+        return calendar.getTime();
     }
 
     /**
@@ -346,16 +345,14 @@ public class DateUtils {
      * @param date
      * @return
      */
-    public static String getLastWeekFirstDay(Date date, String dateFormat) {
-
-        SimpleDateFormat df = new SimpleDateFormat(dateFormat);
+    public static Date getLastWeekFirstDay(Date date, String dateFormat) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_WEEK, -7);
 
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        return df.format(calendar.getTime());
+        return calendar.getTime();
     }
 
 
@@ -365,15 +362,14 @@ public class DateUtils {
      * @param date
      * @return
      */
-    public static String getLastWeekLastDay(Date date, String dateFormat) {
-        SimpleDateFormat df = new SimpleDateFormat(dateFormat);
+    public static Date getLastWeekLastDay(Date date, String dateFormat) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_WEEK, -7);
 
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        return df.format(calendar.getTime());
+        return calendar.getTime();
     }
 
     /**
@@ -444,13 +440,12 @@ public class DateUtils {
      * @param date
      * @return
      */
-    public static String getLastMonthFirstDay(Date date) {
-        SimpleDateFormat df = new SimpleDateFormat(FORMAT_YYYYMMDD);
+    public static Date getLastMonthFirstDay(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.MONTH, -1);
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-        return df.format(calendar.getTime());
+        return calendar.getTime();
     }
 
     /**
@@ -459,13 +454,12 @@ public class DateUtils {
      * @param date
      * @return
      */
-    public static String getLastMonthLastDay(Date date) {
-        SimpleDateFormat df = new SimpleDateFormat(FORMAT_YYYYMMDD);
+    public static Date getLastMonthLastDay(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.MONTH, -1);
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        return df.format(cal.getTime());
+        return cal.getTime();
     }
 
     /**
@@ -491,14 +485,13 @@ public class DateUtils {
      *
      * @return
      */
-    public static String getThisWeekFirstDay() {
-        SimpleDateFormat df = new SimpleDateFormat(FORMAT_YYYY_MM_DD);
+    public static Date getThisWeekFirstDay() {
         Calendar calWeek = Calendar.getInstance();
         calWeek.setFirstDayOfWeek(Calendar.MONDAY);
         calWeek.setTime(new Date());
         calWeek.add(Calendar.DATE, 0);
         calWeek.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        return df.format(calWeek.getTime());
+        return calWeek.getTime();
     }
 
     /**
@@ -506,28 +499,27 @@ public class DateUtils {
      *
      * @return
      */
-    public static String getThisWeekLastDay() {
-        SimpleDateFormat df = new SimpleDateFormat(FORMAT_YYYY_MM_DD);
+    public static Date getThisWeekLastDay() {
         Calendar calWeek = Calendar.getInstance();
         calWeek.setFirstDayOfWeek(Calendar.MONDAY);
         calWeek.setTime(new Date());
         calWeek.add(Calendar.DATE, 0);
         calWeek.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        return df.format(calWeek.getTime());
+        return calWeek.getTime();
     }
 
     /**
      * 获取当前月第一天
      */
-    public static String getThisMonthFirstDay() {
-        return LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).format(FORMATER_YYYY_MM_DD);
+    public static Date getThisMonthFirstDay() {
+        return Date.from(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     /**
      * 获取当前月最后一天
      */
-    public static String getThisMonthLastDay() {
-        return LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).format(FORMATER_YYYY_MM_DD);
+    public static Date getThisMonthLastDay() {
+        return Date.from(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     /**
