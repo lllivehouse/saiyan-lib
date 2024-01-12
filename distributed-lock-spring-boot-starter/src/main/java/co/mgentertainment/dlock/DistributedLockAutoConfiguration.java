@@ -4,6 +4,7 @@ import co.mgentertainment.common.redis.annonation.EnableCommonRedis;
 import co.mgentertainment.dlock.config.DistributedLockProperties;
 import co.mgentertainment.dlock.registry.JdbcLockRegistry;
 import co.mgentertainment.dlock.registry.LockRegistry;
+import co.mgentertainment.dlock.registry.RedisLockRegistry;
 import co.mgentertainment.dlock.repository.DefaultLockRepository;
 import co.mgentertainment.dlock.repository.LockRepository;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
@@ -13,6 +14,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 
 import javax.sql.DataSource;
 
@@ -44,11 +46,11 @@ public class DistributedLockAutoConfiguration {
         return new JdbcLockRegistry(lockRepository);
     }
 
-//    @Bean(name = "lockRegistry")
-//    @ConditionalOnProperty(prefix = "dlock", name = "by", havingValue = "redis")
-//    public LockRegistry lockRegistry(@Qualifier("redisConnectionFactory") LettuceConnectionFactory redisConnectionFactory, DistributedLockProperties distributedLockProperties) {
-//        return distributedLockProperties.getExpiredMs() != null ?
-//                new RedisLockRegistry(redisConnectionFactory, distributedLockProperties.getRedisRegistryKey(), distributedLockProperties.getExpiredMs()) :
-//                new RedisLockRegistry(redisConnectionFactory, distributedLockProperties.getRedisRegistryKey());
-//    }
+    @Bean(name = "redisLockRegistry")
+    @ConditionalOnProperty(prefix = "dlock", name = "by", havingValue = "redis")
+    public RedisLockRegistry redisLockRegistry(@Qualifier("redisConnectionFactory") LettuceConnectionFactory redisConnectionFactory, DistributedLockProperties distributedLockProperties) {
+        return distributedLockProperties.getExpiredMs() != null ?
+                new RedisLockRegistry(redisConnectionFactory, distributedLockProperties.getRedisRegistryKey(), distributedLockProperties.getExpiredMs()) :
+                new RedisLockRegistry(redisConnectionFactory, distributedLockProperties.getRedisRegistryKey());
+    }
 }

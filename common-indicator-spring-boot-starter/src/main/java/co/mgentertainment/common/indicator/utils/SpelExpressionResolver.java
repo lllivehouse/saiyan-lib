@@ -1,7 +1,6 @@
 package co.mgentertainment.common.indicator.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.expression.Expression;
@@ -18,12 +17,12 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 public class SpelExpressionResolver {
 
     public static String parseSpel(String spelExpression, String[] argNames, Object[] argVals, ApplicationContext applicationContext) {
-        if (!StringUtils.contains(spelExpression, "#")) {
-            return spelExpression;
-        }
-        if (argNames == null || argNames.length == 0 || argVals == null || argVals.length == 0) {
-            return null;
-        }
+//        if (!StringUtils.contains(spelExpression, "#")) {
+//            return spelExpression;
+//        }
+//        if (argNames == null || argNames.length == 0 || argVals == null || argVals.length == 0) {
+//            return null;
+//        }
         ExpressionParser parser = new SpelExpressionParser();
         try {
             // 解析后的SPEL
