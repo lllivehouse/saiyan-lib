@@ -47,7 +47,6 @@ public class DistributedLockAutoConfiguration {
     }
 
     @Bean(name = "redisLockRegistry")
-    @ConditionalOnProperty(prefix = "dlock", name = "by", havingValue = "redis")
     public RedisLockRegistry redisLockRegistry(@Qualifier("redisConnectionFactory") LettuceConnectionFactory redisConnectionFactory, DistributedLockProperties distributedLockProperties) {
         return distributedLockProperties.getExpiredMs() != null ?
                 new RedisLockRegistry(redisConnectionFactory, distributedLockProperties.getRedisRegistryKey(), distributedLockProperties.getExpiredMs()) :
