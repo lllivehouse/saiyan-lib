@@ -27,6 +27,8 @@ public enum ErrorCodeEnum {
     USER_INDICATOR_SPEND_FAILED(5003, "用户业务指标扣减异常"),
     NOT_VIP(5004, "非会员"),
     NO_DOWNLOAD_VIP(5005, "无下载次数会员"),
+    NOT_INVALID_COIN_VIDEO(5006, "不是合法的金币视频"),
+    ALREADY_PAID(5007, "已购买"),
     ;
 
     private int code;
