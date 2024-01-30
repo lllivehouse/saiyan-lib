@@ -29,6 +29,12 @@ public enum ErrorCodeEnum {
     NO_DOWNLOAD_VIP(5005, "无下载次数会员"),
     NOT_INVALID_COIN_VIDEO(5006, "不是合法的金币视频"),
     ALREADY_PAID(5007, "已购买"),
+    INVALID_VIDEO(5100, "视频不存在或已下架"),
+    VIDEO_NO_FREE_TIMES(5101, "免费次数已用尽"),
+    VIDEO_NO_VIP(5102, "非平台会员"),
+    VIDEO_NOT_FANS(5103, "未关注UP主"),
+    UNCONSUMED_COLLECTION_VIDEO(5104, "未购买合集视频"),
+    UNCONSUMED_COIN_VIDEO(5105, "未购买金币视频"),
     ;
 
     private int code;
