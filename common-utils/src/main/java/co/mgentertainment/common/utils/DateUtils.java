@@ -571,10 +571,23 @@ public class DateUtils {
         return calendar.getTime();
     }
 
-
     public static Date getEndTimeOfLastDayOfMonth(int year, int month) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, 1, 0, 0, 0); // 下个月的第一天
+        calendar.add(Calendar.SECOND, -1); // 减去1秒，即为当前月的最后一天
+        return calendar.getTime();
+    }
+
+    public static Date getBeginTimeOfTheYear(int year) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, 0, 1, 0, 0, 0); // 将日、时、分、秒设为零
+        calendar.set(Calendar.MILLISECOND, 0); // 毫秒设为零
+        return calendar.getTime();
+    }
+
+    public static Date getEndTimeOfTheYear(int year) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, 0, 1, 0, 0, 0); // 下个月的第一天
         calendar.add(Calendar.SECOND, -1); // 减去1秒，即为当前月的最后一天
         return calendar.getTime();
     }
