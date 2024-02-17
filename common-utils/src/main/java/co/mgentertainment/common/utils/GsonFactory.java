@@ -28,6 +28,12 @@ public class GsonFactory {
     public static Gson getGson() {
         String dateFormat = DateUtils.DEFAULT_FORMAT;
         return new GsonBuilder()
+                // 当Map的key为复杂对象时,需要开启该方法
+                .enableComplexMapKeySerialization()
+                // 当字段值为空或null时，依然对该字段进行转换
+                .serializeNulls()
+                // 防止特殊字符出现乱码
+                .disableHtmlEscaping()
                 .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                 .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                 .setDateFormat(dateFormat)
