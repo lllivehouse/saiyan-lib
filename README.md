@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin http://13.212.225.48/coco/mg-common.git
+git remote add origin xxx/saiyan-common.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](http://13.212.225.48/coco/mg-common/-/settings/integrations)
+- [ ] [Set up project integrations](http://xxx/saiyan-common/-/settings/integrations)
 
 ## Collaborate with your team
 
