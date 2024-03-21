@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>co.mgentertainment</groupId>
+    <groupId>co.saiyan</groupId>
     <artifactId>common-parent</artifactId>
     <version>${revision}</version>
-    <name>common parent</name>
-    <description>mg entertainment common parent lib</description>
+    <name>saiyan parent</name>
+    <description>saiyan common lib parent</description>
     <packaging>pom</packaging>
 
     <properties>
@@ -65,87 +65,87 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>bom</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>model</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>common-utils</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>common-redis-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>common-security-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>common-mybatisplus-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>common-syslog-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>common-doc-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>uid-generator-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>distributed-event-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>common-eventbus-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>http-client-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>common-file-upload</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>common-indicator-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>scheduler-plus-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>distributed-lock-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>co.mgentertainment</groupId>
+                <groupId>co.saiyan</groupId>
                 <artifactId>mybatis-generator-plugin</artifactId>
                 <version>${revision}</version>
             </dependency>

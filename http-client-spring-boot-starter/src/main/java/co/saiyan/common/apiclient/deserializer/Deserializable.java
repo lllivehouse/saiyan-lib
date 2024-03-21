@@ -1,0 +1,34 @@
+package co.saiyan.common.apiclient.deserializer;
+
+import co.saiyan.common.apiclient.core.ApiResponse;
+import co.saiyan.common.apiclient.exception.ClientException;
+
+import java.util.Map;
+
+/**
+ * @author larry
+ * @createTime 2022/12/11
+ * @description Deserializable
+ */
+public interface Deserializable {
+
+    /**
+     * content反序列化
+     *
+     * @param clazz
+     * @param content
+     * @param <T>
+     * @return
+     * @throws ClientException
+     */
+    <T extends ApiResponse> T deserialize(Class<T> clazz, String content) throws ClientException;
+
+    /**
+     * content转Map
+     *
+     * @param content
+     * @return
+     * @throws ClientException
+     */
+    Map<String, String> toMap(String content) throws ClientException;
+}

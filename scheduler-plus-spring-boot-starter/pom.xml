@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>co.mgentertainment</groupId>
+        <groupId>co.saiyan</groupId>
         <artifactId>common-parent</artifactId>
         <version>${revision}</version>
     </parent>
@@ -13,20 +13,20 @@
 
     <dependencies>
         <dependency>
-            <groupId>co.mgentertainment</groupId>
+            <groupId>co.saiyan</groupId>
             <artifactId>distributed-event-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>co.mgentertainment</groupId>
+            <groupId>co.saiyan</groupId>
             <artifactId>distributed-lock-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>co.mgentertainment</groupId>
+            <groupId>co.saiyan</groupId>
             <artifactId>model</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>co.mgentertainment</groupId>
+            <groupId>co.saiyan</groupId>
             <artifactId>common-utils</artifactId>
             <scope>provided</scope>
         </dependency>
