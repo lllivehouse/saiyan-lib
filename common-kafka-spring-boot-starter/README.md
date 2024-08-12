@@ -76,9 +76,22 @@ common.kafka.consumer.sessionTimeoutMs=30000
 
 ### 5.应用的bootstrap.yml的spring.cloud.nacos.config新增：
 ```yml
-- data-id: shared-kafka-config
-  group: ${NACOS_GROUP}
-  refresh: true
+spring:
+  application:
+    name: xxx
+  cloud:
+    nacos:
+      config:
+        server-addr: xxx.xxx.xxx.xxx:8848
+        namespace: local
+        group: xxx
+        username: xxx
+        password: xxx
+        file-extension: properties
+        extension-configs:
+          - data-id: shared-kafka-config
+            group: ${NACOS_GROUP}
+            refresh: true
 ```
 ### 6.应用的nacos配置中配置topic消息处理相关配置（dev环境为例）
 
