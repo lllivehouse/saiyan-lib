@@ -61,6 +61,7 @@
         <module>scheduler-plus-spring-boot-starter</module>
         <module>distributed-lock-spring-boot-starter</module>
         <module>mybatis-generator-plugin</module>
+        <module>common-kafka-spring-boot-starter</module>
     </modules>
 
     <dependencyManagement>
@@ -148,6 +149,11 @@
             <dependency>
                 <groupId>co.saiyan</groupId>
                 <artifactId>mybatis-generator-plugin</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>co.saiyan</groupId>
+                <artifactId>common-kafka-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
 
