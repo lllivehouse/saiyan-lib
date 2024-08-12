@@ -92,6 +92,12 @@ spring:
           - data-id: shared-kafka-config
             group: ${NACOS_GROUP}
             refresh: true
+# 用于nacos中明文密码的加解密，配置时可以通过ENC(加密串)形式替代明文密码。其中加密方式为：spring中注入bena org.jasypt.encryption.StringEncryptor调用其encrypt方法，入参为明文密码
+jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator
+    password: xxxxxx
 ```
 ### 6.应用的nacos配置中配置topic消息处理相关配置（dev环境为例）
 
