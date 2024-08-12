@@ -8,7 +8,7 @@
 ### 1.jar包引入，在服务所在module引入：
 ```xml
 <dependency>
-    <groupId>com.slid</groupId>
+    <groupId>co.saiyan</groupId>
     <artifactId>common-kafka-spring-boot-starter</artifactId>
 </dependency>
 ```
@@ -42,7 +42,7 @@ public class TestConsumer implements MessageHandler {
 # kafka配置开关
 common.kafka.enable=true
 # kafka server,集群节点逗号分隔
-common.kafka.producer.bootstrapServers=172.22.5.23:9092,172.22.5.24:9092,172.22.5.25:9092
+common.kafka.producer.bootstrapServers=xxx.xxx.xxx.xxx:9092
 # 生产者配置（不需要发送可以不配置）
 # 重试次数，0为不启用重试机制
 common.kafka.producer.retries=3
@@ -84,11 +84,11 @@ common.kafka.consumer.sessionTimeoutMs=30000
 
 # kafka topic消费者配置
 ```properties
-common.kafka.consumer.handlers[0].bootstrapServers=172.22.5.23:9092,172.22.5.24:9092,172.22.5.25:9092
+common.kafka.consumer.handlers[0].bootstrapServers=xxx.xxx.xxx.xxx:9092
 common.kafka.consumer.handlers[0].topic=kafka-test
 common.kafka.consumer.handlers[0].groupId=default
 common.kafka.consumer.handlers[0].concurrency=1
-common.kafka.consumer.handlers[0].classpath=com.slid.live.slot.api.game.service.mq.TestConsumer
+common.kafka.consumer.handlers[0].classpath=co.saiyan.demo.service.mq.TestConsumer
 ```
 
 ### 7.消息发送代码示例: 注入kafkaTemplate即可
@@ -121,7 +121,7 @@ public void send() {
 # 存在多个mq中间件情况下必须指定一个默认binder
 spring.cloud.stream.default-binder=rocketmq
 # kafka服务节点配置
-spring.cloud.stream.kafka.binder.brokers=172.22.5.23:9092,172.22.5.24:9092,172.22.5.25:9092
+spring.cloud.stream.kafka.binder.brokers=xxx.xxx.xxx.xxx:9092
 # topic不存在时自动创建
 spring.cloud.stream.kafka.binder.auto-create-topics=true
 # 生产者配置
